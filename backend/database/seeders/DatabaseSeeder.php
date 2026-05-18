@@ -251,14 +251,18 @@ class DatabaseSeeder extends Seeder
         );
 
         // ---- Teacher Assignments ----
+        // Demo teacher → Math in 7-A, 7-B
         // Teacher 1 → Math in 7-A, 8-A
         // Teacher 2 → Science in 7-A, 7-B, 8-A
         // Teacher 3 → English in 8-B, 9-A, 9-B
+        $demoTeacher = User::where('email', 'teacher@school.test')->first();
         $mathSubject = $subjects[0];
         $scienceSubject = $subjects[1];
         $englishSubject = $subjects[2];
 
         $assignments = [
+            ['teacher' => $demoTeacher, 'subject' => $mathSubject, 'classroom' => $classrooms[0]],
+            ['teacher' => $demoTeacher, 'subject' => $mathSubject, 'classroom' => $classrooms[1]],
             ['teacher' => $teachers[0], 'subject' => $mathSubject, 'classroom' => $classrooms[0]],
             ['teacher' => $teachers[0], 'subject' => $mathSubject, 'classroom' => $classrooms[2]],
             ['teacher' => $teachers[1], 'subject' => $scienceSubject, 'classroom' => $classrooms[0]],

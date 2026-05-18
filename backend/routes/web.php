@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\AcademicYearWebController;
 use App\Http\Controllers\Web\AdminUserController;
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
+use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\SettingsWebController;
 use Illuminate\Support\Facades\Route;
@@ -46,5 +47,11 @@ Route::middleware('auth')->group(function () {
 
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
+    });
+
+    // Classrooms (accessible to admin and teacher)
+    Route::middleware('role:admin,teacher')->prefix('classrooms')->name('classrooms.')->group(function () {
+        Route::get('/', [ClassroomWebController::class, 'index'])->name('index');
+        Route::get('/{classroom}', [ClassroomWebController::class, 'show'])->name('show');
     });
 });
