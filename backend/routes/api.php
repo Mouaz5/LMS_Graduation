@@ -57,6 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Schedule slots (v1 prefix per spec)
 use App\Http\Controllers\Academic\ScheduleSlotController;
+use App\Http\Controllers\Academic\AttendanceController;
+use App\Http\Controllers\Academic\AbsenceJustificationController;
+use App\Http\Controllers\Academic\BehavioralNoteController;
 
 Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
@@ -71,5 +74,32 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
         Route::get('schedule-slots/my', [ScheduleSlotController::class, 'mySchedule']);
+    });
+
+    // Attendance
+    Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
+        Route::post('attendance/bulk', [AttendanceController::class, 'bulkStore']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('attendance', [AttendanceController::class, 'index']);
+    });
+
+    // Absence justifications
+    Route::middleware(['auth:sanctum', 'role:parent'])->group(function () {
+        Route::post('absence-justifications', [AbsenceJustificationController::class, 'store']);
+    });
+
+    Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
+        Route::put('absence-justifications/{id}', [AbsenceJustificationController::class, 'update']);
+    });
+
+    // Behavioral notes
+    Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
+        Route::post('behavioral-notes', [BehavioralNoteController::class, 'store']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('behavioral-notes', [BehavioralNoteController::class, 'index']);
     });
 });

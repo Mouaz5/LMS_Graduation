@@ -34,10 +34,39 @@
         .card-ico { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
         .card-ttl { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0f172a; }
         .card-sub { font-size: 12px; color: #94a3b8; }
-        .grade-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f8fafc; }
-        .grade-row:last-child { border-bottom: none; }
-        .grade-badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 13.5px;
+            color: #374151;
+        }
+        .schedule-item:last-child { border-bottom: none; }
+        .period-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: #4338ca;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
         .empty-box { text-align: center; padding: 20px; color: #cbd5e1; font-size: 13px; }
+        .classroom-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #ecfdf5;
+            color: #065f46;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
     </style>
 
     <div class="welcome-banner">
@@ -46,9 +75,14 @@
                 {{ now()->format('l, F j, Y') }}
             </div>
             <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px;">
-                Hello, {{ explode(' ', auth()->user()->name)[0] }}!
+                Hello, {{ explode(' ', $user->name)[0] }}!
             </h2>
             <p style="font-size: 14px; color: #a7f3d0;">Keep up the great work. Your learning journey continues today.</p>
+            @if($classroom)
+                <div style="margin-top: 10px;">
+                    <span class="classroom-badge">{{ $classroom->name }} &middot; {{ $classroom->grade->name }}</span>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -61,12 +95,10 @@
                 </div>
                 <div><div class="card-ttl">My Grades</div><div class="card-sub">Latest academic results</div></div>
             </div>
-            @foreach([['Math', 'A', '#ecfdf5', '#065f46'], ['Physics', 'B+', '#eff6ff', '#1d4ed8'], ['History', 'A-', '#ecfdf5', '#065f46'], ['English', 'B', '#eff6ff', '#1d4ed8']] as [$sub, $grade, $bg, $color])
-            <div class="grade-row">
-                <span style="font-size: 13.5px; color: #374151; font-weight: 500;">{{ $sub }}</span>
-                <span class="grade-badge" style="background: {{ $bg }}; color: {{ $color }};">{{ $grade }}</span>
+            <div class="empty-box">
+                <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                Grades module coming soon
             </div>
-            @endforeach
         </div>
 
         {{-- Schedule --}}
@@ -75,15 +107,22 @@
                 <div class="card-ico" style="background: #eef2ff;">
                     <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
-                <div><div class="card-ttl">My Schedule</div><div class="card-sub">Today's classes</div></div>
+                <div><div class="card-ttl">Today's Schedule</div><div class="card-sub">{{ now()->format('l') }}</div></div>
             </div>
-            @foreach(['08:00 — Mathematics', '10:00 — Physics', '12:00 — English', '14:00 — History'] as $i => $cls)
-            @php $dots = ['#4F46E5','#10b981','#3b82f6','#f59e0b']; @endphp
-            <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f8fafc; font-size: 13.5px; color: #374151;">
-                <div style="width: 8px; height: 8px; border-radius: 50%; background: {{ $dots[$i] }}; flex-shrink: 0;"></div>
-                {{ $cls }}
-            </div>
-            @endforeach
+            @forelse($todaySlots as $slot)
+                <div class="schedule-item">
+                    <div class="period-badge">P{{ $slot->period_number }}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">{{ $slot->subject->name }}</div>
+                        <div style="font-size: 12px; color: #94a3b8;">{{ $slot->teacher->name }} &middot; {{ substr($slot->start_time, 0, 5) }} - {{ substr($slot->end_time, 0, 5) }}</div>
+                    </div>
+                </div>
+            @empty
+                <div class="empty-box">
+                    <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    No classes scheduled for today
+                </div>
+            @endforelse
         </div>
 
         {{-- Announcements --}}
@@ -108,13 +147,9 @@
                 </div>
                 <div><div class="card-ttl">Attendance</div><div class="card-sub">This month's record</div></div>
             </div>
-            <div style="display: flex; justify-content: space-around; padding: 16px 0; text-align: center;">
-                @foreach([['Present', '18', '#ecfdf5', '#065f46'], ['Absent', '2', '#fef2f2', '#991b1b'], ['Late', '1', '#fffbeb', '#92400e']] as [$lbl, $val, $bg, $clr])
-                <div>
-                    <div style="width: 52px; height: 52px; border-radius: 50%; background: {{ $bg }}; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 18px; font-weight: 700; color: {{ $clr }};">{{ $val }}</div>
-                    <div style="font-size: 11px; color: #94a3b8; font-weight: 500;">{{ $lbl }}</div>
-                </div>
-                @endforeach
+            <div class="empty-box">
+                <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Attendance module coming soon
             </div>
         </div>
     </div>

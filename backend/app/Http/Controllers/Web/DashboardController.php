@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
+use App\Models\ScheduleSlot;
+use App\Models\StudentProfile;
+use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,11 +21,57 @@ class DashboardController extends Controller
 
         return match ($role) {
             'admin' => view('dashboards.admin', ['user' => $user, 'stats' => $this->adminStats()]),
-            'teacher' => view('dashboards.teacher', ['user' => $user]),
-            'student' => view('dashboards.student', ['user' => $user]),
-            'parent' => view('dashboards.parent', ['user' => $user]),
+            'teacher' => $this->teacherDashboard($user),
+            'student' => $this->studentDashboard($user),
+            'parent' => $this->parentDashboard($user),
             default => view('dashboards.admin', ['user' => $user, 'stats' => $this->adminStats()]),
         };
+    }
+
+    private function teacherDashboard(User $user): View
+    {
+        $today = strtolower(now()->format('l'));
+
+        $classrooms = Classroom::whereHas('teacherAssignments', fn ($q) => $q->where('teacher_user_id', $user->id))
+            ->with('grade')
+            ->withCount('studentProfiles')
+            ->get();
+
+        $assignments = TeacherSubjectClassroom::where('teacher_user_id', $user->id)
+            ->with(['subject', 'classroom.grade'])
+            ->get();
+
+        $todaySlots = ScheduleSlot::where('teacher_user_id', $user->id)
+            ->where('day_of_week', $today)
+            ->with(['subject', 'classroom'])
+            ->orderBy('period_number')
+            ->get();
+
+        return view('dashboards.teacher', compact('user', 'classrooms', 'assignments', 'todaySlots'));
+    }
+
+    private function studentDashboard(User $user): View
+    {
+        $profile = StudentProfile::where('user_id', $user->id)->first();
+        $classroom = $profile?->classroom;
+        $today = strtolower(now()->format('l'));
+
+        $todaySlots = $classroom
+            ? ScheduleSlot::where('classroom_id', $classroom->id)
+                ->where('day_of_week', $today)
+                ->with(['subject', 'teacher'])
+                ->orderBy('period_number')
+                ->get()
+            : collect();
+
+        return view('dashboards.student', compact('user', 'classroom', 'todaySlots'));
+    }
+
+    private function parentDashboard(User $user): View
+    {
+        $children = $user->children()->with('studentProfile.classroom.grade')->get();
+
+        return view('dashboards.parent', compact('user', 'children'));
     }
 
     private function adminStats(): array

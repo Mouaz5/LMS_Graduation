@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Web;
+
+use App\Http\Controllers\Controller;
+use App\Models\BehavioralNote;
+use App\Models\StudentProfile;
+use App\Models\TeacherSubjectClassroom;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class TeacherBehavioralNoteController extends Controller
+{
+    /**
+     * GET /teacher/behavioral-notes
+     * Shows create form (with student dropdown) + paginated list of previously written notes.
+     */
+    public function index(): View
+    {
+        $teacher      = Auth::user();
+        $classroomIds = $teacher->teacherAssignments()->pluck('classroom_id');
+
+        $students = StudentProfile::whereIn('classroom_id', $classroomIds)
+            ->with(['student', 'classroom.grade'])
+            ->get();
+
+        $notes = BehavioralNote::where('teacher_user_id', $teacher->id)
+            ->with(['student', 'student.studentProfile.classroom'])
+            ->orderByDesc('date')
+            ->paginate(20);
+
+        return view('teacher.behavioral-notes', compact('students', 'notes'));
+    }
+
+    /**
+     * POST /teacher/behavioral-notes
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'student_user_id' => 'required|exists:users,id',
+            'note'            => 'required|string|max:2000',
+            'severity'        => 'required|in:info,warning,critical',
+            'date'            => 'required|date',
+        ]);
+
+        $teacher = Auth::user();
+
+        abort_unless(
+            TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
+                ->whereHas('classroom.studentProfiles', fn ($q) => $q->where('user_id', $validated['student_user_id']))
+                ->exists(),
+            403,
+            'You are not a teacher of this student.'
+        );
+
+        BehavioralNote::create([
+            ...$validated,
+            'teacher_user_id' => $teacher->id,
+        ]);
+
+        return redirect()->route('teacher.behavioral-notes')
+            ->with('success', 'Behavioral note created successfully.');
+    }
+}

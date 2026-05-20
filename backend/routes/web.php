@@ -7,7 +7,13 @@ use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\ScheduleWebController;
+use App\Http\Controllers\Web\AssignmentWebController;
+use App\Http\Controllers\Web\ParentWebController;
 use App\Http\Controllers\Web\SettingsWebController;
+use App\Http\Controllers\Web\StudentWebController;
+use App\Http\Controllers\Web\TeacherWebController;
+use App\Http\Controllers\Web\TeacherAttendanceController;
+use App\Http\Controllers\Web\TeacherBehavioralNoteController;
 use Illuminate\Support\Facades\Route;
 
 // Auth
@@ -52,6 +58,44 @@ Route::middleware('auth')->group(function () {
 
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
+
+        // Teacher Assignments
+        Route::get('/assignments', [AssignmentWebController::class, 'index'])->name('assignments.index');
+        Route::get('/assignments/create', [AssignmentWebController::class, 'create'])->name('assignments.create');
+        Route::post('/assignments', [AssignmentWebController::class, 'store'])->name('assignments.store');
+    });
+
+    // Teacher routes
+    Route::middleware('role:teacher')->prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('/schedule', [TeacherWebController::class, 'schedule'])->name('schedule');
+
+        // Attendance — justifications must be declared before any future param routes
+        Route::get('/attendance/justifications', [TeacherAttendanceController::class, 'justifications'])->name('justifications');
+        Route::post('/attendance/justifications/{justification}/approve', [TeacherAttendanceController::class, 'approveJustification'])->name('justifications.approve');
+        Route::post('/attendance/justifications/{justification}/reject', [TeacherAttendanceController::class, 'rejectJustification'])->name('justifications.reject');
+        Route::get('/attendance', [TeacherAttendanceController::class, 'index'])->name('attendance');
+        Route::post('/attendance', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
+
+        // Behavioral notes
+        Route::get('/behavioral-notes', [TeacherBehavioralNoteController::class, 'index'])->name('behavioral-notes');
+        Route::post('/behavioral-notes', [TeacherBehavioralNoteController::class, 'store'])->name('behavioral-notes.store');
+    });
+
+    // Student pages
+    Route::middleware('role:student')->prefix('student')->name('student.')->group(function () {
+        Route::get('/schedule', [StudentWebController::class, 'schedule'])->name('schedule');
+        Route::get('/grades', [StudentWebController::class, 'grades'])->name('grades');
+        Route::get('/attendance', [StudentWebController::class, 'attendance'])->name('attendance');
+    });
+
+    // Parent pages
+    Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function () {
+        Route::get('/children', [ParentWebController::class, 'children'])->name('children');
+        Route::get('/children/{child}/schedule', [ParentWebController::class, 'childSchedule'])->name('child-schedule');
+        Route::get('/grades', [ParentWebController::class, 'grades'])->name('grades');
+        Route::get('/attendance', [ParentWebController::class, 'attendance'])->name('attendance');
+        Route::post('/attendance/{attendance}/justify', [ParentWebController::class, 'storeJustification'])->name('attendance.justify');
+        Route::get('/behavioral-notes', [ParentWebController::class, 'behavioralNotes'])->name('behavioral-notes');
     });
 
     // Classrooms (accessible to admin and teacher)

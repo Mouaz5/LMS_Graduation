@@ -55,10 +55,8 @@
             font-size: 13px;
             font-weight: 700;
             color: white;
+            flex-shrink: 0;
         }
-        .grade-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f8fafc; }
-        .grade-row:last-child { border-bottom: none; }
-        .grade-badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
         .empty-box { text-align: center; padding: 20px; color: #cbd5e1; font-size: 13px; }
     </style>
 
@@ -68,7 +66,7 @@
                 {{ now()->format('l, F j, Y') }}
             </div>
             <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px;">
-                Welcome, {{ explode(' ', auth()->user()->name)[0] }}!
+                Welcome, {{ explode(' ', $user->name)[0] }}!
             </h2>
             <p style="font-size: 14px; color: #ede9fe;">Track your children's academic progress in one place.</p>
         </div>
@@ -81,22 +79,32 @@
                 <div class="card-ico" style="background: #faf5ff;">
                     <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </div>
-                <div><div class="card-ttl">My Children</div><div class="card-sub">Enrolled students</div></div>
+                <div><div class="card-ttl">My Children</div><div class="card-sub">{{ $children->count() }} enrolled</div></div>
             </div>
-            <div class="child-card">
-                <div class="child-avatar">AH</div>
-                <div>
-                    <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">Ahmad Hassan</div>
-                    <div style="font-size: 12px; color: #94a3b8;">Grade 10 — Section A</div>
+            @forelse($children as $i => $child)
+                @php
+                    $initials = collect(explode(' ', $child->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
+                    $gradients = ['linear-gradient(135deg, #c084fc, #7c3aed)', 'linear-gradient(135deg, #f9a8d4, #ec4899)', 'linear-gradient(135deg, #93c5fd, #3b82f6)', 'linear-gradient(135deg, #6ee7b7, #10b981)'];
+                @endphp
+                <div class="child-card">
+                    <div class="child-avatar" style="background: {{ $gradients[$i % count($gradients)] }};">{{ $initials }}</div>
+                    <div>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">{{ $child->name }}</div>
+                        <div style="font-size: 12px; color: #94a3b8;">
+                            @if($child->studentProfile)
+                                {{ $child->studentProfile->classroom->grade->name ?? '' }} &mdash; {{ $child->studentProfile->classroom->name ?? '' }}
+                            @else
+                                No classroom assigned
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="child-card">
-                <div class="child-avatar" style="background: linear-gradient(135deg, #f9a8d4, #ec4899);">SH</div>
-                <div>
-                    <div style="font-size: 13.5px; font-weight: 600; color: #0f172a;">Sara Hassan</div>
-                    <div style="font-size: 12px; color: #94a3b8;">Grade 8 — Section B</div>
+            @empty
+                <div class="empty-box">
+                    <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    No children linked to your account
                 </div>
-            </div>
+            @endforelse
         </div>
 
         {{-- Recent Grades --}}
@@ -107,12 +115,10 @@
                 </div>
                 <div><div class="card-ttl">Recent Grades</div><div class="card-sub">Latest results</div></div>
             </div>
-            @foreach([['Ahmad — Math', 'A'], ['Ahmad — Physics', 'B+'], ['Sara — English', 'A-'], ['Sara — History', 'B']] as [$name, $grade])
-            <div class="grade-row">
-                <span style="font-size: 13px; color: #374151;">{{ $name }}</span>
-                <span class="grade-badge" style="background: #ecfdf5; color: #065f46;">{{ $grade }}</span>
+            <div class="empty-box">
+                <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                Grades module coming soon
             </div>
-            @endforeach
         </div>
 
         {{-- Attendance Summary --}}
@@ -123,19 +129,10 @@
                 </div>
                 <div><div class="card-ttl">Attendance Summary</div><div class="card-sub">This month</div></div>
             </div>
-            @foreach([['Ahmad', '18', '1', '0'], ['Sara', '19', '0', '1']] as [$name, $p, $a, $l])
-            <div style="margin-bottom: 14px;">
-                <div style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">{{ $name }}</div>
-                <div style="display: flex; gap: 8px;">
-                    @foreach([[$p,'Present','#ecfdf5','#065f46'], [$a,'Absent','#fef2f2','#991b1b'], [$l,'Late','#fffbeb','#92400e']] as [$v,$l2,$bg,$c])
-                    <div style="flex: 1; text-align: center; background: {{ $bg }}; border-radius: 8px; padding: 8px 4px;">
-                        <div style="font-size: 18px; font-weight: 700; color: {{ $c }};">{{ $v }}</div>
-                        <div style="font-size: 10px; color: {{ $c }}; opacity: 0.7;">{{ $l2 }}</div>
-                    </div>
-                    @endforeach
-                </div>
+            <div class="empty-box">
+                <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Attendance module coming soon
             </div>
-            @endforeach
         </div>
 
         {{-- Fees --}}
