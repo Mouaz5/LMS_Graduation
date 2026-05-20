@@ -52,4 +52,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('classrooms', [ClassroomController::class, 'index']);
     Route::get('teacher-assignments', [TeacherAssignmentController::class, 'index']);
     Route::get('school-calendar', [SchoolCalendarController::class, 'index']);
+    Route::get('subjects', [\App\Http\Controllers\SubjectController::class, 'index']);
+});
+
+// Schedule slots (v1 prefix per spec)
+use App\Http\Controllers\Academic\ScheduleSlotController;
+
+Route::prefix('v1')->group(function () {
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::post('schedule-slots', [ScheduleSlotController::class, 'store']);
+        Route::put('schedule-slots/{id}', [ScheduleSlotController::class, 'update']);
+        Route::delete('schedule-slots/{id}', [ScheduleSlotController::class, 'destroy']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('schedule-slots', [ScheduleSlotController::class, 'index']);
+    });
+
+    Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
+        Route::get('schedule-slots/my', [ScheduleSlotController::class, 'mySchedule']);
+    });
 });

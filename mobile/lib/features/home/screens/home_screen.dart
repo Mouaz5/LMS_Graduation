@@ -6,6 +6,7 @@ import '../../../core/services/api_service.dart';
 import '../../../widgets/info_card.dart';
 import '../../../widgets/role_badge.dart';
 import '../../dashboard/widgets/app_drawer.dart';
+import '../../schedule/screens/schedule_screen.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
@@ -143,6 +144,49 @@ class _HomeScreenContent extends StatelessWidget {
                             iconBg: Colors.blue.withOpacity(0.1),
                           ),
                         )),
+
+                  const SizedBox(height: 12),
+                  // My Schedule card
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const ScheduleScreen()),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.calendar_today_outlined,
+                              color: Colors.white, size: 22),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('My Schedule',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700)),
+                                Text('View your weekly timetable',
+                                    style: TextStyle(
+                                        color: Color(0xFFBFDBFE),
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.chevron_right, color: Colors.white54),
+                        ],
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(height: 20),
                   const Text('My Subject Assignments',

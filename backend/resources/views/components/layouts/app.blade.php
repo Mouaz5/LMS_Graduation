@@ -404,6 +404,7 @@
             ['label' => 'Academic Year', 'route' => 'admin.academic-years.index', 'icon' => 'calendar'],
             ['label' => 'Classrooms', 'route' => 'classrooms.index', 'icon' => 'book'],
             ['label' => 'Calendar', 'route' => 'admin.calendar.index', 'icon' => 'calendar'],
+            ['label' => 'Schedule', 'route' => 'admin.schedule.index', 'icon' => 'calendar'],
             ['label' => 'Settings', 'route' => 'admin.settings.index', 'icon' => 'settings'],
         ],
         'teacher' => [

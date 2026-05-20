@@ -401,6 +401,7 @@
         'admin' => [
             ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'home'],
             ['label' => 'Users', 'route' => 'admin.users.index', 'icon' => 'users'],
+            ['label' => 'Schedule', 'route' => 'admin.schedule.index', 'icon' => 'calendar'],
             ['label' => 'Settings', 'route' => 'dashboard', 'icon' => 'settings'],
         ],
         'teacher' => [

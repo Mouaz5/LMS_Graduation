@@ -110,6 +110,19 @@
             gap: 10px;
         }
         .related-item:last-child { border-bottom: none; }
+        a.related-item {
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.15s;
+        }
+        a.related-item:hover { background: #f8faff; }
+        a.related-item:hover .related-item-chevron { opacity: 1; }
+        .related-item-chevron {
+            margin-left: auto;
+            opacity: 0;
+            color: #94a3b8;
+            transition: opacity 0.15s;
+        }
         .related-item-icon {
             width: 32px;
             height: 32px;
@@ -195,7 +208,7 @@
         <div class="related-section">
             <div class="related-title">Classroom</div>
             <div class="related-card">
-                <div class="related-item">
+                <a href="{{ route('classrooms.show', $user->studentProfile->classroom) }}" class="related-item">
                     <div class="related-item-icon" style="background: #eff6ff;">
                         <svg width="16" height="16" fill="none" stroke="#2563eb" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                     </div>
@@ -203,7 +216,10 @@
                         <div style="font-weight: 600;">{{ $user->studentProfile->classroom->name }}</div>
                         <div style="font-size: 12px; color: #94a3b8;">{{ $user->studentProfile->classroom->grade->name }} — Enrolled {{ $user->studentProfile->enrollment_date->format('M d, Y') }}</div>
                     </div>
-                </div>
+                    <span class="related-item-chevron">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                </a>
             </div>
         </div>
     @endif

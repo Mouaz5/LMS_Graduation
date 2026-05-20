@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\SettingsWebController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/calendar/create', [CalendarWebController::class, 'create'])->name('calendar.create');
         Route::get('/calendar/{event}', [CalendarWebController::class, 'show'])->name('calendar.show');
         Route::post('/calendar', [CalendarWebController::class, 'store'])->name('calendar.store');
+
+        // Schedule builder
+        Route::get('/schedule', [ScheduleWebController::class, 'index'])->name('schedule.index');
+        Route::post('/schedule', [ScheduleWebController::class, 'store'])->name('schedule.store');
 
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
