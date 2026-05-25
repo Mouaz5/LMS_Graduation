@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\AcademicYearWebController;
+use App\Http\Controllers\Web\DiagnosticWebController;
 use App\Http\Controllers\Web\SubjectWebController;
 use App\Http\Controllers\Web\AdminUserController;
 use App\Http\Controllers\Web\AuthWebController;
@@ -80,6 +81,13 @@ Route::middleware('auth')->group(function () {
         Route::put('/exam-types/{examType}', [ExamTypeWebController::class, 'update'])->name('exam-types.update');
         Route::delete('/exam-types/{examType}', [ExamTypeWebController::class, 'destroy'])->name('exam-types.destroy');
 
+        // Diagnostic Test Builder & Knowledge Map
+        Route::get('/diagnostic/test-builder', [DiagnosticWebController::class, 'testBuilder'])->name('diagnostic.test-builder');
+        Route::post('/diagnostic/objectives', [DiagnosticWebController::class, 'storeObjective'])->name('diagnostic.objectives.store');
+        Route::post('/diagnostic/questions', [DiagnosticWebController::class, 'storeQuestion'])->name('diagnostic.questions.store');
+        Route::delete('/diagnostic/questions/{question}', [DiagnosticWebController::class, 'destroyQuestion'])->name('diagnostic.questions.destroy');
+        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'knowledgeMap'])->name('diagnostic.knowledge-map');
+
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
 
@@ -107,6 +115,9 @@ Route::middleware('auth')->group(function () {
         // Behavioral notes
         Route::get('/behavioral-notes', [TeacherBehavioralNoteController::class, 'index'])->name('behavioral-notes');
         Route::post('/behavioral-notes', [TeacherBehavioralNoteController::class, 'store'])->name('behavioral-notes.store');
+
+        // Diagnostic knowledge map (view-only for teacher)
+        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'knowledgeMap'])->name('diagnostic.knowledge-map');
     });
 
     // Student pages
@@ -116,6 +127,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/results', [StudentWebController::class, 'results'])->name('results');
         Route::get('/results/pdf', [StudentWebController::class, 'downloadReportCard'])->name('results.pdf');
         Route::get('/attendance', [StudentWebController::class, 'attendance'])->name('attendance');
+
+        // Diagnostic
+        Route::get('/diagnostic/test', [DiagnosticWebController::class, 'studentTest'])->name('diagnostic.test');
+        Route::post('/diagnostic/start', [DiagnosticWebController::class, 'studentStartAttempt'])->name('diagnostic.start');
+        Route::post('/diagnostic/attempts/{attempt}/submit', [DiagnosticWebController::class, 'studentSubmitAttempt'])->name('diagnostic.submit');
+        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'studentKnowledgeMap'])->name('diagnostic.knowledge-map');
     });
 
     // Parent pages

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Academic\AcademicYearController;
+use App\Http\Controllers\Academic\DiagnosticController;
+use App\Http\Controllers\Academic\LearningObjectiveController;
 use App\Http\Controllers\Academic\ClassroomController;
 use App\Http\Controllers\Academic\ParentStudentController;
 use App\Http\Controllers\Academic\SchoolCalendarController;
@@ -128,5 +130,21 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('behavioral-notes', [BehavioralNoteController::class, 'index']);
+    });
+
+    // Diagnostic Tests & Knowledge Maps
+    Route::middleware(['auth:sanctum', 'role:student'])->group(function () {
+        Route::post('diagnostic-attempts', [DiagnosticController::class, 'startAttempt']);
+        Route::get('diagnostic-attempts/{id}/questions', [DiagnosticController::class, 'getQuestions']);
+        Route::post('diagnostic-attempts/{id}/submit', [DiagnosticController::class, 'submitAttempt']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('knowledge-map', [DiagnosticController::class, 'knowledgeMap']);
+    });
+
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::post('learning-objectives', [LearningObjectiveController::class, 'store']);
+        Route::post('diagnostic-questions', [LearningObjectiveController::class, 'storeQuestion']);
     });
 });
