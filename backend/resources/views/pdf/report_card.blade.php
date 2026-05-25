@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 12px;
+            color: #1e293b;
+            background: #fff;
+            direction: ltr;
+        }
+        .page { padding: 32px 40px; }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #4F46E5;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+        }
+        .school-name { font-size: 20px; font-weight: 700; color: #4F46E5; }
+        .report-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+        .student-info {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .info-grid { display: flex; flex-wrap: wrap; gap: 12px 30px; }
+        .info-item label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        .info-item span { display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-top: 2px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        thead tr { background: #4F46E5; color: white; }
+        th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; }
+        td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
+        tbody tr:nth-child(even) { background: #f8fafc; }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-a { background: #dcfce7; color: #166534; }
+        .badge-b { background: #dbeafe; color: #1e40af; }
+        .badge-c { background: #fef9c3; color: #854d0e; }
+        .badge-d { background: #fed7aa; color: #9a3412; }
+        .badge-f { background: #fee2e2; color: #991b1b; }
+        .footer { border-top: 1px solid #e2e8f0; padding-top: 12px; text-align: center; color: #94a3b8; font-size: 10px; }
+        .section-title { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="header">
+        <div>
+            <div class="school-name">SchoolLMS</div>
+            <div class="report-title">Academic Report Card</div>
+        </div>
+        <div style="text-align:right; color:#64748b; font-size:11px;">
+            <div>Issued: {{ now()->format('Y-m-d') }}</div>
+            @if($semester)
+                <div>Semester: {{ $semester->name }} — {{ $semester->academicYear->name ?? '' }}</div>
+            @endif
+        </div>
+    </div>
+
+    <div class="student-info">
+        <div class="info-grid">
+            <div class="info-item">
+                <label>Student Name</label>
+                <span>{{ $student->name }}</span>
+            </div>
+            <div class="info-item">
+                <label>Email</label>
+                <span>{{ $student->email }}</span>
+            </div>
+            @if($student->studentProfile?->classroom)
+                <div class="info-item">
+                    <label>Classroom</label>
+                    <span>{{ $student->studentProfile->classroom->name }}</span>
+                </div>
+                @if($student->studentProfile->classroom->grade)
+                    <div class="info-item">
+                        <label>Grade Level</label>
+                        <span>{{ $student->studentProfile->classroom->grade->name }}</span>
+                    </div>
+                @endif
+            @endif
+        </div>
+    </div>
+
+    <div class="section-title">Results by Subject</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                @foreach($examTypes as $et)
+                    <th>{{ $et->name }} ({{ $et->weight_percent }}%)</th>
+                @endforeach
+                <th>Weighted Avg</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($summaries as $summary)
+                @php
+                    $subjectGrades = $grades->get($summary->subject_id, collect());
+                    $badgeClass = match($summary->letter_grade) {
+                        'A' => 'badge-a', 'B' => 'badge-b', 'C' => 'badge-c',
+                        'D' => 'badge-d', default => 'badge-f'
+                    };
+                @endphp
+                <tr>
+                    <td>{{ $summary->subject->name }}</td>
+                    @foreach($examTypes as $et)
+                        @php $g = $subjectGrades->firstWhere('exam_type_id', $et->id); @endphp
+                        <td>{{ $g ? $g->score . '/' . $g->max_score : '—' }}</td>
+                    @endforeach
+                    <td>{{ $summary->weighted_average }}%</td>
+                    <td><span class="badge {{ $badgeClass }}">{{ $summary->letter_grade }}</span></td>
+                </tr>
+            @endforeach
+            @if($summaries->isEmpty())
+                <tr>
+                    <td colspan="{{ 3 + $examTypes->count() }}" style="text-align:center; color:#94a3b8; padding:20px;">
+                        No results for this semester.
+                    </td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Generated automatically by SchoolLMS — {{ now()->format('Y-m-d H:i') }}
+    </div>
+</div>
+</body>
+</html>

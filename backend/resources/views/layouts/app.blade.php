@@ -402,28 +402,28 @@
             ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'home'],
             ['label' => 'Users', 'route' => 'admin.users.index', 'icon' => 'users'],
             ['label' => 'Schedule', 'route' => 'admin.schedule.index', 'icon' => 'calendar'],
+            ['label' => 'Exam Types', 'route' => 'admin.exam-types.index', 'icon' => 'star'],
             ['label' => 'Settings', 'route' => 'dashboard', 'icon' => 'settings'],
         ],
         'teacher' => [
             ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'home'],
-            ['label' => 'My Classes', 'route' => 'dashboard', 'icon' => 'book'],
-            ['label' => 'Attendance', 'route' => 'dashboard', 'icon' => 'check-circle'],
-            ['label' => 'Grades', 'route' => 'dashboard', 'icon' => 'star'],
-            ['label' => 'Reports', 'route' => 'dashboard', 'icon' => 'bar-chart'],
+            ['label' => 'My Schedule', 'route' => 'teacher.schedule', 'icon' => 'calendar'],
+            ['label' => 'Attendance', 'route' => 'teacher.attendance', 'icon' => 'check-circle'],
+            ['label' => 'Grade Entry', 'route' => 'teacher.grades.entry', 'icon' => 'star'],
+            ['label' => 'Behavioral Notes', 'route' => 'teacher.behavioral-notes', 'icon' => 'bar-chart'],
         ],
         'student' => [
             ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'home'],
-            ['label' => 'My Grades', 'route' => 'dashboard', 'icon' => 'star'],
-            ['label' => 'Schedule', 'route' => 'dashboard', 'icon' => 'calendar'],
-            ['label' => 'Attendance', 'route' => 'dashboard', 'icon' => 'check-circle'],
+            ['label' => 'My Results', 'route' => 'student.results', 'icon' => 'star'],
+            ['label' => 'Schedule', 'route' => 'student.schedule', 'icon' => 'calendar'],
+            ['label' => 'Attendance', 'route' => 'student.attendance', 'icon' => 'check-circle'],
         ],
         'parent' => [
             ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'home'],
-            ['label' => 'My Children', 'route' => 'dashboard', 'icon' => 'users'],
-            ['label' => 'Grades', 'route' => 'dashboard', 'icon' => 'star'],
-            ['label' => 'Attendance', 'route' => 'dashboard', 'icon' => 'check-circle'],
-            ['label' => 'Fees', 'route' => 'dashboard', 'icon' => 'credit-card'],
-            ['label' => 'Transport', 'route' => 'dashboard', 'icon' => 'truck'],
+            ['label' => 'My Children', 'route' => 'parent.children', 'icon' => 'users'],
+            ['label' => 'Results', 'route' => 'parent.results', 'icon' => 'star'],
+            ['label' => 'Attendance', 'route' => 'parent.attendance', 'icon' => 'check-circle'],
+            ['label' => 'Behavioral Notes', 'route' => 'parent.behavioral-notes', 'icon' => 'bar-chart'],
         ],
     ];
 
@@ -467,8 +467,9 @@
             @foreach($menuItems as $item)
                 @php
                     $isActive = request()->routeIs($item['route']) || (isset($item['active']) && $item['active']);
-                    $routeExists = \Illuminate\Support\Facades\Route::has($item['route']);
-                    $href = $routeExists ? route($item['route']) : '#';
+                    $href = \Illuminate\Support\Facades\Route::has($item['route'])
+                        ? route($item['route'])
+                        : route('dashboard');
                 @endphp
                 <a href="{{ $href }}" class="nav-item {{ $isActive ? 'active' : '' }}">
                     {!! $icons[$item['icon']] ?? $icons['home'] !!}

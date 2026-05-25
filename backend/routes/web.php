@@ -7,11 +7,13 @@ use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\ExamTypeWebController;
 use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\ParentWebController;
 use App\Http\Controllers\Web\SettingsWebController;
 use App\Http\Controllers\Web\StudentWebController;
+use App\Http\Controllers\Web\TeacherGradeController;
 use App\Http\Controllers\Web\TeacherWebController;
 use App\Http\Controllers\Web\TeacherAttendanceController;
 use App\Http\Controllers\Web\TeacherBehavioralNoteController;
@@ -72,6 +74,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/subjects/{subject}', [SubjectWebController::class, 'update'])->name('subjects.update');
         Route::delete('/subjects/{subject}', [SubjectWebController::class, 'destroy'])->name('subjects.destroy');
 
+        // Exam Types
+        Route::get('/exam-types', [ExamTypeWebController::class, 'index'])->name('exam-types.index');
+        Route::post('/exam-types', [ExamTypeWebController::class, 'store'])->name('exam-types.store');
+        Route::put('/exam-types/{examType}', [ExamTypeWebController::class, 'update'])->name('exam-types.update');
+        Route::delete('/exam-types/{examType}', [ExamTypeWebController::class, 'destroy'])->name('exam-types.destroy');
+
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
 
@@ -84,6 +92,10 @@ Route::middleware('auth')->group(function () {
     // Teacher routes
     Route::middleware('role:teacher')->prefix('teacher')->name('teacher.')->group(function () {
         Route::get('/schedule', [TeacherWebController::class, 'schedule'])->name('schedule');
+
+        // Grade entry
+        Route::get('/grades/entry', [TeacherGradeController::class, 'entry'])->name('grades.entry');
+        Route::post('/grades/entry', [TeacherGradeController::class, 'store'])->name('grades.store');
 
         // Attendance — justifications must be declared before any future param routes
         Route::get('/attendance/justifications', [TeacherAttendanceController::class, 'justifications'])->name('justifications');
@@ -101,6 +113,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:student')->prefix('student')->name('student.')->group(function () {
         Route::get('/schedule', [StudentWebController::class, 'schedule'])->name('schedule');
         Route::get('/grades', [StudentWebController::class, 'grades'])->name('grades');
+        Route::get('/results', [StudentWebController::class, 'results'])->name('results');
+        Route::get('/results/pdf', [StudentWebController::class, 'downloadReportCard'])->name('results.pdf');
         Route::get('/attendance', [StudentWebController::class, 'attendance'])->name('attendance');
     });
 
@@ -108,7 +122,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:parent')->prefix('parent')->name('parent.')->group(function () {
         Route::get('/children', [ParentWebController::class, 'children'])->name('children');
         Route::get('/children/{child}/schedule', [ParentWebController::class, 'childSchedule'])->name('child-schedule');
+        Route::get('/children/{child}/report-card/pdf', [ParentWebController::class, 'downloadReportCard'])->name('child-report-card.pdf');
         Route::get('/grades', [ParentWebController::class, 'grades'])->name('grades');
+        Route::get('/results', [ParentWebController::class, 'results'])->name('results');
         Route::get('/attendance', [ParentWebController::class, 'attendance'])->name('attendance');
         Route::post('/attendance/{attendance}/justify', [ParentWebController::class, 'storeJustification'])->name('attendance.justify');
         Route::get('/behavioral-notes', [ParentWebController::class, 'behavioralNotes'])->name('behavioral-notes');

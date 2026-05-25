@@ -58,12 +58,37 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Schedule slots (v1 prefix per spec)
+use App\Http\Controllers\Academic\ExamTypeController;
+use App\Http\Controllers\Academic\GradeController;
 use App\Http\Controllers\Academic\ScheduleSlotController;
 use App\Http\Controllers\Academic\AttendanceController;
 use App\Http\Controllers\Academic\AbsenceJustificationController;
 use App\Http\Controllers\Academic\BehavioralNoteController;
 
 Route::prefix('v1')->group(function () {
+    // Exam Types
+    Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+        Route::post('exam-types', [ExamTypeController::class, 'store']);
+        Route::put('exam-types/{id}', [ExamTypeController::class, 'update']);
+        Route::delete('exam-types/{id}', [ExamTypeController::class, 'destroy']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('exam-types', [ExamTypeController::class, 'index']);
+    });
+
+    // Grades
+    Route::middleware(['auth:sanctum', 'role:teacher,admin'])->group(function () {
+        Route::post('grades/bulk', [GradeController::class, 'bulkStore']);
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('grades', [GradeController::class, 'index']);
+        Route::get('grades/class-average', [GradeController::class, 'classAverage']);
+        Route::get('students/{id}/report-card', [GradeController::class, 'reportCard']);
+        Route::get('students/{id}/report-card/pdf', [GradeController::class, 'reportCardPdf']);
+    });
+
     Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::post('schedule-slots', [ScheduleSlotController::class, 'store']);
         Route::put('schedule-slots/{id}', [ScheduleSlotController::class, 'update']);
