@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Web\AcademicYearWebController;
+use App\Http\Controllers\Web\SubjectWebController;
 use App\Http\Controllers\Web\AdminUserController;
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
@@ -24,6 +25,8 @@ Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
 // Password reset
 Route::get('/forgot-password', [AuthWebController::class, 'showForgotPassword'])->name('password.request');
 Route::post('/forgot-password', [AuthWebController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthWebController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->name('password.update');
 
 // Authenticated
 Route::middleware('auth')->group(function () {
@@ -39,6 +42,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
         Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::post('/users/{user}/link-parent', [AdminUserController::class, 'linkParent'])->name('users.link-parent');
+        Route::delete('/users/{user}/unlink-parent', [AdminUserController::class, 'unlinkParent'])->name('users.unlink-parent');
+        Route::post('/users/{user}/link-child', [AdminUserController::class, 'linkChild'])->name('users.link-child');
+        Route::delete('/users/{user}/unlink-child', [AdminUserController::class, 'unlinkChild'])->name('users.unlink-child');
 
         // Academic Years
         Route::get('/academic-years', [AcademicYearWebController::class, 'index'])->name('academic-years.index');
@@ -55,6 +62,15 @@ Route::middleware('auth')->group(function () {
         // Schedule builder
         Route::get('/schedule', [ScheduleWebController::class, 'index'])->name('schedule.index');
         Route::post('/schedule', [ScheduleWebController::class, 'store'])->name('schedule.store');
+
+        // Subjects
+        Route::get('/subjects', [SubjectWebController::class, 'index'])->name('subjects.index');
+        Route::get('/subjects/create', [SubjectWebController::class, 'create'])->name('subjects.create');
+        Route::post('/subjects', [SubjectWebController::class, 'store'])->name('subjects.store');
+        Route::get('/subjects/{subject}', [SubjectWebController::class, 'show'])->name('subjects.show');
+        Route::get('/subjects/{subject}/edit', [SubjectWebController::class, 'edit'])->name('subjects.edit');
+        Route::put('/subjects/{subject}', [SubjectWebController::class, 'update'])->name('subjects.update');
+        Route::delete('/subjects/{subject}', [SubjectWebController::class, 'destroy'])->name('subjects.destroy');
 
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');

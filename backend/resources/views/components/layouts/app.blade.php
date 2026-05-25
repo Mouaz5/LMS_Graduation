@@ -403,6 +403,7 @@
             ['label' => 'Users', 'route' => 'admin.users.index', 'icon' => 'users'],
             ['label' => 'Academic Year', 'route' => 'admin.academic-years.index', 'icon' => 'calendar'],
             ['label' => 'Classrooms', 'route' => 'classrooms.index', 'icon' => 'book'],
+            ['label' => 'Subjects', 'route' => 'admin.subjects.index', 'icon' => 'book'],
             ['label' => 'Assignments', 'route' => 'admin.assignments.index', 'icon' => 'star'],
             ['label' => 'Calendar', 'route' => 'admin.calendar.index', 'icon' => 'calendar'],
             ['label' => 'Schedule', 'route' => 'admin.schedule.index', 'icon' => 'calendar'],

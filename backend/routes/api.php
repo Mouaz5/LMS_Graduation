@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Academic Years (admin only)
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('academic-years', AcademicYearController::class);
     Route::apiResource('semesters', SemesterController::class);
     Route::post('parent-student', [ParentStudentController::class, 'store']);
@@ -52,7 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('classrooms', [ClassroomController::class, 'index']);
     Route::get('teacher-assignments', [TeacherAssignmentController::class, 'index']);
     Route::get('school-calendar', [SchoolCalendarController::class, 'index']);
-    Route::get('subjects', [\App\Http\Controllers\SubjectController::class, 'index']);
+    Route::apiResource('subjects', \App\Http\Controllers\SubjectController::class)->only(['index', 'show']);
+
 });
 
 // Schedule slots (v1 prefix per spec)
