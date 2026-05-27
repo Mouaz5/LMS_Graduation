@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreAcademicYearRequest;
+use App\Http\Requests\Academic\UpdateAcademicYearRequest;
 use App\Models\AcademicYear;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class AcademicYearController extends Controller
 {
@@ -21,33 +22,18 @@ class AcademicYearController extends Controller
         return response()->json($year);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreAcademicYearRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'school_id' => 'required|exists:schools,id',
-            'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'is_active' => 'boolean',
-        ]);
-
-        $year = AcademicYear::create($validated);
+        $year = AcademicYear::create($request->validated());
 
         return response()->json($year, 201);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateAcademicYearRequest $request, int $id): JsonResponse
     {
         $year = AcademicYear::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'string|max:255',
-            'start_date' => 'date',
-            'end_date' => 'date|after:start_date',
-            'is_active' => 'boolean',
-        ]);
-
-        $year->update($validated);
+        $year->update($request->validated());
 
         return response()->json($year);
     }

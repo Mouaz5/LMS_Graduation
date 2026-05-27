@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreAbsenceJustificationRequest;
+use App\Http\Requests\Academic\UpdateAbsenceJustificationRequest;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Services\AttendanceService;
@@ -18,13 +20,9 @@ class AbsenceJustificationController extends Controller
      * POST /api/v1/absence-justifications
      * Role: parent only.
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreAbsenceJustificationRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'attendance_id' => 'required|exists:attendance,id',
-            'reason'        => 'required|string|max:1000',
-            'document'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $attendance = Attendance::findOrFail($validated['attendance_id']);
         $parent     = $request->user();
@@ -64,11 +62,9 @@ class AbsenceJustificationController extends Controller
      *
      * Body: { action: 'approve' | 'reject' }
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateAbsenceJustificationRequest $request, int $id): JsonResponse
     {
-        $validated = $request->validate([
-            'action' => 'required|in:approve,reject',
-        ]);
+        $validated = $request->validated();
 
         $justification = AbsenceJustification::with('attendance.classroom')->findOrFail($id);
 

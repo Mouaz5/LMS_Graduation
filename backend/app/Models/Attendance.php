@@ -26,6 +26,11 @@ class Attendance extends Model
         ];
     }
 
+    public function isPresent(): bool  { return $this->status === 'present'; }
+    public function isAbsent(): bool   { return $this->status === 'absent'; }
+    public function isLate(): bool     { return $this->status === 'late'; }
+    public function isExcused(): bool  { return $this->status === 'excused'; }
+
     public function student(): BelongsTo
     {
         return $this->belongsTo(User::class, 'student_user_id');

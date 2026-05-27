@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreSubjectWebRequest;
+use App\Http\Requests\Web\UpdateSubjectWebRequest;
 use App\Models\School;
 use App\Models\Subject;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SubjectWebController extends Controller
@@ -25,15 +26,9 @@ class SubjectWebController extends Controller
         return view('admin.subjects.create', compact('schools'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreSubjectWebRequest $request): RedirectResponse
     {
-        $request->validate([
-            'school_id' => 'required|exists:schools,id',
-            'name'      => 'required|string|max:255',
-            'code'      => 'required|string|max:20|unique:subjects,code',
-        ]);
-
-        Subject::create($request->only('school_id', 'name', 'code'));
+        Subject::create($request->validated());
 
         return redirect()->route('admin.subjects.index')
                          ->with('success', 'Subject created successfully.');
@@ -61,14 +56,9 @@ class SubjectWebController extends Controller
         return view('admin.subjects.edit', compact('subject', 'schools'));
     }
 
-    public function update(Request $request, Subject $subject): RedirectResponse
+    public function update(UpdateSubjectWebRequest $request, Subject $subject): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:20|unique:subjects,code,' . $subject->id,
-        ]);
-
-        $subject->update($request->only('name', 'code'));
+        $subject->update($request->validated());
 
         return redirect()->route('admin.subjects.index')
                          ->with('success', 'Subject updated successfully.');

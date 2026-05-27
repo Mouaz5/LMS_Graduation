@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreGradeWebRequest;
 use App\Models\ExamType;
 use App\Models\Semester;
 use App\Models\StudentGrade;
@@ -61,17 +62,9 @@ class TeacherGradeController extends Controller
         ));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreGradeWebRequest $request): RedirectResponse
     {
         $teacher = Auth::user();
-
-        $request->validate([
-            'subject_id'    => 'required|integer|exists:subjects,id',
-            'exam_type_id'  => 'required|integer|exists:exam_types,id',
-            'scores'        => 'required|array',
-            'scores.*'      => 'nullable|numeric|min:0',
-            'max_score'     => 'required|numeric|min:0.01',
-        ]);
 
         $subjectId   = $request->integer('subject_id');
         $examTypeId  = $request->integer('exam_type_id');

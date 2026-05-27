@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\TeacherAttendanceStoreRequest;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Models\Classroom;
@@ -50,16 +51,8 @@ class TeacherAttendanceController extends Controller
      * POST /teacher/attendance
      * Form payload: classroom_id, date, schedule_slot_id?, statuses[{student_id}] = status
      */
-    public function store(Request $request): RedirectResponse
+    public function store(TeacherAttendanceStoreRequest $request): RedirectResponse
     {
-        $request->validate([
-            'classroom_id'     => 'required|exists:classrooms,id',
-            'date'             => 'required|date',
-            'schedule_slot_id' => 'nullable|exists:schedule_slots,id',
-            'statuses'         => 'required|array|min:1',
-            'statuses.*'       => 'required|in:present,absent,late,excused',
-        ]);
-
         $entries = [];
         foreach ($request->statuses as $studentId => $status) {
             $entries[] = [

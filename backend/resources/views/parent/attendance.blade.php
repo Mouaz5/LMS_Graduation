@@ -231,7 +231,7 @@
                                     <td>
                                         @if($record->justification)
                                             <span class="badge badge-{{ $record->justification->status }}">{{ ucfirst($record->justification->status) }}</span>
-                                        @elseif($record->status === 'absent')
+                                        @elseif($record->isAbsent())
                                             <button type="button" class="btn-justify"
                                                     onclick="openJustifyModal({{ $record->id }}, '{{ $record->date?->format('M j, Y') }}')">
                                                 Submit Justification

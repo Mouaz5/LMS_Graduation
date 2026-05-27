@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreAssignmentRequest;
 use App\Models\AcademicYear;
 use App\Models\Classroom;
 use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AssignmentWebController extends Controller
@@ -33,14 +33,9 @@ class AssignmentWebController extends Controller
         return view('admin.assignments.create', compact('teachers', 'subjects', 'classrooms', 'academicYears'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreAssignmentRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'teacher_user_id' => 'required|exists:users,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'classroom_id' => 'required|exists:classrooms,id',
-            'academic_year_id' => 'required|exists:academic_years,id',
-        ]);
+        $validated = $request->validated();
 
         // Prevent duplicate assignment
         $exists = TeacherSubjectClassroom::where('teacher_user_id', $validated['teacher_user_id'])

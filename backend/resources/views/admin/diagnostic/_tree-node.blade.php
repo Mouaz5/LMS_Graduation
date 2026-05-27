@@ -1,20 +1,9 @@
 @php
-    $mastery = $node['mastery_percent'];
-    if ($mastery === null) {
-        $circleClass = 'mastery-grey';
-        $label = '—';
-    } elseif ($mastery >= 70) {
-        $circleClass = 'mastery-green';
-        $label = $mastery . '%';
-    } elseif ($mastery >= 40) {
-        $circleClass = 'mastery-yellow';
-        $label = $mastery . '%';
-    } else {
-        $circleClass = 'mastery-red';
-        $label = $mastery . '%';
-    }
+    $level       = $node['level'];
+    $circleClass = $level->color();
+    $label       = $level->label($node['mastery_percent']);
     $hasChildren = count($node['children']) > 0;
-    $nodeId = 'node-' . $node['id'];
+    $nodeId      = 'node-' . $node['id'];
 @endphp
 <li class="tree-node">
     <div class="node-row" onclick="{{ $hasChildren ? 'toggleNode(' . $node['id'] . ')' : '' }}">

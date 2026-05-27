@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Subject\StoreSubjectRequest;
+use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
@@ -13,15 +14,9 @@ class SubjectController extends Controller
         return response()->json(Subject::with('school')->orderBy('name')->get());
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreSubjectRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'school_id' => 'required|exists:schools,id',
-            'name'      => 'required|string|max:255',
-            'code'      => 'required|string|max:20|unique:subjects,code',
-        ]);
-
-        $subject = Subject::create($validated);
+        $subject = Subject::create($request->validated());
 
         return response()->json($subject->load('school'), 201);
     }
@@ -31,16 +26,11 @@ class SubjectController extends Controller
         return response()->json(Subject::with('school')->findOrFail($id));
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateSubjectRequest $request, int $id): JsonResponse
     {
         $subject = Subject::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'code' => 'sometimes|string|max:20|unique:subjects,code,' . $id,
-        ]);
-
-        $subject->update($validated);
+        $subject->update($request->validated());
 
         return response()->json($subject->load('school'));
     }

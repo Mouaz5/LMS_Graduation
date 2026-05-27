@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreTeacherAssignmentRequest;
 use App\Models\TeacherSubjectClassroom;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,16 +26,9 @@ class TeacherAssignmentController extends Controller
         return response()->json($assignments);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreTeacherAssignmentRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'teacher_user_id' => 'required|exists:users,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'classroom_id' => 'required|exists:classrooms,id',
-            'academic_year_id' => 'required|exists:academic_years,id',
-        ]);
-
-        $assignment = TeacherSubjectClassroom::firstOrCreate($validated);
+        $assignment = TeacherSubjectClassroom::firstOrCreate($request->validated());
 
         return response()->json($assignment->load(['subject', 'classroom.grade', 'academicYear']), 201);
     }

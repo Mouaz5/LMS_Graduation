@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreBehavioralNoteWebRequest;
 use App\Models\BehavioralNote;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -37,14 +37,9 @@ class TeacherBehavioralNoteController extends Controller
     /**
      * POST /teacher/behavioral-notes
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreBehavioralNoteWebRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'student_user_id' => 'required|exists:users,id',
-            'note'            => 'required|string|max:2000',
-            'severity'        => 'required|in:info,warning,critical',
-            'date'            => 'required|date',
-        ]);
+        $validated = $request->validated();
 
         $teacher = Auth::user();
 

@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreParentStudentRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ParentStudentController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    public function store(StoreParentStudentRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'parent_user_id' => 'required|exists:users,id',
-            'student_user_id' => 'required|exists:users,id',
-            'relation' => 'required|in:father,mother,guardian',
-        ]);
+        $validated = $request->validated();
 
         $parent = User::findOrFail($validated['parent_user_id']);
         $student = User::findOrFail($validated['student_user_id']);

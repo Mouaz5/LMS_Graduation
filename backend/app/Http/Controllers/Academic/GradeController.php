@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Grade\BulkStoreGradeRequest;
+use App\Http\Requests\Grade\ClassAverageRequest;
 use App\Models\ExamType;
 use App\Models\GradeSummary;
 use App\Models\StudentGrade;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use App\Services\GradeService;
+use App\Services\ReportCardAssembler;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,19 +22,14 @@ use Illuminate\Validation\ValidationException;
 
 class GradeController extends Controller
 {
+    public function __construct(private ReportCardAssembler $assembler) {}
+
     /** POST /api/v1/grades/bulk */
-    public function bulkStore(Request $request): JsonResponse
+    public function bulkStore(BulkStoreGradeRequest $request): JsonResponse
     {
         $teacher = Auth::user();
 
-        $validated = $request->validate([
-            'grades'                 => 'required|array|min:1',
-            'grades.*.student_id'    => 'required|integer|exists:users,id',
-            'grades.*.subject_id'    => 'required|integer|exists:subjects,id',
-            'grades.*.exam_type_id'  => 'required|integer|exists:exam_types,id',
-            'grades.*.score'         => 'required|numeric|min:0',
-            'grades.*.max_score'     => 'required|numeric|min:0.01',
-        ]);
+        $validated = $request->validated();
 
         // Validate score <= max_score per row
         foreach ($validated['grades'] as $i => $row) {
@@ -102,17 +100,8 @@ class GradeController extends Controller
             return response()->json(['message' => 'student_id is required.'], 422);
         }
 
-        // Authorization
-        if ($actor->role === 'student' && $actor->id !== $studentId) {
-            return response()->json(['message' => 'Forbidden.'], 403);
-        }
-
-        if ($actor->role === 'parent') {
-            $children = $actor->children()->pluck('users.id');
-            if (!$children->contains($studentId)) {
-                return response()->json(['message' => 'Forbidden.'], 403);
-            }
-        }
+        $student = User::findOrFail($studentId);
+        $this->authorize('viewRecords', $student);
 
         $query = StudentGrade::where('student_user_id', $studentId)
             ->with(['subject', 'examType', 'teacher']);
@@ -125,13 +114,8 @@ class GradeController extends Controller
     }
 
     /** GET /api/v1/grades/class-average?subject_id=X&exam_type_id=Y */
-    public function classAverage(Request $request): JsonResponse
+    public function classAverage(ClassAverageRequest $request): JsonResponse
     {
-        $request->validate([
-            'subject_id'   => 'required|integer|exists:subjects,id',
-            'exam_type_id' => 'required|integer|exists:exam_types,id',
-        ]);
-
         $stats = StudentGrade::where('subject_id', $request->subject_id)
             ->where('exam_type_id', $request->exam_type_id)
             ->selectRaw('count(*) as count, avg(score/max_score*100) as average, min(score/max_score*100) as min_pct, max(score/max_score*100) as max_pct')
@@ -143,56 +127,30 @@ class GradeController extends Controller
     /** GET /api/v1/students/{id}/report-card?semester_id=Y */
     public function reportCard(Request $request, int $id): JsonResponse
     {
-        $actor = Auth::user();
-        $this->authorizeReportCardAccess($actor, $id);
+        $this->authorizeReportCardAccess($id);
 
-        $semesterId = $request->integer('semester_id');
-
-        $summaries = GradeSummary::where('student_user_id', $id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with(['subject', 'semester.academicYear'])
-            ->get();
-
-        $grades = StudentGrade::where('student_user_id', $id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with(['subject', 'examType'])
-            ->get()
-            ->groupBy(fn($g) => "{$g->subject_id}-{$g->semester_id}");
-
-        $student = User::with('studentProfile.classroom.grade')->find($id);
+        $data = $this->assembler->assemble($id, $request->integer('semester_id') ?: null);
 
         return response()->json([
-            'student'   => $student,
-            'summaries' => $summaries,
-            'grades'    => $grades,
+            'student'   => $data->student,
+            'summaries' => $data->summaries,
+            'grades'    => $data->grades->groupBy(fn($g) => "{$g->subject_id}-{$g->semester_id}"),
         ]);
     }
 
     /** GET /api/v1/students/{id}/report-card/pdf?semester_id=Y */
     public function reportCardPdf(Request $request, int $id): Response
     {
-        $actor = Auth::user();
-        $this->authorizeReportCardAccess($actor, $id);
+        $this->authorizeReportCardAccess($id);
 
-        $semesterId = $request->integer('semester_id');
+        $semesterId = $request->integer('semester_id') ?: null;
+        $data       = $this->assembler->assemble($id, $semesterId);
 
-        $student  = User::with('studentProfile.classroom.grade')->findOrFail($id);
-        $semester = $semesterId ? \App\Models\Semester::with('academicYear')->find($semesterId) : null;
-
-        $summaries = GradeSummary::where('student_user_id', $id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with('subject')
-            ->get();
-
-        $grades = StudentGrade::where('student_user_id', $id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with(['subject', 'examType'])
-            ->get()
-            ->groupBy('subject_id');
-
-        $examTypes = $semesterId
-            ? ExamType::where('semester_id', $semesterId)->orderBy('id')->get()
-            : collect();
+        $student   = $data->student;
+        $semester  = $data->semester;
+        $summaries = $data->summaries;
+        $examTypes = $data->examTypes;
+        $grades    = $data->grades->groupBy('subject_id');
 
         $pdf = Pdf::loadView('pdf.report_card', compact('student', 'semester', 'summaries', 'grades', 'examTypes'))
             ->setPaper('a4', 'portrait');
@@ -200,20 +158,9 @@ class GradeController extends Controller
         return $pdf->download("report_card_{$student->name}_{$semesterId}.pdf");
     }
 
-    private function authorizeReportCardAccess($actor, int $studentId): void
+    private function authorizeReportCardAccess(int $studentId): void
     {
-        if (in_array($actor->role, ['admin', 'teacher'])) {
-            return;
-        }
-        if ($actor->role === 'student' && $actor->id === $studentId) {
-            return;
-        }
-        if ($actor->role === 'parent') {
-            $children = $actor->children()->pluck('users.id');
-            if ($children->contains($studentId)) {
-                return;
-            }
-        }
-        abort(403);
+        $student = User::findOrFail($studentId);
+        $this->authorize('viewRecords', $student);
     }
 }

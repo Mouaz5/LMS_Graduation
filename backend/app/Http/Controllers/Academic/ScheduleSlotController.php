@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Schedule\IndexScheduleRequest;
+use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
+use App\Http\Requests\Schedule\UpdateScheduleSlotRequest;
 use App\Models\ScheduleSlot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,13 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class ScheduleSlotController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function index(IndexScheduleRequest $request): JsonResponse
     {
-        $request->validate([
-            'classroom_id' => 'required|exists:classrooms,id',
-            'semester_id'  => 'required|exists:semesters,id',
-        ]);
-
         $slots = ScheduleSlot::with(['subject', 'teacher', 'classroom.grade'])
             ->where('classroom_id', $request->classroom_id)
             ->where('semester_id', $request->semester_id)
@@ -38,18 +36,9 @@ class ScheduleSlotController extends Controller
         return response()->json($slots);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreScheduleSlotRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'classroom_id'    => 'required|exists:classrooms,id',
-            'subject_id'      => 'required|exists:subjects,id',
-            'teacher_user_id' => 'required|exists:users,id',
-            'day_of_week'     => 'required|in:sunday,monday,tuesday,wednesday,thursday',
-            'period_number'   => 'required|integer|min:1|max:8',
-            'start_time'      => 'required|date_format:H:i',
-            'end_time'        => 'required|date_format:H:i|after:start_time',
-            'semester_id'     => 'required|exists:semesters,id',
-        ]);
+        $validated = $request->validated();
 
         $conflict = ScheduleSlot::where('teacher_user_id', $validated['teacher_user_id'])
             ->where('semester_id', $validated['semester_id'])
@@ -73,20 +62,10 @@ class ScheduleSlotController extends Controller
         );
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateScheduleSlotRequest $request, int $id): JsonResponse
     {
-        $slot = ScheduleSlot::findOrFail($id);
-
-        $validated = $request->validate([
-            'classroom_id'    => 'sometimes|exists:classrooms,id',
-            'subject_id'      => 'sometimes|exists:subjects,id',
-            'teacher_user_id' => 'sometimes|exists:users,id',
-            'day_of_week'     => 'sometimes|in:sunday,monday,tuesday,wednesday,thursday',
-            'period_number'   => 'sometimes|integer|min:1|max:8',
-            'start_time'      => 'sometimes|date_format:H:i',
-            'end_time'        => 'sometimes|date_format:H:i|after:start_time',
-            'semester_id'     => 'sometimes|exists:semesters,id',
-        ]);
+        $slot      = ScheduleSlot::findOrFail($id);
+        $validated = $request->validated();
 
         $teacherId  = $validated['teacher_user_id'] ?? $slot->teacher_user_id;
         $semesterId = $validated['semester_id']      ?? $slot->semester_id;

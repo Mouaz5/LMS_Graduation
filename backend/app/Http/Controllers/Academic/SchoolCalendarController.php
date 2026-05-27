@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreSchoolCalendarRequest;
 use App\Models\SchoolCalendar;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class SchoolCalendarController extends Controller
 {
@@ -15,16 +15,9 @@ class SchoolCalendarController extends Controller
         return response()->json($events);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreSchoolCalendarRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'school_id' => 'required|exists:schools,id',
-            'date' => 'required|date',
-            'type' => 'required|in:holiday,event,exam',
-            'description' => 'required|string|max:500',
-        ]);
-
-        $event = SchoolCalendar::create($validated);
+        $event = SchoolCalendar::create($request->validated());
 
         return response()->json($event, 201);
     }

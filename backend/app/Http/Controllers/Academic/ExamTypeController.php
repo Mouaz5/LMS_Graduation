@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Academic\StoreExamTypeRequest;
+use App\Http\Requests\Academic\UpdateExamTypeRequest;
 use App\Models\ExamType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,28 +22,18 @@ class ExamTypeController extends Controller
         return response()->json($query->orderBy('semester_id')->orderBy('id')->get());
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreExamTypeRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name'           => 'required|string|max:100',
-            'weight_percent' => 'required|numeric|min:0.01|max:100',
-            'semester_id'    => 'required|integer|exists:semesters,id',
-        ]);
-
-        $examType = ExamType::create($validated);
+        $examType = ExamType::create($request->validated());
 
         return response()->json($examType->load('semester'), 201);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UpdateExamTypeRequest $request, int $id): JsonResponse
     {
-        $examType  = ExamType::findOrFail($id);
-        $validated = $request->validate([
-            'name'           => 'sometimes|string|max:100',
-            'weight_percent' => 'sometimes|numeric|min:0.01|max:100',
-        ]);
+        $examType = ExamType::findOrFail($id);
 
-        $examType->update($validated);
+        $examType->update($request->validated());
 
         return response()->json($examType->load('semester'));
     }

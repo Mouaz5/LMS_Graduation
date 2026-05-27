@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Domain\MasteryLevel;
 use App\Http\Controllers\Controller;
-use App\Models\DiagnosticAnswer;
+use App\Http\Requests\Diagnostic\KnowledgeMapRequest;
+use App\Http\Requests\Diagnostic\StartAttemptRequest;
+use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
 use App\Models\DiagnosticAttempt;
-use App\Models\DiagnosticQuestion;
 use App\Models\KnowledgeMapResult;
 use App\Models\LearningObjective;
+use App\Models\User;
+use App\Services\DiagnosticAttemptService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DiagnosticController extends Controller
 {
+    public function __construct(private DiagnosticAttemptService $service) {}
+
     // POST /diagnostic-attempts
-    public function startAttempt(Request $request): JsonResponse
+    public function startAttempt(StartAttemptRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'subject_id' => 'required|exists:subjects,id',
-        ]);
+        $data = $request->validated();
 
         $attempt = DiagnosticAttempt::create([
             'student_user_id' => $request->user()->id,
@@ -58,82 +61,26 @@ class DiagnosticController extends Controller
     }
 
     // POST /diagnostic-attempts/{id}/submit
-    public function submitAttempt(Request $request, int $id): JsonResponse
+    public function submitAttempt(SubmitAttemptRequest $request, int $id): JsonResponse
     {
         $attempt = DiagnosticAttempt::where('id', $id)
             ->where('student_user_id', $request->user()->id)
             ->whereNull('completed_at')
             ->firstOrFail();
 
-        $data = $request->validate([
-            'answers'                     => 'required|array',
-            'answers.*.question_id'       => 'required|exists:diagnostic_questions,id',
-            'answers.*.selected_option_id' => 'nullable|exists:question_options,id',
-        ]);
-
-        DB::transaction(function () use ($attempt, $data) {
-            foreach ($data['answers'] as $ans) {
-                $question = DiagnosticQuestion::find($ans['question_id']);
-                $isCorrect = false;
-
-                if ($ans['selected_option_id']) {
-                    $isCorrect = $question->options()
-                        ->where('id', $ans['selected_option_id'])
-                        ->where('is_correct', true)
-                        ->exists();
-                }
-
-                DiagnosticAnswer::create([
-                    'attempt_id'         => $attempt->id,
-                    'question_id'        => $ans['question_id'],
-                    'selected_option_id' => $ans['selected_option_id'] ?? null,
-                    'is_correct'         => $isCorrect,
-                ]);
-            }
-
-            $attempt->update(['completed_at' => now()]);
-
-            // Recalculate mastery per learning_objective
-            $answers = $attempt->answers()->with('question')->get();
-            $byObjective = $answers->groupBy('question.learning_objective_id');
-
-            foreach ($byObjective as $objectiveId => $objectiveAnswers) {
-                $total   = $objectiveAnswers->count();
-                $correct = $objectiveAnswers->where('is_correct', true)->count();
-                $mastery = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
-
-                KnowledgeMapResult::updateOrCreate(
-                    ['student_user_id' => $attempt->student_user_id, 'learning_objective_id' => $objectiveId],
-                    ['mastery_percent' => $mastery, 'last_assessed_at' => now()]
-                );
-            }
-        });
+        $this->service->submitAnswers($attempt, $request->validated()['answers']);
 
         return response()->json(['message' => 'Attempt submitted successfully.']);
     }
 
     // GET /knowledge-map?student_id=X&subject_id=Y
-    public function knowledgeMap(Request $request): JsonResponse
+    public function knowledgeMap(KnowledgeMapRequest $request): JsonResponse
     {
-        $request->validate([
-            'student_id' => 'required|exists:users,id',
-            'subject_id' => 'required|exists:subjects,id',
-        ]);
+        $studentId = $request->integer('student_id');
+        $subjectId = $request->integer('subject_id');
 
-        $studentId = (int) $request->student_id;
-        $subjectId = (int) $request->subject_id;
-
-        // Authorization: student sees own, admin/teacher sees all
-        $user = $request->user();
-        if ($user->role === 'student' && $user->id !== $studentId) {
-            return response()->json(['message' => 'Forbidden.'], 403);
-        }
-        if ($user->role === 'parent') {
-            $childIds = $user->children()->pluck('users.id')->toArray();
-            if (! in_array($studentId, $childIds)) {
-                return response()->json(['message' => 'Forbidden.'], 403);
-            }
-        }
+        $student = User::findOrFail($studentId);
+        $this->authorize('viewRecords', $student);
 
         $masteryMap = KnowledgeMapResult::where('student_user_id', $studentId)
             ->pluck('mastery_percent', 'learning_objective_id');
@@ -150,12 +97,16 @@ class DiagnosticController extends Controller
 
     private function buildTree($objectives, $masteryMap): array
     {
-        return $objectives->map(fn ($obj) => [
-            'id'              => $obj->id,
-            'name'            => $obj->name,
-            'description'     => $obj->description,
-            'mastery_percent' => $masteryMap[$obj->id] ?? null,
-            'children'        => $this->buildTree($obj->children, $masteryMap),
-        ])->values()->toArray();
+        return $objectives->map(function ($obj) use ($masteryMap) {
+            $pct = $masteryMap[$obj->id] ?? null;
+            return [
+                'id'              => $obj->id,
+                'name'            => $obj->name,
+                'description'     => $obj->description,
+                'mastery_percent' => $pct,
+                'level'           => MasteryLevel::fromPercent($pct),
+                'children'        => $this->buildTree($obj->children, $masteryMap),
+            ];
+        })->values()->toArray();
     }
 }

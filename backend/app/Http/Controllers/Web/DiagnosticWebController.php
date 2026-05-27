@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Domain\MasteryLevel;
 use App\Http\Controllers\Controller;
-use App\Models\DiagnosticAnswer;
+use App\Http\Requests\Diagnostic\StartAttemptRequest;
+use App\Http\Requests\Web\StoreDiagnosticObjectiveRequest;
+use App\Http\Requests\Web\StoreDiagnosticQuestionWebRequest;
+use App\Http\Requests\Web\StudentSubmitAttemptRequest;
 use App\Models\DiagnosticAttempt;
 use App\Models\DiagnosticQuestion;
 use App\Models\KnowledgeMapResult;
 use App\Models\LearningObjective;
 use App\Models\QuestionOption;
 use App\Models\Subject;
+use App\Services\DiagnosticAttemptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class DiagnosticWebController extends Controller
 {
+    public function __construct(private DiagnosticAttemptService $service) {}
+
     // Admin: Test Builder — list subjects, objectives, questions
     public function testBuilder(Request $request)
     {
@@ -41,14 +49,9 @@ class DiagnosticWebController extends Controller
     }
 
     // Admin: store learning objective
-    public function storeObjective(Request $request)
+    public function storeObjective(StoreDiagnosticObjectiveRequest $request)
     {
-        $data = $request->validate([
-            'subject_id'  => 'required|exists:subjects,id',
-            'name'        => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'parent_id'   => 'nullable|exists:learning_objectives,id',
-        ]);
+        $data = $request->validated();
 
         LearningObjective::create($data);
 
@@ -57,17 +60,9 @@ class DiagnosticWebController extends Controller
     }
 
     // Admin: store question with options
-    public function storeQuestion(Request $request)
+    public function storeQuestion(StoreDiagnosticQuestionWebRequest $request)
     {
-        $data = $request->validate([
-            'subject_id'             => 'required|exists:subjects,id',
-            'learning_objective_id'  => 'required|exists:learning_objectives,id',
-            'question_text'          => 'required|string',
-            'type'                   => 'required|in:mcq,true_false',
-            'options'                => 'required|array|min:2',
-            'options.*.option_text'  => 'required|string',
-            'options.*.is_correct'   => 'nullable',
-        ]);
+        $data = $request->validated();
 
         DB::transaction(function () use ($data) {
             $question = DiagnosticQuestion::create([
@@ -159,9 +154,9 @@ class DiagnosticWebController extends Controller
     }
 
     // Student: start a new attempt
-    public function studentStartAttempt(Request $request)
+    public function studentStartAttempt(StartAttemptRequest $request)
     {
-        $data = $request->validate(['subject_id' => 'required|exists:subjects,id']);
+        $data = $request->validated();
 
         // End any open attempt first
         DiagnosticAttempt::where('student_user_id', auth()->id())
@@ -179,48 +174,22 @@ class DiagnosticWebController extends Controller
     }
 
     // Student: submit answers
-    public function studentSubmitAttempt(Request $request, DiagnosticAttempt $attempt)
+    public function studentSubmitAttempt(StudentSubmitAttemptRequest $request, DiagnosticAttempt $attempt)
     {
         abort_if($attempt->student_user_id !== auth()->id(), 403);
 
-        $data = $request->validate([
-            'answers'   => 'required|array',
-            'answers.*' => 'nullable|exists:question_options,id',
-        ]);
+        $data = $request->validated();
 
-        DB::transaction(function () use ($attempt, $data) {
-            foreach ($data['answers'] as $questionId => $optionId) {
-                $question = DiagnosticQuestion::find($questionId);
-                if (! $question) continue;
+        // Normalise from [$questionId => $optionId] to canonical shape
+        $answers = collect($data['answers'])
+            ->map(fn ($optionId, $questionId) => [
+                'question_id'        => (int) $questionId,
+                'selected_option_id' => $optionId ? (int) $optionId : null,
+            ])
+            ->values()
+            ->all();
 
-                $isCorrect = $optionId
-                    ? $question->options()->where('id', $optionId)->where('is_correct', true)->exists()
-                    : false;
-
-                DiagnosticAnswer::create([
-                    'attempt_id'         => $attempt->id,
-                    'question_id'        => $questionId,
-                    'selected_option_id' => $optionId ?? null,
-                    'is_correct'         => $isCorrect,
-                ]);
-            }
-
-            $attempt->update(['completed_at' => now()]);
-
-            $answers = $attempt->answers()->with('question')->get();
-            $byObjective = $answers->groupBy('question.learning_objective_id');
-
-            foreach ($byObjective as $objectiveId => $objectiveAnswers) {
-                $total   = $objectiveAnswers->count();
-                $correct = $objectiveAnswers->where('is_correct', true)->count();
-                $mastery = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
-
-                KnowledgeMapResult::updateOrCreate(
-                    ['student_user_id' => $attempt->student_user_id, 'learning_objective_id' => $objectiveId],
-                    ['mastery_percent' => $mastery, 'last_assessed_at' => now()]
-                );
-            }
-        });
+        $this->service->submitAnswers($attempt, $answers);
 
         return redirect()->route('student.diagnostic.knowledge-map', ['subject_id' => $attempt->subject_id])
             ->with('success', 'Test submitted! Your knowledge map has been updated.');
@@ -251,12 +220,16 @@ class DiagnosticWebController extends Controller
 
     private function buildTree($objectives, $masteryMap): array
     {
-        return $objectives->map(fn ($obj) => [
-            'id'              => $obj->id,
-            'name'            => $obj->name,
-            'description'     => $obj->description,
-            'mastery_percent' => isset($masteryMap[$obj->id]) ? (float) $masteryMap[$obj->id] : null,
-            'children'        => $this->buildTree($obj->children, $masteryMap),
-        ])->values()->toArray();
+        return $objectives->map(function ($obj) use ($masteryMap) {
+            $pct = isset($masteryMap[$obj->id]) ? (float) $masteryMap[$obj->id] : null;
+            return [
+                'id'              => $obj->id,
+                'name'            => $obj->name,
+                'description'     => $obj->description,
+                'mastery_percent' => $pct,
+                'level'           => MasteryLevel::fromPercent($pct),
+                'children'        => $this->buildTree($obj->children, $masteryMap),
+            ];
+        })->values()->toArray();
     }
 }

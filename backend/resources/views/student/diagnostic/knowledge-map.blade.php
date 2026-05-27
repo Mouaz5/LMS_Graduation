@@ -101,10 +101,10 @@
             }
         };
         $flatten($tree);
-        $assessed = $flatTree->filter(fn($n) => $n['mastery_percent'] !== null);
-        $mastered  = $assessed->filter(fn($n) => $n['mastery_percent'] >= 70)->count();
-        $developing = $assessed->filter(fn($n) => $n['mastery_percent'] >= 40 && $n['mastery_percent'] < 70)->count();
-        $needsWork  = $assessed->filter(fn($n) => $n['mastery_percent'] < 40)->count();
+        $assessed   = $flatTree->filter(fn($n) => $n['mastery_percent'] !== null);
+        $mastered   = $assessed->filter(fn($n) => $n['level'] === \App\Domain\MasteryLevel::Mastered)->count();
+        $developing = $assessed->filter(fn($n) => $n['level'] === \App\Domain\MasteryLevel::Developing)->count();
+        $needsWork  = $assessed->filter(fn($n) => $n['level'] === \App\Domain\MasteryLevel::NeedsWork)->count();
         $avgMastery = $assessed->isNotEmpty() ? round($assessed->avg('mastery_percent'), 1) : null;
     @endphp
 

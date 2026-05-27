@@ -199,7 +199,7 @@
                                 <td>
                                     @if($record->justification)
                                         <span class="badge badge-{{ $record->justification->status }}">{{ ucfirst($record->justification->status) }}</span>
-                                    @elseif($record->status === 'absent')
+                                    @elseif($record->isAbsent())
                                         <span class="badge badge-none" style="font-size: 11px;">No justification</span>
                                     @else
                                         <span style="color: #cbd5e1; font-size: 12px;">—</span>

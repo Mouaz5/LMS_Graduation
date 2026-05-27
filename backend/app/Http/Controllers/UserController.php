@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateRoleRequest;
+use App\Http\Requests\User\UpdateStatusRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -24,20 +25,16 @@ class UserController extends Controller
         return response()->json($user->only('id', 'name', 'email', 'role', 'phone', 'is_active', 'created_at'));
     }
 
-    public function updateRole(Request $request, int $id): JsonResponse
+    public function updateRole(UpdateRoleRequest $request, int $id): JsonResponse
     {
-        $request->validate(['role' => 'required|in:admin,teacher,student,parent']);
-
         $user = User::findOrFail($id);
         $user->update(['role' => $request->role]);
 
         return response()->json(['message' => 'Role updated.', 'user' => $user->only('id', 'name', 'email', 'role')]);
     }
 
-    public function updateStatus(Request $request, int $id): JsonResponse
+    public function updateStatus(UpdateStatusRequest $request, int $id): JsonResponse
     {
-        $request->validate(['is_active' => 'required|boolean']);
-
         $user = User::findOrFail($id);
         $user->update(['is_active' => $request->is_active]);
 

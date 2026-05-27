@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Domain\MasteryLevel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,6 +14,11 @@ class KnowledgeMapResult extends Model
         'last_assessed_at' => 'datetime',
         'mastery_percent'  => 'float',
     ];
+
+    public function masteryLevel(): MasteryLevel
+    {
+        return MasteryLevel::fromPercent($this->mastery_percent);
+    }
 
     public function student(): BelongsTo
     {

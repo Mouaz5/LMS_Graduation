@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
 use App\Models\Classroom;
 use App\Models\ScheduleSlot;
 use App\Models\Semester;
@@ -39,18 +40,9 @@ class ScheduleWebController extends Controller
         ));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreScheduleSlotRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'classroom_id'    => 'required|exists:classrooms,id',
-            'subject_id'      => 'required|exists:subjects,id',
-            'teacher_user_id' => 'required|exists:users,id',
-            'day_of_week'     => 'required|in:sunday,monday,tuesday,wednesday,thursday',
-            'period_number'   => 'required|integer|min:1|max:8',
-            'start_time'      => 'required|date_format:H:i',
-            'end_time'        => 'required|date_format:H:i|after:start_time',
-            'semester_id'     => 'required|exists:semesters,id',
-        ]);
+        $validated = $request->validated();
 
         $conflict = ScheduleSlot::where('teacher_user_id', $validated['teacher_user_id'])
             ->where('semester_id', $validated['semester_id'])

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\LinkChildRequest;
+use App\Http\Requests\Web\LinkParentRequest;
+use App\Http\Requests\Web\StoreUserRequest;
+use App\Http\Requests\Web\UnlinkChildRequest;
+use App\Http\Requests\Web\UnlinkParentRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class AdminUserController extends Controller
@@ -49,16 +52,8 @@ class AdminUserController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|in:admin,teacher,student,parent',
-            'phone' => 'nullable|string|max:20',
-        ]);
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -77,14 +72,9 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User status updated.');
     }
 
-    public function linkParent(Request $request, User $user): RedirectResponse
+    public function linkParent(LinkParentRequest $request, User $user): RedirectResponse
     {
         abort_unless($user->role === 'student', 422, 'User is not a student.');
-
-        $request->validate([
-            'parent_user_id' => 'required|exists:users,id',
-            'relation'       => 'required|in:father,mother,guardian',
-        ]);
 
         $parent = User::findOrFail($request->parent_user_id);
         abort_unless($parent->role === 'parent', 422, 'Selected user is not a parent.');
@@ -106,10 +96,8 @@ class AdminUserController extends Controller
                          ->with('success', "{$parent->name} linked as {$request->relation}.");
     }
 
-    public function unlinkParent(Request $request, User $user): RedirectResponse
+    public function unlinkParent(UnlinkParentRequest $request, User $user): RedirectResponse
     {
-        $request->validate(['parent_user_id' => 'required|exists:users,id']);
-
         DB::table('parent_student')
             ->where('parent_user_id', $request->parent_user_id)
             ->where('student_user_id', $user->id)
@@ -119,14 +107,9 @@ class AdminUserController extends Controller
                          ->with('success', 'Parent unlinked.');
     }
 
-    public function linkChild(Request $request, User $user): RedirectResponse
+    public function linkChild(LinkChildRequest $request, User $user): RedirectResponse
     {
         abort_unless($user->role === 'parent', 422, 'User is not a parent.');
-
-        $request->validate([
-            'student_user_id' => 'required|exists:users,id',
-            'relation'        => 'required|in:father,mother,guardian',
-        ]);
 
         $student = User::findOrFail($request->student_user_id);
         abort_unless($student->role === 'student', 422, 'Selected user is not a student.');
@@ -148,10 +131,8 @@ class AdminUserController extends Controller
                          ->with('success', "{$student->name} linked as your child.");
     }
 
-    public function unlinkChild(Request $request, User $user): RedirectResponse
+    public function unlinkChild(UnlinkChildRequest $request, User $user): RedirectResponse
     {
-        $request->validate(['student_user_id' => 'required|exists:users,id']);
-
         DB::table('parent_student')
             ->where('parent_user_id', $user->id)
             ->where('student_user_id', $request->student_user_id)

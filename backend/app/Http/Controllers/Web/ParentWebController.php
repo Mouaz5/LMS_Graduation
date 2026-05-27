@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreJustificationWebRequest;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Models\BehavioralNote;
@@ -190,7 +191,7 @@ class ParentWebController extends Controller
         return view('parent.behavioral-notes', compact('parent', 'children', 'selectedChild', 'notes'));
     }
 
-    public function storeJustification(Request $request, Attendance $attendance): RedirectResponse
+    public function storeJustification(StoreJustificationWebRequest $request, Attendance $attendance): RedirectResponse
     {
         $parent = Auth::user();
 
@@ -205,11 +206,6 @@ class ParentWebController extends Controller
             422,
             'A justification already exists for this absence.'
         );
-
-        $request->validate([
-            'reason'   => 'required|string|max:1000',
-            'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
 
         $documentUrl = null;
         if ($request->hasFile('document')) {

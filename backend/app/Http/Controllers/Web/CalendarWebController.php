@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreCalendarEventRequest;
 use App\Models\School;
 use App\Models\SchoolCalendar;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CalendarWebController extends Controller
@@ -28,20 +28,14 @@ class CalendarWebController extends Controller
         return view('admin.calendar.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCalendarEventRequest $request): RedirectResponse
     {
-        $request->validate([
-            'date' => 'required|date',
-            'type' => 'required|in:holiday,event,exam',
-            'description' => 'required|string|max:500',
-        ]);
-
         $school = School::first();
 
         SchoolCalendar::create([
-            'school_id' => $school->id,
-            'date' => $request->date,
-            'type' => $request->type,
+            'school_id'   => $school->id,
+            'date'        => $request->date,
+            'type'        => $request->type,
             'description' => $request->description,
         ]);
 
