@@ -96,7 +96,9 @@
         @else
             <div class="empty-state">
                 No learning objectives defined for {{ $subject->name }}.
-                <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">Go to Test Builder →</a>
+                @if(auth()->user()->role === 'admin')
+                    <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">Go to Test Builder →</a>
+                @endif
             </div>
         @endif
     </div>
