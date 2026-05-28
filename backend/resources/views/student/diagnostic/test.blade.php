@@ -1,21 +1,17 @@
 <x-layouts.app pageTitle="Diagnostic Test">
 <style>
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-    .page-desc { font-size: 13px; color: #64748b; margin-bottom: 20px; }
 
     .filter-card {
         background: white; border-radius: 14px; border: 1px solid #f1f5f9;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
-    .filter-group { display: flex; flex-direction: column; gap: 5px; }
-    .filter-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; }
     .filter-select {
         padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
         font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
         background: #fafafa; outline: none; min-width: 220px;
     }
-    .filter-select:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
 
     .card { background: white; border-radius: 14px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
     .card-header { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }

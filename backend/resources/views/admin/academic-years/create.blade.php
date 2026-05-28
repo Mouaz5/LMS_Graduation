@@ -18,23 +18,6 @@
             color: #334155;
             margin-bottom: 6px;
         }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
-            color: #0f172a;
-            background: #fafafa;
-            transition: all 0.2s;
-            outline: none;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
-            background: white;
-        }
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -52,11 +35,6 @@
         }
         .checkbox-group label {
             margin-bottom: 0;
-        }
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 28px;
         }
         .btn-primary {
             display: inline-flex;

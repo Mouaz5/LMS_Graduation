@@ -9,3 +9,194 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ==========================================================
+   Shared UI utilities — promoted from per-page <style> blocks.
+   Only classes that were byte-for-byte identical across all
+   callers are here. Divergent classes stay page-local.
+   ========================================================== */
+@layer components {
+
+    /* ── Page chrome ── */
+    .page-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .page-desc {
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    /* ── Tables ── */
+    .table-card {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+
+    .table-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .table-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .table-meta {
+        font-size: 12.5px;
+        color: #94a3b8;
+    }
+
+    .pagination-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        border-top: 1px solid #f1f5f9;
+        font-size: 13px;
+        color: #64748b;
+    }
+
+    /* ── Filters ── */
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .filter-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+    }
+
+    .filter-select:focus {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    /* ── Buttons ── */
+    .btn-primary svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    /* ── Detail cards ── */
+    .detail-card {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+        max-width: 640px;
+    }
+
+    .detail-body {
+        padding: 0;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    /* ── Forms ── */
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: 'DM Sans', sans-serif;
+        color: #0f172a;
+        background: #fafafa;
+        transition: all 0.2s;
+        outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        background: white;
+    }
+
+    /* ── Dashboard cards ── */
+    .dash-card {
+        background: white;
+        border-radius: 14px;
+        padding: 24px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .dash-card-hdr {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .dash-card-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .dash-card-ttl {
+        font-family: 'Playfair Display', serif;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .dash-card-sub {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    .dash-card-empty {
+        text-align: center;
+        padding: 20px;
+        color: #cbd5e1;
+        font-size: 13px;
+    }
+
+    /* ── Empty states ── */
+    .empty-title {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .empty-desc {
+        font-size: 13px;
+        color: #94a3b8;
+    }
+}

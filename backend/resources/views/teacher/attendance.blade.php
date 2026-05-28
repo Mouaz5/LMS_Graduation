@@ -2,7 +2,6 @@
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-        .page-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
 
         .filter-card {
             background: white;
@@ -16,8 +15,6 @@
             flex-wrap: wrap;
             align-items: flex-end;
         }
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-        .filter-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; }
         .filter-select, .filter-input {
             padding: 9px 14px;
             border: 1.5px solid #e2e8f0;
@@ -31,23 +28,6 @@
             min-width: 180px;
         }
         .filter-select:focus, .filter-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-
-        .table-card {
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
-        }
-        .table-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .table-title { font-size: 14px; font-weight: 700; color: #0f172a; }
-        .table-meta { font-size: 12.5px; color: #94a3b8; }
 
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
@@ -131,8 +111,6 @@
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 14px;
         }
-        .empty-title { font-weight: 700; color: #0f172a; font-size: 15px; margin-bottom: 4px; }
-        .empty-desc { font-size: 13px; color: #94a3b8; }
 
         .bulk-select-bar {
             display: flex; gap: 8px; align-items: center;

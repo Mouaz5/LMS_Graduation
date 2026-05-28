@@ -36,11 +36,6 @@
             background: white;
         }
         .form-group textarea { resize: vertical; min-height: 80px; }
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 28px;
-        }
         .btn-primary {
             display: inline-flex;
             align-items: center;

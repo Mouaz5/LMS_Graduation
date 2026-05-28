@@ -5,10 +5,6 @@
             display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px;
         }
         .back-link:hover { color: #334155; }
-        .detail-card {
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; max-width: 640px;
-        }
         .detail-header {
             padding: 28px; display: flex; align-items: center; gap: 16px;
             border-bottom: 1px solid #f1f5f9;
@@ -20,12 +16,10 @@
         }
         .detail-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
         .detail-email { font-size: 13px; color: #94a3b8; margin-top: 2px; }
-        .detail-body { padding: 0; }
         .detail-row {
             display: flex; align-items: center; justify-content: space-between;
             padding: 16px 28px; border-bottom: 1px solid #f8fafc;
         }
-        .detail-row:last-child { border-bottom: none; }
         .detail-label { font-size: 13px; font-weight: 500; color: #94a3b8; }
         .detail-value { font-size: 14px; font-weight: 600; color: #0f172a; }
         .badge {

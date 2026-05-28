@@ -2,7 +2,6 @@
 <style>
     .page-header { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-    .page-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
 
     .card {
         background: white;

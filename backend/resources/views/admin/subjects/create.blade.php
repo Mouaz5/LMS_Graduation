@@ -9,16 +9,7 @@
             display: block; font-size: 13px; font-weight: 600;
             color: #334155; margin-bottom: 6px;
         }
-        .form-group input, .form-group select {
-            width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0;
-            border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif;
-            color: #0f172a; background: #fafafa; transition: all 0.2s; outline: none;
-        }
-        .form-group input:focus, .form-group select:focus {
-            border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); background: white;
-        }
         .field-hint { font-size: 11.5px; color: #94a3b8; margin-top: 4px; }
-        .btn-row { display: flex; gap: 12px; margin-top: 28px; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 10px 24px; background: #4F46E5; color: white; border: none;

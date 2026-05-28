@@ -1,10 +1,5 @@
 <x-layouts.app pageTitle="Subjects">
     <style>
-        .page-actions {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-        }
-        .page-desc { font-size: 13px; color: #64748b; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 9px 20px; background: #4F46E5; color: white;
@@ -13,11 +8,6 @@
             transition: all 0.2s; box-shadow: 0 2px 8px rgba(79,70,229,0.3);
         }
         .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
-        .btn-primary svg { width: 15px; height: 15px; }
-        .table-card {
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
-        }
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
         th {

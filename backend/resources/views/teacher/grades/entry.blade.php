@@ -2,32 +2,23 @@
 <style>
     .page-header { margin-bottom: 20px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-    .page-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
 
     .filter-card {
         background: white; border-radius: 14px; border: 1px solid #f1f5f9;
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
-    .filter-group { display: flex; flex-direction: column; gap: 5px; }
-    .filter-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; }
     .filter-select {
         padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
         font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
         background: #fafafa; outline: none; transition: border 0.2s; min-width: 180px;
     }
-    .filter-select:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
 
     .btn-primary {
         padding: 9px 20px; background: #4F46E5; color: white; border: none; border-radius: 8px;
         font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s;
     }
     .btn-primary:hover { background: #3730a3; }
-
-    .table-card { background: white; border-radius: 14px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
-    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #f1f5f9; }
-    .table-title { font-size: 14px; font-weight: 700; color: #0f172a; }
-    .table-meta { font-size: 12.5px; color: #94a3b8; }
 
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #f8fafc; }

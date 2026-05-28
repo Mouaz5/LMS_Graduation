@@ -5,7 +5,7 @@
     $hasChildren = count($node['children']) > 0;
 @endphp
 <li class="tree-node">
-    <div class="node-row" onclick="{{ $hasChildren ? 'toggleNode(' . $node['id'] . ')' : '' }}">
+    <div class="node-row" @if($hasChildren) data-node-id="{{ $node['id'] }}" @endif>
         @if($hasChildren)
             <span class="node-toggle" id="toggle-{{ $node['id'] }}">▶</span>
         @else
@@ -23,9 +23,27 @@
         <div class="node-children" id="children-{{ $node['id'] }}">
             <ul>
                 @foreach($node['children'] as $child)
-                    @include('student.diagnostic._tree-node', ['node' => $child])
+                    @include('components.diagnostic.tree-node', ['node' => $child])
                 @endforeach
             </ul>
         </div>
     @endif
 </li>
+
+@once
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.tree').forEach(function (tree) {
+        tree.addEventListener('click', function (e) {
+            const row = e.target.closest('[data-node-id]');
+            if (!row) return;
+            const id = row.dataset.nodeId;
+            const children = document.getElementById('children-' + id);
+            const toggle   = document.getElementById('toggle-'   + id);
+            if (children) children.classList.toggle('open');
+            if (toggle)   toggle.classList.toggle('open');
+        });
+    });
+});
+</script>
+@endonce

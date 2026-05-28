@@ -1,14 +1,5 @@
 <x-layouts.app pageTitle="Teacher Assignments">
     <style>
-        .page-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .page-desc { font-size: 13px; color: #64748b; }
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -28,14 +19,6 @@
             background: #4338ca;
             transform: translateY(-1px);
             box-shadow: 0 4px 14px rgba(79,70,229,0.4);
-        }
-        .btn-primary svg { width: 15px; height: 15px; }
-        .table-card {
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
         }
         .table-toolbar {
             display: flex;
@@ -62,7 +45,6 @@
             transition: all 0.2s;
         }
         .search-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-        .table-meta { font-size: 12.5px; color: #94a3b8; }
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
         th {
@@ -88,15 +70,6 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-        }
-        .pagination-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 20px;
-            border-top: 1px solid #f1f5f9;
-            font-size: 13px;
-            color: #64748b;
         }
         .empty-state {
             text-align: center;

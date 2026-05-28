@@ -1,21 +1,5 @@
 <x-layouts.app pageTitle="Classrooms">
     <style>
-        .page-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .page-desc { font-size: 13px; color: #64748b; }
-        .table-card {
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
-        }
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
         th {

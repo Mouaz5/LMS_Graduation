@@ -23,17 +23,6 @@
             gap: 16px;
         }
         @media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } }
-        .dash-card {
-            background: white;
-            border-radius: 14px;
-            padding: 24px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-        .card-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .card-ico { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .card-ttl { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0f172a; }
-        .card-sub { font-size: 12px; color: #94a3b8; }
         .schedule-item {
             display: flex;
             align-items: center;
@@ -56,7 +45,6 @@
             font-weight: 700;
             flex-shrink: 0;
         }
-        .empty-box { text-align: center; padding: 20px; color: #cbd5e1; font-size: 13px; }
         .classroom-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -88,27 +76,21 @@
 
     <div class="cards-grid">
         {{-- My Grades --}}
-        <div class="dash-card">
-            <div class="card-hdr">
-                <div class="card-ico" style="background: #fffbeb;">
-                    <svg width="20" height="20" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                </div>
-                <div><div class="card-ttl">My Grades</div><div class="card-sub">Latest academic results</div></div>
-            </div>
-            <div class="empty-box">
+        <x-dashboard.card title="My Grades" subtitle="Latest academic results" iconBg="#fffbeb">
+            <x-slot:icon>
+                <svg width="20" height="20" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+            </x-slot:icon>
+            <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 Grades module coming soon
             </div>
-        </div>
+        </x-dashboard.card>
 
         {{-- Schedule --}}
-        <div class="dash-card">
-            <div class="card-hdr">
-                <div class="card-ico" style="background: #eef2ff;">
-                    <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                <div><div class="card-ttl">Today's Schedule</div><div class="card-sub">{{ now()->format('l') }}</div></div>
-            </div>
+        <x-dashboard.card title="Today's Schedule" :subtitle="now()->format('l')" iconBg="#eef2ff">
+            <x-slot:icon>
+                <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </x-slot:icon>
             @forelse($todaySlots as $slot)
                 <div class="schedule-item">
                     <div class="period-badge">P{{ $slot->period_number }}</div>
@@ -118,39 +100,33 @@
                     </div>
                 </div>
             @empty
-                <div class="empty-box">
+                <div class="dash-card-empty">
                     <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     No classes scheduled for today
                 </div>
             @endforelse
-        </div>
+        </x-dashboard.card>
 
         {{-- Announcements --}}
-        <div class="dash-card">
-            <div class="card-hdr">
-                <div class="card-ico" style="background: #faf5ff;">
-                    <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
-                </div>
-                <div><div class="card-ttl">Announcements</div><div class="card-sub">School notices</div></div>
-            </div>
-            <div class="empty-box">
+        <x-dashboard.card title="Announcements" subtitle="School notices" iconBg="#faf5ff">
+            <x-slot:icon>
+                <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+            </x-slot:icon>
+            <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
                 No announcements yet
             </div>
-        </div>
+        </x-dashboard.card>
 
         {{-- Attendance --}}
-        <div class="dash-card">
-            <div class="card-hdr">
-                <div class="card-ico" style="background: #ecfdf5;">
-                    <svg width="20" height="20" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <div><div class="card-ttl">Attendance</div><div class="card-sub">This month's record</div></div>
-            </div>
-            <div class="empty-box">
+        <x-dashboard.card title="Attendance" subtitle="This month's record" iconBg="#ecfdf5">
+            <x-slot:icon>
+                <svg width="20" height="20" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </x-slot:icon>
+            <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Attendance module coming soon
             </div>
-        </div>
+        </x-dashboard.card>
     </div>
 </x-layouts.app>

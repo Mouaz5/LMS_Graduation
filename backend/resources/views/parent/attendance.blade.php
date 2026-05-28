@@ -2,7 +2,6 @@
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-        .page-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
 
         .child-selector {
             background: white; border-radius: 14px;
@@ -12,8 +11,6 @@
             margin-bottom: 20px;
             display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
         }
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-        .filter-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; }
         .filter-select, .filter-input {
             padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px;
             font-size: 13px; font-family: 'DM Sans', sans-serif; color: #374151;
@@ -26,19 +23,6 @@
             font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
         }
         .btn-filter:hover { background: #4338ca; }
-
-        .table-card {
-            background: white; border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            overflow: hidden;
-        }
-        .table-header {
-            padding: 18px 20px; border-bottom: 1px solid #f1f5f9;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .table-title { font-size: 14px; font-weight: 700; color: #0f172a; }
-        .table-meta { font-size: 12.5px; color: #94a3b8; }
 
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
@@ -121,19 +105,11 @@
         }
         .btn-cancel:hover { background: #f1f5f9; }
 
-        .pagination-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px; border-top: 1px solid #f1f5f9;
-            font-size: 13px; color: #64748b;
-        }
-
         .empty-state { text-align: center; padding: 56px 20px; }
         .empty-icon {
             width: 56px; height: 56px; background: #f1f5f9; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
         }
-        .empty-title { font-weight: 700; color: #0f172a; font-size: 15px; margin-bottom: 4px; }
-        .empty-desc { font-size: 13px; color: #94a3b8; }
     </style>
 
     <div class="page-header">

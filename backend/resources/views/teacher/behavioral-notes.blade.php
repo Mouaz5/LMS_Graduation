@@ -2,7 +2,6 @@
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-        .page-desc { font-size: 13px; color: #64748b; margin-top: 2px; }
 
         .two-col { display: grid; grid-template-columns: 380px 1fr; gap: 20px; align-items: start; }
         @media(max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
@@ -83,19 +82,7 @@
         .badge-warning  { background: #fef3c7; color: #78350f; }
         .badge-critical { background: #fee2e2; color: #991b1b; }
 
-        .table-header { padding: 18px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
-        .table-title { font-size: 14px; font-weight: 700; color: #0f172a; }
-        .table-meta { font-size: 12.5px; color: #94a3b8; }
-
-        .pagination-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px; border-top: 1px solid #f1f5f9;
-            font-size: 13px; color: #64748b;
-        }
-
         .empty-state { text-align: center; padding: 48px 20px; }
-        .empty-title { font-weight: 700; color: #0f172a; font-size: 15px; margin-bottom: 4px; }
-        .empty-desc { font-size: 13px; color: #94a3b8; }
 
         .error-msg { font-size: 12px; color: #ef4444; margin-top: 4px; }
     </style>
