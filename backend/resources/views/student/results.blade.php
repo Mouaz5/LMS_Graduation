@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="My Results">
+<x-layouts.app :pageTitle="__('My Results')">
 <style>
     .page-header { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -68,15 +68,15 @@
 
 <div class="page-header">
     <div>
-        <div class="page-title">My Results</div>
-        <div class="page-desc">Your academic scores per subject</div>
+        <div class="page-title">{{ __("My Results") }}</div>
+        <div class="page-desc">{{ __("Your academic scores per subject") }}</div>
     </div>
     @if($selectedSemesterId)
         <a href="{{ route('student.results.pdf', ['semester_id' => $selectedSemesterId]) }}" class="btn-download" target="_blank">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            Download Report Card
+            {{ __("Download Report Card") }}
         </a>
     @endif
 </div>
@@ -85,7 +85,7 @@
 <form method="GET" action="{{ route('student.results') }}">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Semester</label>
+            <label class="filter-label">{{ __("Semester") }}</label>
             <select class="filter-select" name="semester_id" onchange="this.form.submit()">
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
@@ -131,7 +131,7 @@
                 </div>
                 <div class="subject-card-footer">
                     <div>
-                        <div class="avg-label">Weighted Average</div>
+                        <div class="avg-label">{{ __("Weighted Average") }}</div>
                         <div class="progress-bar-wrap" style="width:160px; margin-top:6px;">
                             <div class="progress-bar" style="width:{{ min($summary->weighted_average, 100) }}%"></div>
                         </div>
@@ -145,8 +145,8 @@
     <div style="background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
         <div class="empty-state">
             <div class="empty-icon">📊</div>
-            <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">No results yet</div>
-            <div>No grades have been entered for this semester.</div>
+            <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">{{ __("No results yet") }}</div>
+            <div>{{ __("No grades have been entered for this semester.") }}</div>
         </div>
     </div>
 @endif

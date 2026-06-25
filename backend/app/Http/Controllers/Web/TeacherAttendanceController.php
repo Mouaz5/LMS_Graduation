@@ -74,7 +74,7 @@ class TeacherAttendanceController extends Controller
                 'date'         => $request->date,
                 'classroom_id' => $request->classroom_id,
             ])
-            ->with('success', 'Attendance recorded successfully.');
+            ->with('success', __('Attendance recorded successfully.'));
     }
 
     /**
@@ -113,7 +113,7 @@ class TeacherAttendanceController extends Controller
         $this->service->approveJustification($justification);
 
         return redirect()->route('teacher.justifications')
-            ->with('success', 'Justification approved and attendance marked as excused.');
+            ->with('success', __('Justification approved and attendance marked as excused.'));
     }
 
     /**
@@ -130,7 +130,7 @@ class TeacherAttendanceController extends Controller
         $this->service->rejectJustification($justification);
 
         return redirect()->route('teacher.justifications')
-            ->with('success', 'Justification rejected.');
+            ->with('success', __('Justification rejected.'));
     }
 
     private function getTeacherClassrooms($teacher)

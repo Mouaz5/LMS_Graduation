@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Schedule Builder">
+<x-layouts.app :pageTitle="__('Schedule Builder')">
     <style>
         .controls-bar {
             display: flex;
@@ -169,10 +169,10 @@
     {{-- Page header --}}
     <div style="margin-bottom: 24px;">
         <div style="font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
-            Schedule Builder
+            {{ __("Schedule Builder") }}
         </div>
         <div style="font-size:13px; color:var(--text-secondary);">
-            Build and manage weekly class timetables. Select a classroom and semester to view or edit.
+            {{ __("Build and manage weekly class timetables. Select a classroom and semester to view or edit.") }}
         </div>
     </div>
 
@@ -184,7 +184,7 @@
     {{-- Classroom + Semester selectors — submits as GET to reload page with data --}}
     <form method="GET" action="{{ route('admin.schedule.index') }}" class="controls-bar">
         <select name="classroom_id" onchange="this.form.submit()">
-            <option value="">— Select Classroom —</option>
+            <option value="">{{ __("— Select Classroom —") }}</option>
             @foreach($classrooms as $cr)
                 <option value="{{ $cr->id }}" @selected($classroomId == $cr->id)>
                     {{ $cr->name }} ({{ $cr->grade->name }})
@@ -192,7 +192,7 @@
             @endforeach
         </select>
         <select name="semester_id" onchange="this.form.submit()">
-            <option value="">— Select Semester —</option>
+            <option value="">{{ __("— Select Semester —") }}</option>
             @foreach($semesters as $sem)
                 <option value="{{ $sem->id }}" @selected($semesterId == $sem->id)>
                     {{ $sem->name }} — {{ $sem->academicYear->name }}
@@ -202,19 +202,19 @@
     </form>
 
     @if(!$classroomId || !$semesterId)
-        <div class="hint-box">Select a classroom and semester above to view or build the schedule.</div>
+        <div class="hint-box">{{ __("Select a classroom and semester above to view or build the schedule.") }}</div>
     @else
         {{-- Schedule grid --}}
         <div class="schedule-grid">
             <table class="grid-table">
                 <thead>
                     <tr>
-                        <th style="min-width:90px;">Period</th>
-                        <th>Sunday</th>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
+                        <th style="min-width:90px;">{{ __("Period") }}</th>
+                        <th>{{ __("Sunday") }}</th>
+                        <th>{{ __("Monday") }}</th>
+                        <th>{{ __("Tuesday") }}</th>
+                        <th>{{ __("Wednesday") }}</th>
+                        <th>{{ __("Thursday") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -249,8 +249,8 @@
     <div class="modal-overlay" id="slotModal">
         <div class="modal">
             <div class="modal-header">
-                <h3 id="modalTitle">Assign Slot</h3>
-                <p id="modalSubtitle">Choose a teacher and subject for this period.</p>
+                <h3 id="modalTitle">{{ __("Assign Slot") }}</h3>
+                <p id="modalSubtitle">{{ __("Choose a teacher and subject for this period.") }}</p>
             </div>
 
             <form method="POST" action="{{ route('admin.schedule.store') }}">
@@ -261,18 +261,18 @@
                 <input type="hidden" name="period_number" id="modalPeriod">
 
                 <div class="form-group">
-                    <label>Teacher</label>
+                    <label>{{ __("Teacher") }}</label>
                     <select name="teacher_user_id" required>
-                        <option value="">— Select Teacher —</option>
+                        <option value="">{{ __("— Select Teacher —") }}</option>
                         @foreach($teachers as $teacher)
                             <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Subject</label>
+                    <label>{{ __("Subject") }}</label>
                     <select name="subject_id" required>
-                        <option value="">— Select Subject —</option>
+                        <option value="">{{ __("— Select Subject —") }}</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->code }})</option>
                         @endforeach
@@ -280,18 +280,18 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Start Time</label>
+                        <label>{{ __("Start Time") }}</label>
                         <input type="time" name="start_time" step="300" required>
                     </div>
                     <div class="form-group">
-                        <label>End Time</label>
+                        <label>{{ __("End Time") }}</label>
                         <input type="time" name="end_time" step="300" required>
                     </div>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn-save">Save Slot</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal()">{{ __("Cancel") }}</button>
+                    <button type="submit" class="btn-save">{{ __("Save Slot") }}</button>
                 </div>
             </form>
         </div>

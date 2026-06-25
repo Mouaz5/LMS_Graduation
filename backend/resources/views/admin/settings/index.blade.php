@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Settings">
+<x-layouts.app :pageTitle="__('Settings')">
     <style>
         .settings-container {
             display: flex;
@@ -62,15 +62,15 @@
                 <circle cx="12" cy="12" r="3" stroke-width="2"/>
             </svg>
         </div>
-        <div class="settings-title">Settings</div>
+        <div class="settings-title">{{ __("Settings") }}</div>
         <div class="settings-desc">
-            System settings and configuration options will be available here. This section is under development.
+            {{ __("System settings and configuration options will be available here. This section is under development.") }}
         </div>
         <div class="coming-soon-badge">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            Coming Soon
+            {{ __("Coming Soon") }}
         </div>
     </div>
 </x-layouts.app>

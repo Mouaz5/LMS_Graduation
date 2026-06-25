@@ -63,21 +63,21 @@ class AdminUserController extends Controller
             'is_active' => true,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', __('User created successfully.'));
     }
 
     public function toggleStatus(User $user): RedirectResponse
     {
         $user->update(['is_active' => ! $user->is_active]);
-        return redirect()->route('admin.users.index')->with('success', 'User status updated.');
+        return redirect()->route('admin.users.index')->with('success', __('User status updated.'));
     }
 
     public function linkParent(LinkParentRequest $request, User $user): RedirectResponse
     {
-        abort_unless($user->role === 'student', 422, 'User is not a student.');
+        abort_unless($user->role === 'student', 422, __('User is not a student.'));
 
         $parent = User::findOrFail($request->parent_user_id);
-        abort_unless($parent->role === 'parent', 422, 'Selected user is not a parent.');
+        abort_unless($parent->role === 'parent', 422, __('Selected user is not a parent.'));
 
         $exists = DB::table('parent_student')
             ->where('parent_user_id', $parent->id)
@@ -104,15 +104,15 @@ class AdminUserController extends Controller
             ->delete();
 
         return redirect()->route('admin.users.show', $user)
-                         ->with('success', 'Parent unlinked.');
+                         ->with('success', __('Parent unlinked.'));
     }
 
     public function linkChild(LinkChildRequest $request, User $user): RedirectResponse
     {
-        abort_unless($user->role === 'parent', 422, 'User is not a parent.');
+        abort_unless($user->role === 'parent', 422, __('User is not a parent.'));
 
         $student = User::findOrFail($request->student_user_id);
-        abort_unless($student->role === 'student', 422, 'Selected user is not a student.');
+        abort_unless($student->role === 'student', 422, __('Selected user is not a student.'));
 
         $exists = DB::table('parent_student')
             ->where('parent_user_id', $user->id)
@@ -139,6 +139,6 @@ class AdminUserController extends Controller
             ->delete();
 
         return redirect()->route('admin.users.show', $user)
-                         ->with('success', 'Child unlinked.');
+                         ->with('success', __('Child unlinked.'));
     }
 }

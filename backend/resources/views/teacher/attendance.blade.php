@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Take Attendance">
+<x-layouts.app :pageTitle="__('Take Attendance')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -129,8 +129,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">Take Attendance</div>
-        <div class="page-desc">Select a classroom and date to record student attendance</div>
+        <div class="page-title">{{ __("Take Attendance") }}</div>
+        <div class="page-desc">{{ __("Select a classroom and date to record student attendance") }}</div>
     </div>
 
     @if(session('success'))
@@ -143,9 +143,9 @@
     <form method="GET" action="{{ route('teacher.attendance') }}">
         <div class="filter-card">
             <div class="filter-group">
-                <label class="filter-label">Classroom</label>
+                <label class="filter-label">{{ __("Classroom") }}</label>
                 <select name="classroom_id" class="filter-select" onchange="this.form.submit()">
-                    <option value="">— Select Classroom —</option>
+                    <option value="">{{ __("— Select Classroom —") }}</option>
                     @foreach($classrooms as $classroom)
                         <option value="{{ $classroom->id }}" @selected($selectedClassroomId == $classroom->id)>
                             {{ $classroom->name }} ({{ $classroom->grade->name ?? '—' }})
@@ -154,7 +154,7 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label class="filter-label">Date</label>
+                <label class="filter-label">{{ __("Date") }}</label>
                 <input type="date" name="date" class="filter-input" value="{{ $selectedDate }}" onchange="this.form.submit()">
             </div>
         </div>
@@ -166,8 +166,8 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
                 </div>
-                <div class="empty-title">No Students Found</div>
-                <div class="empty-desc">This classroom has no enrolled students.</div>
+                <div class="empty-title">{{ __("No Students Found") }}</div>
+                <div class="empty-desc">{{ __("This classroom has no enrolled students.") }}</div>
             </div>
         </div>
     @elseif($students->isNotEmpty())
@@ -184,16 +184,16 @@
                 <div class="table-header">
                     <div>
                         <div class="table-title">
-                            {{ $classrooms->firstWhere('id', $selectedClassroomId)?->name ?? 'Classroom' }}
+                            {{ $classrooms->firstWhere('id', $selectedClassroomId)?->name ?? __('Classroom') }}
                             — {{ \Carbon\Carbon::parse($selectedDate)->format('D, M j, Y') }}
                         </div>
-                        <div class="table-meta">{{ $students->count() }} students</div>
+                        <div class="table-meta">{{ __(":count students", ['count' => $students->count()]) }}</div>
                     </div>
                     <div class="bulk-select-bar">
-                        <span style="font-size: 12px; color: #94a3b8; margin-right: 4px;">Mark all:</span>
-                        <button type="button" class="btn-quick" onclick="markAll('present')">Present</button>
-                        <button type="button" class="btn-quick" onclick="markAll('absent')">Absent</button>
-                        <button type="button" class="btn-quick" onclick="markAll('late')">Late</button>
+                        <span style="font-size: 12px; color: #94a3b8; margin-inline-end: 4px;">{{ __("Mark all:") }}</span>
+                        <button type="button" class="btn-quick" onclick="markAll('present')">{{ __("Present") }}</button>
+                        <button type="button" class="btn-quick" onclick="markAll('absent')">{{ __("Absent") }}</button>
+                        <button type="button" class="btn-quick" onclick="markAll('late')">{{ __("Late") }}</button>
                     </div>
                 </div>
 
@@ -202,8 +202,8 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Student</th>
-                                <th>Status</th>
+                                <th>{{ __("Student") }}</th>
+                                <th>{{ __("Status") }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -219,7 +219,7 @@
                                     </td>
                                     <td>
                                         <div class="radio-group" data-student="{{ $profile->user_id }}">
-                                            @foreach(['present' => 'Present', 'absent' => 'Absent', 'late' => 'Late', 'excused' => 'Excused'] as $val => $label)
+                                            @foreach(['present' => __('Present'), 'absent' => __('Absent'), 'late' => __('Late'), 'excused' => __('Excused')] as $val => $label)
                                                 <label class="radio-label {{ $val }}">
                                                     <input type="radio"
                                                            name="statuses[{{ $profile->user_id }}]"
@@ -239,12 +239,12 @@
                 <div class="submit-bar">
                     <div style="font-size: 13px; color: #64748b;">
                         @if($existingAttendance->isNotEmpty())
-                            <span style="color: #10b981; font-weight: 600;">✓ Attendance already recorded</span> — submitting will update existing records.
+                            <span style="color: #10b981; font-weight: 600;">{{ __("✓ Attendance already recorded") }}</span> {{ __("— submitting will update existing records.") }}
                         @else
-                            Recording attendance for <strong>{{ $students->count() }}</strong> students.
+                            {{ __("Recording attendance for") }} <strong>{{ $students->count() }}</strong> {{ __("students.") }}
                         @endif
                     </div>
-                    <button type="submit" class="btn-submit">Save Attendance</button>
+                    <button type="submit" class="btn-submit">{{ __("Save Attendance") }}</button>
                 </div>
             </div>
         </form>
@@ -254,8 +254,8 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
-                <div class="empty-title">Select a Classroom</div>
-                <div class="empty-desc">Choose a classroom and date above to start recording attendance.</div>
+                <div class="empty-title">{{ __("Select a Classroom") }}</div>
+                <div class="empty-desc">{{ __("Choose a classroom and date above to start recording attendance.") }}</div>
             </div>
         </div>
     @endif

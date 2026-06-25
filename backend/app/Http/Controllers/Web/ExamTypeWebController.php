@@ -24,20 +24,20 @@ class ExamTypeWebController extends Controller
     {
         ExamType::create($request->validated());
 
-        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type created.');
+        return redirect()->route('admin.exam-types.index')->with('success', __('Exam type created.'));
     }
 
     public function update(UpdateExamTypeWebRequest $request, ExamType $examType): RedirectResponse
     {
         $examType->update($request->validated());
 
-        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type updated.');
+        return redirect()->route('admin.exam-types.index')->with('success', __('Exam type updated.'));
     }
 
     public function destroy(ExamType $examType): RedirectResponse
     {
         $examType->delete();
 
-        return redirect()->route('admin.exam-types.index')->with('success', 'Exam type deleted.');
+        return redirect()->route('admin.exam-types.index')->with('success', __('Exam type deleted.'));
     }
 }

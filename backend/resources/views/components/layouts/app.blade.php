@@ -8,7 +8,7 @@
     <title>{{ $title ?? 'SchoolLMS' }} — Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
@@ -33,14 +33,20 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'DM Sans', 'Cairo', sans-serif;
             background: var(--surface-2);
             color: var(--text-primary);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', 'Cairo', serif; }
+
+        /* Arabic glyphs fall through to Cairo per-glyph via the font stacks above;
+           force Cairo for headings in RTL so Playfair's Latin-only serif never shows. */
+        [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+            font-family: 'Cairo', sans-serif;
+        }
 
         /* === LAYOUT === */
         .app-wrapper {
@@ -314,7 +320,7 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'DM Sans', 'Cairo', sans-serif;
         }
 
         .logout-btn:hover {
@@ -470,12 +476,12 @@
             </div>
             <div>
                 <div class="logo-text">SchoolLMS</div>
-                <div class="logo-sub">Management System</div>
+                <div class="logo-sub">{{ __("Management System") }}</div>
             </div>
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-section-label">Navigation</div>
+            <div class="nav-section-label">{{ __("Navigation") }}</div>
             @foreach($menuItems as $item)
                 @php
                     $isActive = request()->routeIs($item['route']) || (isset($item['active']) && $item['active']);
@@ -484,7 +490,7 @@
                 @endphp
                 <a href="{{ $href }}" class="nav-item {{ $isActive ? 'active' : '' }}">
                     {!! $icons[$item['icon']] ?? $icons['home'] !!}
-                    <span>{{ $item['label'] }}</span>
+                    <span>{{ __($item['label']) }}</span>
                 </a>
             @endforeach
         </nav>
@@ -494,7 +500,7 @@
                 <div class="user-avatar">{{ $initials }}</div>
                 <div class="user-info">
                     <div class="user-name">{{ $user->name }}</div>
-                    <div class="user-role">{{ $currentRole }}</div>
+                    <div class="user-role">{{ __(ucfirst($currentRole)) }}</div>
                 </div>
             </div>
         </div>
@@ -511,11 +517,13 @@
                     </svg>
                 </button>
                 <div>
-                    <div class="page-title">{{ $pageTitle ?? 'Dashboard' }}</div>
+                    <div class="page-title">{{ $pageTitle ?? __('Dashboard') }}</div>
                 </div>
             </div>
 
             <div class="topbar-right">
+                <x-language-switcher />
+
                 <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">{{ $user->name }}</span>
 
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
@@ -524,7 +532,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
-                        Logout
+                        {{ __("Logout") }}
                     </button>
                 </form>
             </div>

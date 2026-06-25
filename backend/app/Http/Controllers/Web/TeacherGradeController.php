@@ -77,7 +77,7 @@ class TeacherGradeController extends Controller
             ->exists();
 
         if (!$isAssigned) {
-            return back()->withErrors(['subject_id' => 'You are not assigned to this subject.']);
+            return back()->withErrors(['subject_id' => __('You are not assigned to this subject.')]);
         }
 
         $tuples = [];
@@ -115,6 +115,6 @@ class TeacherGradeController extends Controller
             GradeService::refreshSummaries($tuples);
         });
 
-        return back()->with('success', 'Grades saved successfully.');
+        return back()->with('success', __('Grades saved successfully.'));
     }
 }

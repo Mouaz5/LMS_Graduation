@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Children's Attendance">
+<x-layouts.app :pageTitle="__('Children\'s Attendance')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -113,8 +113,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">Children's Attendance</div>
-        <div class="page-desc">View your child's absence history and submit justifications</div>
+        <div class="page-title">{{ __("Children's Attendance") }}</div>
+        <div class="page-desc">{{ __("View your child's absence history and submit justifications") }}</div>
     </div>
 
     @if(session('success'))
@@ -129,7 +129,7 @@
         <div class="child-selector">
             @if($children->count() > 1)
                 <div class="filter-group">
-                    <label class="filter-label">Child</label>
+                    <label class="filter-label">{{ __("Child") }}</label>
                     <select name="child_id" class="filter-select" onchange="this.form.submit()">
                         @foreach($children as $child)
                             <option value="{{ $child->id }}" @selected($selectedChild?->id == $child->id)>
@@ -140,19 +140,19 @@
                 </div>
             @endif
             <div class="filter-group">
-                <label class="filter-label">From</label>
+                <label class="filter-label">{{ __("From") }}</label>
                 <input type="date" name="date_from" class="filter-input" value="{{ request('date_from') }}">
             </div>
             <div class="filter-group">
-                <label class="filter-label">To</label>
+                <label class="filter-label">{{ __("To") }}</label>
                 <input type="date" name="date_to" class="filter-input" value="{{ request('date_to') }}">
             </div>
             @if($selectedChild)
                 <input type="hidden" name="child_id" value="{{ $selectedChild->id }}">
             @endif
-            <button type="submit" class="btn-filter">Filter</button>
+            <button type="submit" class="btn-filter">{{ __("Filter") }}</button>
             @if(request('date_from') || request('date_to'))
-                <a href="{{ route('parent.attendance', ['child_id' => $selectedChild?->id]) }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none;">Clear</a>
+                <a href="{{ route('parent.attendance', ['child_id' => $selectedChild?->id]) }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none;">{{ __("Clear") }}</a>
             @endif
         </div>
     </form>
@@ -163,16 +163,16 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/></svg>
                 </div>
-                <div class="empty-title">No Children Linked</div>
-                <div class="empty-desc">No children are linked to your account yet.</div>
+                <div class="empty-title">{{ __("No Children Linked") }}</div>
+                <div class="empty-desc">{{ __("No children are linked to your account yet.") }}</div>
             </div>
         </div>
     @else
         <div class="table-card">
             <div class="table-header">
                 <div>
-                    <div class="table-title">{{ $selectedChild->name }}'s Attendance</div>
-                    <div class="table-meta">{{ $records->total() }} records</div>
+                    <div class="table-title">{{ __(":name's Attendance", ['name' => $selectedChild->name]) }}</div>
+                    <div class="table-meta">{{ __(":count records", ['count' => $records->total()]) }}</div>
                 </div>
             </div>
 
@@ -181,18 +181,18 @@
                     <div class="empty-icon">
                         <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
-                    <div class="empty-title">No Records Found</div>
-                    <div class="empty-desc">No attendance has been recorded yet for this period.</div>
+                    <div class="empty-title">{{ __("No Records Found") }}</div>
+                    <div class="empty-desc">{{ __("No attendance has been recorded yet for this period.") }}</div>
                 </div>
             @else
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Subject</th>
-                                <th>Status</th>
-                                <th>Justification</th>
+                                <th>{{ __("Date") }}</th>
+                                <th>{{ __("Subject") }}</th>
+                                <th>{{ __("Status") }}</th>
+                                <th>{{ __("Justification") }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -210,7 +210,7 @@
                                         @elseif($record->isAbsent())
                                             <button type="button" class="btn-justify"
                                                     onclick="openJustifyModal({{ $record->id }}, '{{ $record->date?->format('M j, Y') }}')">
-                                                Submit Justification
+                                                {{ __("Submit Justification") }}
                                             </button>
                                         @else
                                             <span style="color: #cbd5e1; font-size: 12px;">—</span>
@@ -224,17 +224,17 @@
 
                 @if($records->hasPages())
                     <div class="pagination-row">
-                        <div>Page {{ $records->currentPage() }} of {{ $records->lastPage() }}</div>
+                        <div>{{ __("Page :current of :last", ['current' => $records->currentPage(), 'last' => $records->lastPage()]) }}</div>
                         <div style="display: flex; gap: 6px;">
                             @if($records->onFirstPage())
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</span>
                             @else
-                                <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← Prev</a>
+                                <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
                             @endif
                             @if($records->hasMorePages())
-                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">Next →</a>
+                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
                             @else
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
                             @endif
                         </div>
                     </div>
@@ -246,20 +246,20 @@
     {{-- Justification Modal --}}
     <div class="modal-overlay" id="justifyModal">
         <div class="modal-box">
-            <div class="modal-title">Submit Justification</div>
-            <div class="modal-subtitle" id="modalSubtitle">Absence on —</div>
+            <div class="modal-title">{{ __("Submit Justification") }}</div>
+            <div class="modal-subtitle" id="modalSubtitle">{{ __("Absence on") }} —</div>
 
             <form id="justifyForm" method="POST" enctype="multipart/form-data">
                 @csrf
-                <label class="modal-label">Reason</label>
-                <textarea name="reason" class="modal-textarea" placeholder="Explain the reason for the absence..." required></textarea>
+                <label class="modal-label">{{ __("Reason") }}</label>
+                <textarea name="reason" class="modal-textarea" placeholder="{{ __('Explain the reason for the absence...') }}" required></textarea>
 
-                <label class="modal-label">Supporting Document (optional)</label>
+                <label class="modal-label">{{ __("Supporting Document (optional)") }}</label>
                 <input type="file" name="document" class="modal-input" accept=".pdf,.jpg,.jpeg,.png">
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeJustifyModal()">Cancel</button>
-                    <button type="submit" class="btn-submit">Submit</button>
+                    <button type="button" class="btn-cancel" onclick="closeJustifyModal()">{{ __("Cancel") }}</button>
+                    <button type="submit" class="btn-submit">{{ __("Submit") }}</button>
                 </div>
             </form>
         </div>

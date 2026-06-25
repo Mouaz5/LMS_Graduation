@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="My Attendance">
+<x-layouts.app :pageTitle="__('My Attendance')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -81,8 +81,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">My Attendance</div>
-        <div class="page-desc">View your attendance history and justification statuses</div>
+        <div class="page-title">{{ __("My Attendance") }}</div>
+        <div class="page-desc">{{ __("View your attendance history and justification statuses") }}</div>
     </div>
 
     {{-- Stats --}}
@@ -98,25 +98,25 @@
             <div class="stat-icon" style="background: #eef2ff;">
                 <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             </div>
-            <div><div class="stat-value">{{ $total }}</div><div class="stat-label">Total Days</div></div>
+            <div><div class="stat-value">{{ $total }}</div><div class="stat-label">{{ __("Total Days") }}</div></div>
         </div>
         <div class="stat-card">
             <div class="stat-icon" style="background: #d1fae5;">
                 <svg width="20" height="20" fill="none" stroke="#059669" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <div><div class="stat-value" style="color: #059669;">{{ $present }}</div><div class="stat-label">Present</div></div>
+            <div><div class="stat-value" style="color: #059669;">{{ $present }}</div><div class="stat-label">{{ __("Present") }}</div></div>
         </div>
         <div class="stat-card">
             <div class="stat-icon" style="background: #fee2e2;">
                 <svg width="20" height="20" fill="none" stroke="#dc2626" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </div>
-            <div><div class="stat-value" style="color: #dc2626;">{{ $absent }}</div><div class="stat-label">Absent</div></div>
+            <div><div class="stat-value" style="color: #dc2626;">{{ $absent }}</div><div class="stat-label">{{ __("Absent") }}</div></div>
         </div>
         <div class="stat-card">
             <div class="stat-icon" style="background: #fef3c7;">
                 <svg width="20" height="20" fill="none" stroke="#d97706" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
-            <div><div class="stat-value" style="color: #d97706;">{{ $rate }}%</div><div class="stat-label">Rate</div></div>
+            <div><div class="stat-value" style="color: #d97706;">{{ $rate }}%</div><div class="stat-label">{{ __("Rate") }}</div></div>
         </div>
     </div>
 
@@ -124,24 +124,24 @@
     <form method="GET" action="{{ route('student.attendance') }}">
         <div class="filter-card">
             <div class="filter-group">
-                <label class="filter-label">From</label>
+                <label class="filter-label">{{ __("From") }}</label>
                 <input type="date" name="date_from" class="filter-input" value="{{ request('date_from') }}">
             </div>
             <div class="filter-group">
-                <label class="filter-label">To</label>
+                <label class="filter-label">{{ __("To") }}</label>
                 <input type="date" name="date_to" class="filter-input" value="{{ request('date_to') }}">
             </div>
-            <button type="submit" class="btn-filter">Filter</button>
+            <button type="submit" class="btn-filter">{{ __("Filter") }}</button>
             @if(request('date_from') || request('date_to'))
-                <a href="{{ route('student.attendance') }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none;">Clear</a>
+                <a href="{{ route('student.attendance') }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none;">{{ __("Clear") }}</a>
             @endif
         </div>
     </form>
 
     <div class="table-card">
         <div class="table-header">
-            <div class="table-title">Attendance History</div>
-            <div class="table-meta">{{ $records->total() }} records</div>
+            <div class="table-title">{{ __("Attendance History") }}</div>
+            <div class="table-meta">{{ __(":count records", ['count' => $records->total()]) }}</div>
         </div>
 
         @if($records->isEmpty())
@@ -149,18 +149,18 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
-                <div class="empty-title">No Records Found</div>
-                <div class="empty-desc">No attendance records match the selected filters.</div>
+                <div class="empty-title">{{ __("No Records Found") }}</div>
+                <div class="empty-desc">{{ __("No attendance records match the selected filters.") }}</div>
             </div>
         @else
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th>Justification</th>
+                            <th>{{ __("Date") }}</th>
+                            <th>{{ __("Subject") }}</th>
+                            <th>{{ __("Status") }}</th>
+                            <th>{{ __("Justification") }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -176,7 +176,7 @@
                                     @if($record->justification)
                                         <span class="badge badge-{{ $record->justification->status }}">{{ ucfirst($record->justification->status) }}</span>
                                     @elseif($record->isAbsent())
-                                        <span class="badge badge-none" style="font-size: 11px;">No justification</span>
+                                        <span class="badge badge-none" style="font-size: 11px;">{{ __("No justification") }}</span>
                                     @else
                                         <span style="color: #cbd5e1; font-size: 12px;">—</span>
                                     @endif
@@ -189,17 +189,17 @@
 
             @if($records->hasPages())
                 <div class="pagination-row">
-                    <div>Page {{ $records->currentPage() }} of {{ $records->lastPage() }}</div>
+                    <div>{{ __("Page :current of :last", ['current' => $records->currentPage(), 'last' => $records->lastPage()]) }}</div>
                     <div style="display: flex; gap: 6px;">
                         @if($records->onFirstPage())
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
                         @else
-                            <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← Prev</a>
+                            <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                         @endif
                         @if($records->hasMorePages())
-                            <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">Next →</a>
+                            <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                         @else
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                         @endif
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Create Subject">
+<x-layouts.app :pageTitle="__('Create Subject')">
     <style>
         .form-card {
             background: white; border-radius: 14px; border: 1px solid #f1f5f9;
@@ -30,7 +30,7 @@
 
     <div style="margin-bottom: 20px;">
         <a href="{{ route('admin.subjects.index') }}" style="font-size: 13px; color: #64748b; text-decoration: none;">
-            &larr; Back to Subjects
+            &larr; {{ __("Back to Subjects") }}
         </a>
     </div>
 
@@ -39,9 +39,9 @@
             @csrf
 
             <div class="form-group">
-                <label for="school_id">School</label>
+                <label for="school_id">{{ __("School") }}</label>
                 <select id="school_id" name="school_id" required>
-                    <option value="">Select school…</option>
+                    <option value="">{{ __("Select school…") }}</option>
                     @foreach($schools as $school)
                         <option value="{{ $school->id }}" {{ old('school_id') == $school->id ? 'selected' : '' }}>
                             {{ $school->name }}
@@ -52,26 +52,26 @@
             </div>
 
             <div class="form-group">
-                <label for="name">Subject Name</label>
+                <label for="name">{{ __("Subject Name") }}</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}"
-                       placeholder="e.g. Mathematics" required>
+                       placeholder="{{ __('e.g. Mathematics') }}" required>
                 @error('name')<div class="error">{{ $message }}</div>@enderror
             </div>
 
             <div class="form-group">
-                <label for="code">Subject Code</label>
+                <label for="code">{{ __("Subject Code") }}</label>
                 <input type="text" id="code" name="code" value="{{ old('code') }}"
-                       placeholder="e.g. MATH101" required>
-                <div class="field-hint">Must be unique across all subjects.</div>
+                       placeholder="{{ __('e.g. MATH101') }}" required>
+                <div class="field-hint">{{ __("Must be unique across all subjects.") }}</div>
                 @error('code')<div class="error">{{ $message }}</div>@enderror
             </div>
 
             <div class="btn-row">
                 <button type="submit" class="btn-primary">
                     <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Create Subject
+                    {{ __("Create Subject") }}
                 </button>
-                <a href="{{ route('admin.subjects.index') }}" class="btn-secondary">Cancel</a>
+                <a href="{{ route('admin.subjects.index') }}" class="btn-secondary">{{ __("Cancel") }}</a>
             </div>
         </form>
     </div>

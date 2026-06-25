@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="User Management">
+<x-layouts.app :pageTitle="__('User Management')">
     <style>
         .btn-primary {
             display: inline-flex;
@@ -62,31 +62,31 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">All Users</div>
-            <div class="page-desc">{{ $users->total() }} users registered in the system</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("All Users") }}</div>
+            <div class="page-desc">{{ __(':count users registered in the system', ['count' => $users->total()]) }}</div>
         </div>
         <a href="{{ route('admin.users.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Create User
+            {{ __("Create User") }}
         </a>
     </div>
 
     <div class="table-card">
         <div class="table-toolbar">
-            <input type="text" class="search-input" placeholder="Search users..." oninput="filterTable(this.value)">
-            <div class="table-meta">Showing {{ $users->firstItem() }}–{{ $users->lastItem() }} of {{ $users->total() }}</div>
+            <input type="text" class="search-input" placeholder="{{ __('Search users...') }}" oninput="filterTable(this.value)">
+            <div class="table-meta">{{ __('Showing :from–:to of :total', ['from' => $users->firstItem(), 'to' => $users->lastItem(), 'total' => $users->total()]) }}</div>
         </div>
 
         <div style="overflow-x: auto;">
             <table id="usersTable">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Role</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Joined</th>
-                        <th>Actions</th>
+                        <th>{{ __("User") }}</th>
+                        <th>{{ __("Role") }}</th>
+                        <th>{{ __("Phone") }}</th>
+                        <th>{{ __("Status") }}</th>
+                        <th>{{ __("Joined") }}</th>
+                        <th>{{ __("Actions") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,7 +95,7 @@
                     @empty
                         <tr>
                             <td colspan="6" style="text-align: center; padding: 48px; color: #cbd5e1; font-size: 14px;">
-                                No users found
+                                {{ __("No users found") }}
                             </td>
                         </tr>
                     @endforelse
@@ -105,18 +105,18 @@
 
         @if($users->hasPages())
         <div class="pagination-row">
-            <div>Page {{ $users->currentPage() }} of {{ $users->lastPage() }}</div>
+            <div>{{ __('Page :current of :last', ['current' => $users->currentPage(), 'last' => $users->lastPage()]) }}</div>
             <div style="display: flex; gap: 6px; align-items: center;">
                 @if($users->onFirstPage())
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
                 @else
-                    <a href="{{ $users->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">← Prev</a>
+                    <a href="{{ $users->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">{{ __("← Prev") }}</a>
                 @endif
 
                 @if($users->hasMorePages())
-                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">Next →</a>
+                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">{{ __("Next →") }}</a>
                 @else
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                 @endif
             </div>
         </div>

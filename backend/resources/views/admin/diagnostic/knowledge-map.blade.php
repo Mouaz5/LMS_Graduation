@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Knowledge Map">
+<x-layouts.app :pageTitle="__('Knowledge Map')">
 <style>
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
 
@@ -17,8 +17,8 @@
 
     /* Tree styles */
     .tree { font-size: 13px; }
-    .tree ul { list-style: none; padding-left: 24px; margin: 0; }
-    .tree > ul { padding-left: 0; }
+    .tree ul { list-style: none; padding-inline-start: 24px; margin: 0; }
+    .tree > ul { padding-inline-start: 0; }
     .tree-node { margin: 6px 0; }
     .node-row {
         display: flex; align-items: center; gap: 10px; cursor: pointer;
@@ -46,24 +46,24 @@
     .empty-state { padding: 60px 20px; text-align: center; color: #94a3b8; }
 </style>
 
-<div class="page-title">Knowledge Map</div>
-<div class="page-desc">View student mastery across learning objectives.</div>
+<div class="page-title">{{ __('Knowledge Map') }}</div>
+<div class="page-desc">{{ __('View student mastery across learning objectives.') }}</div>
 
 <form method="GET" action="{{ request()->is('teacher/*') ? route('teacher.diagnostic.knowledge-map') : route('admin.diagnostic.knowledge-map') }}">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Subject</label>
+            <label class="filter-label">{{ __('Subject') }}</label>
             <select class="filter-select" name="subject_id" onchange="this.form.submit()">
-                <option value="">-- Select Subject --</option>
+                <option value="">-- {{ __('Select Subject') }} --</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
                 @endforeach
             </select>
         </div>
         <div class="filter-group">
-            <label class="filter-label">Student</label>
+            <label class="filter-label">{{ __('Student') }}</label>
             <select class="filter-select" name="student_id" onchange="this.form.submit()">
-                <option value="">-- Select Student --</option>
+                <option value="">-- {{ __('Select Student') }} --</option>
                 @foreach($students as $st)
                     <option value="{{ $st->id }}" {{ $student?->id == $st->id ? 'selected' : '' }}>{{ $st->name }}</option>
                 @endforeach
@@ -74,10 +74,10 @@
 
 @if($subject && $student)
     <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#dcfce7; border:1px solid #bbf7d0;"></div> Mastered (≥70%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fef9c3; border:1px solid #fde68a;"></div> Developing (40–69%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fee2e2; border:1px solid #fca5a5;"></div> Needs Work (&lt;40%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></div> Not Assessed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#dcfce7; border:1px solid #bbf7d0;"></div> {{ __('Mastered (≥70%)') }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fef9c3; border:1px solid #fde68a;"></div> {{ __('Developing (40–69%)') }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fee2e2; border:1px solid #fca5a5;"></div> {{ __('Needs Work (&lt;40%)') }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></div> {{ __('Not Assessed') }}</div>
     </div>
 
     <div class="card">
@@ -91,16 +91,16 @@
             </div>
         @else
             <div class="empty-state">
-                No learning objectives defined for {{ $subject->name }}.
+                {{ __('No learning objectives defined for :name.', ['name' => $subject->name]) }}
                 @if(auth()->user()->role === 'admin')
-                    <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">Go to Test Builder →</a>
+                    <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">{{ __('Go to Test Builder') }} →</a>
                 @endif
             </div>
         @endif
     </div>
 @elseif($subject || $student)
     <div class="card">
-        <div class="empty-state">Select both a subject and a student to view the knowledge map.</div>
+        <div class="empty-state">{{ __('Select both a subject and a student to view the knowledge map.') }}</div>
     </div>
 @endif
 

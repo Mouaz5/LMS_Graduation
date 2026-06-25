@@ -45,11 +45,11 @@ class AssignmentWebController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->withErrors(['duplicate' => 'This teacher is already assigned to this subject in this classroom.'])->withInput();
+            return back()->withErrors(['duplicate' => __('This teacher is already assigned to this subject in this classroom.')])->withInput();
         }
 
         TeacherSubjectClassroom::create($validated);
 
-        return redirect()->route('admin.assignments.index')->with('success', 'Teacher assignment created successfully.');
+        return redirect()->route('admin.assignments.index')->with('success', __('Teacher assignment created successfully.'));
     }
 }

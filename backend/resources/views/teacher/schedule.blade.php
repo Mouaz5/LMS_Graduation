@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="My Schedule">
+<x-layouts.app :pageTitle="__('My Schedule')">
     <style>
         .page-header {
             margin-bottom: 24px;
@@ -172,12 +172,12 @@
 
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
         <div class="page-header" style="margin-bottom: 0;">
-            <h2>My Schedule</h2>
-            <p>Your weekly teaching timetable</p>
+            <h2>{{ __("My Schedule") }}</h2>
+            <p>{{ __("Your weekly teaching timetable") }}</p>
         </div>
         <a href="{{ route('teacher.schedule') }}" class="refresh-btn">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Refresh
+            {{ __("Refresh") }}
         </a>
     </div>
 
@@ -220,7 +220,7 @@
             <svg width="48" height="48" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <p>No classes on {{ ucfirst($selectedDay) }}</p>
+            <p>{{ __("No classes on :day", ['day' => ucfirst($selectedDay)]) }}</p>
         </div>
     @endif
 </x-layouts.app>

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="My Knowledge Map">
+<x-layouts.app :pageTitle="__('My Knowledge Map')">
 <style>
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
 
@@ -29,8 +29,8 @@
 
     /* Tree */
     .tree { font-size: 13px; }
-    .tree ul { list-style: none; padding-left: 24px; margin: 0; }
-    .tree > ul { padding-left: 0; }
+    .tree ul { list-style: none; padding-inline-start: 24px; margin: 0; }
+    .tree > ul { padding-inline-start: 0; }
     .tree-node { margin: 6px 0; }
     .node-row {
         display: flex; align-items: center; gap: 10px; cursor: pointer;
@@ -59,8 +59,8 @@
     .alert-success { background: #dcfce7; color: #166534; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
 </style>
 
-<div class="page-title">My Knowledge Map</div>
-<div class="page-desc">See your mastery level across learning objectives.</div>
+<div class="page-title">{{ __("My Knowledge Map") }}</div>
+<div class="page-desc">{{ __("See your mastery level across learning objectives.") }}</div>
 
 @if(session('success'))
     <div class="alert-success">{{ session('success') }}</div>
@@ -69,18 +69,18 @@
 <form method="GET" action="{{ route('student.diagnostic.knowledge-map') }}">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Subject</label>
+            <label class="filter-label">{{ __("Subject") }}</label>
             <select class="filter-select" name="subject_id" onchange="this.form.submit()">
-                <option value="">-- Select Subject --</option>
+                <option value="">{{ __("-- Select Subject --") }}</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
                 @endforeach
             </select>
         </div>
         @if($subject)
-            <div style="margin-left:auto; display:flex; align-items:flex-end;">
+            <div style="margin-inline-start:auto; display:flex; align-items:flex-end;">
                 <a href="{{ route('student.diagnostic.test', ['subject_id' => $subject->id]) }}" class="btn btn-primary">
-                    Take Diagnostic Test
+                    {{ __("Take Diagnostic Test") }}
                 </a>
             </div>
         @endif
@@ -108,28 +108,28 @@
         <div class="summary-bar">
             <div class="summary-stat">
                 <div class="stat-value" style="color:#166534;">{{ $mastered }}</div>
-                <div class="stat-label">Mastered</div>
+                <div class="stat-label">{{ __("Mastered") }}</div>
             </div>
             <div class="summary-stat">
                 <div class="stat-value" style="color:#854d0e;">{{ $developing }}</div>
-                <div class="stat-label">Developing</div>
+                <div class="stat-label">{{ __("Developing") }}</div>
             </div>
             <div class="summary-stat">
                 <div class="stat-value" style="color:#991b1b;">{{ $needsWork }}</div>
-                <div class="stat-label">Needs Work</div>
+                <div class="stat-label">{{ __("Needs Work") }}</div>
             </div>
             <div class="summary-stat">
                 <div class="stat-value">{{ $avgMastery }}%</div>
-                <div class="stat-label">Overall Avg</div>
+                <div class="stat-label">{{ __("Overall Avg") }}</div>
             </div>
         </div>
     @endif
 
     <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#dcfce7; border:1px solid #bbf7d0;"></div> Mastered (≥70%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fef9c3; border:1px solid #fde68a;"></div> Developing (40–69%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fee2e2; border:1px solid #fca5a5;"></div> Needs Work (&lt;40%)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></div> Not Assessed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#dcfce7; border:1px solid #bbf7d0;"></div> {{ __("Mastered (≥70%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fef9c3; border:1px solid #fde68a;"></div> {{ __("Developing (40–69%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fee2e2; border:1px solid #fca5a5;"></div> {{ __("Needs Work (<40%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></div> {{ __("Not Assessed") }}</div>
     </div>
 
     <div class="card">
@@ -144,8 +144,8 @@
         @else
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:12px;">🗺️</div>
-                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">No objectives defined yet</div>
-                <div>Your teacher hasn't set up learning objectives for {{ $subject->name }} yet.</div>
+                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">{{ __("No objectives defined yet") }}</div>
+                <div>{{ __("Your teacher hasn't set up learning objectives for :subject yet.", ['subject' => $subject->name]) }}</div>
             </div>
         @endif
     </div>

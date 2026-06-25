@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="User Details">
+<x-layouts.app :pageTitle="__('User Details')">
     <style>
         .back-link {
             font-size: 13px; color: #64748b; text-decoration: none;
@@ -72,7 +72,7 @@
         }
         .btn-link:hover { background: #4338ca; }
         .btn-unlink {
-            margin-left: auto; padding: 4px 10px;
+            margin-inline-start: auto; padding: 4px 10px;
             background: #fff1f2; color: #e11d48;
             border: 1px solid #fecdd3; border-radius: 7px;
             font-size: 12px; font-weight: 600; cursor: pointer;
@@ -91,7 +91,7 @@
     </style>
 
     <a href="{{ route('admin.users.index') }}" class="back-link">
-        &larr; Back to Users
+        &larr; {{ __('Back to Users') }}
     </a>
 
     @if(session('success'))
@@ -100,10 +100,10 @@
 
     @php
         $roleBadge = [
-            'admin'   => ['label' => 'Admin',   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
-            'teacher' => ['label' => 'Teacher', 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
-            'student' => ['label' => 'Student', 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
-            'parent'  => ['label' => 'Parent',  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
+            'admin'   => ['label' => __('Admin'),   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
+            'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
+            'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
+            'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
         ];
         $rb = $roleBadge[$user->role] ?? $roleBadge['student'];
         $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
@@ -129,32 +129,32 @@
         </div>
         <div class="detail-body">
             <div class="detail-row">
-                <span class="detail-label">Role</span>
+                <span class="detail-label">{{ __('Role') }}</span>
                 <span class="badge" style="background: {{ $rb['bg'] }}; color: {{ $rb['color'] }};">
                     <span class="badge-dot" style="background: {{ $rb['dot'] }};"></span>
                     {{ $rb['label'] }}
                 </span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Phone</span>
+                <span class="detail-label">{{ __('Phone') }}</span>
                 <span class="detail-value">{{ $user->phone ?? '—' }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Status</span>
+                <span class="detail-label">{{ __('Status') }}</span>
                 @if($user->is_active)
                     <span class="badge" style="background: #ecfdf5; color: #065f46;">
                         <span class="badge-dot" style="background: #10b981;"></span>
-                        Active
+                        {{ __('Active') }}
                     </span>
                 @else
                     <span class="badge" style="background: #f8fafc; color: #94a3b8;">
                         <span class="badge-dot" style="background: #cbd5e1;"></span>
-                        Inactive
+                        {{ __('Inactive') }}
                     </span>
                 @endif
             </div>
             <div class="detail-row">
-                <span class="detail-label">Joined</span>
+                <span class="detail-label">{{ __('Joined') }}</span>
                 <span class="detail-value">{{ $user->created_at->format('M d, Y') }}</span>
             </div>
         </div>
@@ -165,7 +165,7 @@
 
         @if($user->studentProfile)
             <div class="related-section">
-                <div class="related-title" style="margin-bottom: 12px;">Classroom</div>
+                <div class="related-title" style="margin-bottom: 12px;">{{ __('Classroom') }}</div>
                 <div class="related-card">
                     <div class="related-item">
                         <div class="related-item-icon" style="background: #eff6ff;">
@@ -175,7 +175,7 @@
                             <div style="font-weight: 600;">{{ $user->studentProfile->classroom->name }}</div>
                             <div style="font-size: 12px; color: #94a3b8;">
                                 {{ $user->studentProfile->classroom->grade->name }} —
-                                Enrolled {{ $user->studentProfile->enrollment_date->format('M d, Y') }}
+                                {{ __('Enrolled :date', ['date' => $user->studentProfile->enrollment_date->format('M d, Y')]) }}
                             </div>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
         {{-- Parents list + link form --}}
         <div class="related-section">
             <div class="related-header">
-                <div class="related-title">Parents ({{ $user->parents->count() }})</div>
+                <div class="related-title">{{ __('Parents (:count)', ['count' => $user->parents->count()]) }}</div>
             </div>
             <div class="related-card">
                 @forelse($user->parents as $parent)
@@ -203,32 +203,32 @@
                               onsubmit="return confirm('Unlink {{ $parent->name }}?')">
                             @csrf @method('DELETE')
                             <input type="hidden" name="parent_user_id" value="{{ $parent->id }}">
-                            <button type="submit" class="btn-unlink">Unlink</button>
+                            <button type="submit" class="btn-unlink">{{ __('Unlink') }}</button>
                         </form>
                     </div>
                 @empty
-                    <div class="empty-state">No parents linked yet.</div>
+                    <div class="empty-state">{{ __('No parents linked yet.') }}</div>
                 @endforelse
             </div>
 
             @if($availableParents->count() > 0)
                 <div class="link-form-card">
-                    <div class="link-form-title">Link a parent to this student</div>
+                    <div class="link-form-title">{{ __('Link a parent to this student') }}</div>
                     <form method="POST" action="{{ route('admin.users.link-parent', $user) }}">
                         @csrf
                         <div class="link-form-row">
                             <select name="parent_user_id" required>
-                                <option value="">Select parent…</option>
+                                <option value="">{{ __('Select parent…') }}</option>
                                 @foreach($availableParents as $p)
                                     <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->email }})</option>
                                 @endforeach
                             </select>
                             <select name="relation" required>
-                                <option value="father">Father</option>
-                                <option value="mother">Mother</option>
-                                <option value="guardian">Guardian</option>
+                                <option value="father">{{ __("Father") }}</option>
+                                <option value="mother">{{ __("Mother") }}</option>
+                                <option value="guardian">{{ __("Guardian") }}</option>
                             </select>
-                            <button type="submit" class="btn-link">Link Parent</button>
+                            <button type="submit" class="btn-link">{{ __('Link Parent') }}</button>
                         </div>
                     </form>
                 </div>
@@ -242,7 +242,7 @@
 
         <div class="related-section">
             <div class="related-header">
-                <div class="related-title">Children ({{ $user->children->count() }})</div>
+                <div class="related-title">{{ __('Children (:count)', ['count' => $user->children->count()]) }}</div>
             </div>
             <div class="related-card">
                 @forelse($user->children as $child)
@@ -264,32 +264,32 @@
                               onsubmit="return confirm('Unlink {{ $child->name }}?')">
                             @csrf @method('DELETE')
                             <input type="hidden" name="student_user_id" value="{{ $child->id }}">
-                            <button type="submit" class="btn-unlink">Unlink</button>
+                            <button type="submit" class="btn-unlink">{{ __('Unlink') }}</button>
                         </form>
                     </div>
                 @empty
-                    <div class="empty-state">No children linked yet.</div>
+                    <div class="empty-state">{{ __('No children linked yet.') }}</div>
                 @endforelse
             </div>
 
             @if($availableStudents->count() > 0)
                 <div class="link-form-card">
-                    <div class="link-form-title">Link a student to this parent</div>
+                    <div class="link-form-title">{{ __('Link a student to this parent') }}</div>
                     <form method="POST" action="{{ route('admin.users.link-child', $user) }}">
                         @csrf
                         <div class="link-form-row">
                             <select name="student_user_id" required>
-                                <option value="">Select student…</option>
+                                <option value="">{{ __('Select student…') }}</option>
                                 @foreach($availableStudents as $s)
                                     <option value="{{ $s->id }}">{{ $s->name }} ({{ $s->email }})</option>
                                 @endforeach
                             </select>
                             <select name="relation" required>
-                                <option value="father">Father</option>
-                                <option value="mother">Mother</option>
-                                <option value="guardian">Guardian</option>
+                                <option value="father">{{ __("Father") }}</option>
+                                <option value="mother">{{ __("Mother") }}</option>
+                                <option value="guardian">{{ __("Guardian") }}</option>
                             </select>
-                            <button type="submit" class="btn-link">Link Student</button>
+                            <button type="submit" class="btn-link">{{ __('Link Student') }}</button>
                         </div>
                     </form>
                 </div>
@@ -301,7 +301,7 @@
     {{-- ── TEACHER: subject assignments ─────────────────────────────── --}}
     @if($user->role === 'teacher' && $user->teacherAssignments->count() > 0)
         <div class="related-section">
-            <div class="related-title" style="margin-bottom: 12px;">Subject Assignments</div>
+            <div class="related-title" style="margin-bottom: 12px;">{{ __('Subject Assignments') }}</div>
             <div class="related-card">
                 @foreach($user->teacherAssignments as $assignment)
                     <div class="related-item">

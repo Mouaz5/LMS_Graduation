@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Create User">
+<x-layouts.app :pageTitle="__('Create User')">
     <style>
         .form-container {
             max-width: 600px;
@@ -134,15 +134,15 @@
     <div class="form-container">
         {{-- Breadcrumb --}}
         <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #94a3b8; margin-bottom: 16px;">
-            <a href="{{ route('admin.users.index') }}" style="color: #4F46E5; text-decoration: none; font-weight: 500;">Users</a>
+            <a href="{{ route('admin.users.index') }}" style="color: #4F46E5; text-decoration: none; font-weight: 500;">{{ __("Users") }}</a>
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span>Create New User</span>
+            <span>{{ __("Create New User") }}</span>
         </div>
 
         <div class="form-card">
             <div class="form-header">
-                <div class="form-header-title">Create New User</div>
-                <div class="form-header-sub">Add a new account to the school system</div>
+                <div class="form-header-title">{{ __("Create New User") }}</div>
+                <div class="form-header-sub">{{ __("Add a new account to the school system") }}</div>
             </div>
 
             <form action="{{ route('admin.users.store') }}" method="POST" novalidate>
@@ -151,7 +151,7 @@
                 <div class="form-grid">
                     {{-- Name --}}
                     <div class="form-group">
-                        <label class="form-label" for="name">Full Name <span class="req">*</span></label>
+                        <label class="form-label" for="name">{{ __("Full Name") }} <span class="req">*</span></label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}"
                                placeholder="e.g. Ahmad Al-Rashid"
                                class="form-input {{ $errors->has('name') ? 'is-error' : '' }}">
@@ -165,7 +165,7 @@
 
                     {{-- Phone --}}
                     <div class="form-group">
-                        <label class="form-label" for="phone">Phone Number</label>
+                        <label class="form-label" for="phone">{{ __("Phone Number") }}</label>
                         <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
                                placeholder="+962 79 xxx xxxx"
                                class="form-input {{ $errors->has('phone') ? 'is-error' : '' }}">
@@ -179,7 +179,7 @@
 
                     {{-- Email --}}
                     <div class="form-group full">
-                        <label class="form-label" for="email">Email Address <span class="req">*</span></label>
+                        <label class="form-label" for="email">{{ __("Email Address") }} <span class="req">*</span></label>
                         <input type="email" id="email" name="email" value="{{ old('email') }}"
                                placeholder="user@school.edu"
                                class="form-input {{ $errors->has('email') ? 'is-error' : '' }}">
@@ -193,9 +193,9 @@
 
                     {{-- Password --}}
                     <div class="form-group">
-                        <label class="form-label" for="password">Password <span class="req">*</span></label>
+                        <label class="form-label" for="password">{{ __("Password") }} <span class="req">*</span></label>
                         <input type="password" id="password" name="password"
-                               placeholder="Min. 8 characters"
+                               placeholder="{{ __('Min. 8 characters') }}"
                                class="form-input {{ $errors->has('password') ? 'is-error' : '' }}">
                         @error('password')
                             <div class="field-error">
@@ -207,21 +207,21 @@
 
                     {{-- Confirm Password --}}
                     <div class="form-group">
-                        <label class="form-label" for="password_confirmation">Confirm Password <span class="req">*</span></label>
+                        <label class="form-label" for="password_confirmation">{{ __("Confirm Password") }} <span class="req">*</span></label>
                         <input type="password" id="password_confirmation" name="password_confirmation"
-                               placeholder="Repeat password"
+                               placeholder="{{ __('Repeat password') }}"
                                class="form-input">
                     </div>
 
                     {{-- Role --}}
                     <div class="form-group full">
-                        <label class="form-label">Role <span class="req">*</span></label>
+                        <label class="form-label">{{ __("Role") }} <span class="req">*</span></label>
                         <div class="role-options">
                             @foreach([
-                                ['admin',   'Admin',   '🔑'],
-                                ['teacher', 'Teacher', '📚'],
-                                ['student', 'Student', '🎓'],
-                                ['parent',  'Parent',  '👨‍👩‍👧'],
+                                ['admin',   __('Admin'),   '🔑'],
+                                ['teacher', __('Teacher'), '📚'],
+                                ['student', __('Student'), '🎓'],
+                                ['parent',  __('Parent'),  '👨‍👩‍👧'],
                             ] as [$value, $label, $emoji])
                             <div class="role-option">
                                 <input type="radio" name="role" id="role_{{ $value }}" value="{{ $value }}"
@@ -243,8 +243,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-submit">Create User</button>
-                    <a href="{{ route('admin.users.index') }}" class="btn-cancel">Cancel</a>
+                    <button type="submit" class="btn-submit">{{ __("Create User") }}</button>
+                    <a href="{{ route('admin.users.index') }}" class="btn-cancel">{{ __("Cancel") }}</a>
                 </div>
             </form>
         </div>

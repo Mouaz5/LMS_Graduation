@@ -56,7 +56,7 @@ class DiagnosticWebController extends Controller
         LearningObjective::create($data);
 
         return redirect()->route('admin.diagnostic.test-builder', ['subject_id' => $data['subject_id']])
-            ->with('success', 'Learning objective added.');
+            ->with('success', __('Learning objective added.'));
     }
 
     // Admin: store question with options
@@ -83,7 +83,7 @@ class DiagnosticWebController extends Controller
         });
 
         return redirect()->route('admin.diagnostic.test-builder', ['subject_id' => $data['subject_id']])
-            ->with('success', 'Question added.');
+            ->with('success', __('Question added.'));
     }
 
     // Admin: delete question
@@ -93,7 +93,7 @@ class DiagnosticWebController extends Controller
         $question->delete();
 
         return redirect()->route('admin.diagnostic.test-builder', ['subject_id' => $subjectId])
-            ->with('success', 'Question deleted.');
+            ->with('success', __('Question deleted.'));
     }
 
     // Admin/Teacher: Knowledge Map viewer (any student)

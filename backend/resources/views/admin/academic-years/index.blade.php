@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Academic Years">
+<x-layouts.app :pageTitle="__('Academic Years')">
     <style>
         .btn-primary {
             display: inline-flex;
@@ -66,12 +66,12 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">Academic Years</div>
-            <div class="page-desc">Manage academic years and semesters</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("Academic Years") }}</div>
+            <div class="page-desc">{{ __("Manage academic years and semesters") }}</div>
         </div>
         <a href="{{ route('admin.academic-years.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            New Academic Year
+            {{ __("New Academic Year") }}
         </a>
     </div>
 
@@ -79,11 +79,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Semesters</th>
-                    <th>Status</th>
+                    <th>{{ __("Name") }}</th>
+                    <th>{{ __("Start Date") }}</th>
+                    <th>{{ __("End Date") }}</th>
+                    <th>{{ __("Semesters") }}</th>
+                    <th>{{ __("Status") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,13 +98,13 @@
                         <td>{{ $year->semesters_count }}</td>
                         <td>
                             <span class="badge {{ $year->is_active ? 'badge-active' : 'badge-inactive' }}">
-                                {{ $year->is_active ? 'Active' : 'Inactive' }}
+                                {{ $year->is_active ? __("Active") : __("Inactive") }}
                             </span>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="empty-state">No academic years found. Create one to get started.</td>
+                        <td colspan="5" class="empty-state">{{ __("No academic years found. Create one to get started.") }}</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Edit Subject">
+<x-layouts.app :pageTitle="__('Edit Subject')">
     <style>
         .form-card {
             background: white; border-radius: 14px; border: 1px solid #f1f5f9;
@@ -43,29 +43,29 @@
             @csrf @method('PUT')
 
             <div class="form-group">
-                <label>School</label>
+                <label>{{ __("School") }}</label>
                 <div class="school-label">{{ $subject->school?->name ?? '—' }}</div>
-                <div class="field-hint">School cannot be changed after creation.</div>
+                <div class="field-hint">{{ __("School cannot be changed after creation.") }}</div>
             </div>
 
             <div class="form-group">
-                <label for="name">Subject Name</label>
+                <label for="name">{{ __("Subject Name") }}</label>
                 <input type="text" id="name" name="name"
                        value="{{ old('name', $subject->name) }}" required>
                 @error('name')<div class="error">{{ $message }}</div>@enderror
             </div>
 
             <div class="form-group">
-                <label for="code">Subject Code</label>
+                <label for="code">{{ __("Subject Code") }}</label>
                 <input type="text" id="code" name="code"
                        value="{{ old('code', $subject->code) }}" required>
-                <div class="field-hint">Must be unique across all subjects.</div>
+                <div class="field-hint">{{ __("Must be unique across all subjects.") }}</div>
                 @error('code')<div class="error">{{ $message }}</div>@enderror
             </div>
 
             <div class="btn-row">
-                <button type="submit" class="btn-primary">Save Changes</button>
-                <a href="{{ route('admin.subjects.index') }}" class="btn-secondary">Cancel</a>
+                <button type="submit" class="btn-primary">{{ __("Save Changes") }}</button>
+                <a href="{{ route('admin.subjects.index') }}" class="btn-secondary">{{ __("Cancel") }}</a>
             </div>
         </form>
     </div>

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Create Academic Year">
+<x-layouts.app :pageTitle="__('Create Academic Year')">
     <style>
         .form-card {
             background: white;
@@ -80,7 +80,7 @@
 
     <div style="margin-bottom: 20px;">
         <a href="{{ route('admin.academic-years.index') }}" style="font-size: 13px; color: #64748b; text-decoration: none;">
-            &larr; Back to Academic Years
+            &larr; {{ __("Back to Academic Years") }}
         </a>
     </div>
 
@@ -89,8 +89,8 @@
             @csrf
 
             <div class="form-group">
-                <label for="name">Academic Year Name</label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="e.g. 2025-2026" required>
+                <label for="name">{{ __("Academic Year Name") }}</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('e.g. 2025-2026') }}" required>
                 @error('name')
                     <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                 @enderror
@@ -98,7 +98,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="start_date">Start Date</label>
+                    <label for="start_date">{{ __("Start Date") }}</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
                     @error('start_date')
                         <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="end_date">End Date</label>
+                    <label for="end_date">{{ __("End Date") }}</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
                     @error('end_date')
                         <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
@@ -117,16 +117,16 @@
             <div class="form-group">
                 <div class="checkbox-group">
                     <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active') ? 'checked' : '' }}>
-                    <label for="is_active">Set as active academic year</label>
+                    <label for="is_active">{{ __("Set as active academic year") }}</label>
                 </div>
             </div>
 
             <div class="btn-row">
                 <button type="submit" class="btn-primary">
                     <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Create Academic Year
+                    {{ __("Create Academic Year") }}
                 </button>
-                <a href="{{ route('admin.academic-years.index') }}" class="btn-secondary">Cancel</a>
+                <a href="{{ route('admin.academic-years.index') }}" class="btn-secondary">{{ __("Cancel") }}</a>
             </div>
         </form>
     </div>

@@ -31,7 +31,7 @@ class SubjectWebController extends Controller
         Subject::create($request->validated());
 
         return redirect()->route('admin.subjects.index')
-                         ->with('success', 'Subject created successfully.');
+                         ->with('success', __('Subject created successfully.'));
     }
 
     public function show(Subject $subject): View
@@ -61,7 +61,7 @@ class SubjectWebController extends Controller
         $subject->update($request->validated());
 
         return redirect()->route('admin.subjects.index')
-                         ->with('success', 'Subject updated successfully.');
+                         ->with('success', __('Subject updated successfully.'));
     }
 
     public function destroy(Subject $subject): RedirectResponse
@@ -69,6 +69,6 @@ class SubjectWebController extends Controller
         $subject->delete();
 
         return redirect()->route('admin.subjects.index')
-                         ->with('success', 'Subject deleted.');
+                         ->with('success', __('Subject deleted.'));
     }
 }

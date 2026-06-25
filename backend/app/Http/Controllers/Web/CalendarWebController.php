@@ -39,6 +39,6 @@ class CalendarWebController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.calendar.index')->with('success', 'Calendar event created successfully.');
+        return redirect()->route('admin.calendar.index')->with('success', __('Calendar event created successfully.'));
     }
 }

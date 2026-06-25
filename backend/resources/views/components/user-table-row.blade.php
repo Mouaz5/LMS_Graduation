@@ -2,10 +2,10 @@
 
 @php
 $roleBadge = [
-    'admin'   => ['label' => 'Admin',   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
-    'teacher' => ['label' => 'Teacher', 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
-    'student' => ['label' => 'Student', 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
-    'parent'  => ['label' => 'Parent',  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
+    'admin'   => ['label' => __('Admin'),   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
+    'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
+    'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
+    'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
 ];
 $rb = $roleBadge[$user->role] ?? $roleBadge['student'];
 $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
@@ -86,7 +86,7 @@ $ac = $avatarColors[$user->role] ?? $avatarColors['student'];
                 color: #065f46;
             ">
                 <span style="width: 5px; height: 5px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-                Active
+                {{ __('Active') }}
             </span>
         @else
             <span style="
@@ -101,7 +101,7 @@ $ac = $avatarColors[$user->role] ?? $avatarColors['student'];
                 color: #94a3b8;
             ">
                 <span style="width: 5px; height: 5px; border-radius: 50%; background: #cbd5e1; display: inline-block;"></span>
-                Inactive
+                {{ __('Inactive') }}
             </span>
         @endif
     </td>
@@ -129,7 +129,7 @@ $ac = $avatarColors[$user->role] ?? $avatarColors['student'];
                     ? 'background: #fff1f2; border-color: #fca5a5; color: #dc2626;'
                     : 'background: #ecfdf5; border-color: #a7f3d0; color: #059669;' }}
             ">
-                {{ $user->is_active ? 'Deactivate' : 'Activate' }}
+                {{ $user->is_active ? __('Deactivate') : __('Activate') }}
             </button>
         </form>
     </td>

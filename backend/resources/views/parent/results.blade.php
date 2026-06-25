@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Children Results">
+<x-layouts.app :pageTitle="__('Children Results')">
 <style>
     .page-header { margin-bottom: 20px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -55,15 +55,15 @@
 </style>
 
 <div class="page-header">
-    <div class="page-title">Children Results</div>
-    <div class="page-desc">Academic results for your children</div>
+    <div class="page-title">{{ __('Children Results') }}</div>
+    <div class="page-desc">{{ __('Academic results for your children') }}</div>
 </div>
 
 {{-- Filters --}}
 <form method="GET" action="{{ route('parent.results') }}" id="filterForm">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Child</label>
+            <label class="filter-label">{{ __('Child') }}</label>
             <select class="filter-select" name="child_id" onchange="this.form.submit()">
                 @foreach($children as $child)
                     <option value="{{ $child->id }}" {{ $selectedChild?->id == $child->id ? 'selected' : '' }}>
@@ -73,7 +73,7 @@
             </select>
         </div>
         <div class="filter-group">
-            <label class="filter-label">Semester</label>
+            <label class="filter-label">{{ __('Semester') }}</label>
             <select class="filter-select" name="semester_id" onchange="this.form.submit()">
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
@@ -83,13 +83,13 @@
             </select>
         </div>
         @if($selectedChild && $selectedSemesterId)
-            <div style="margin-left: auto;">
+            <div style="margin-inline-start: auto;">
                 <a href="{{ route('parent.child-report-card.pdf', ['child' => $selectedChild->id, 'semester_id' => $selectedSemesterId]) }}"
                    class="btn-download" target="_blank">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    Download PDF
+                    {{ __('Download PDF') }}
                 </a>
             </div>
         @endif
@@ -142,7 +142,7 @@
                     </div>
                     <div class="subject-card-footer">
                         <div>
-                            <div class="avg-label">Weighted Average</div>
+                            <div class="avg-label">{{ __('Weighted Average') }}</div>
                             <div class="progress-bar-wrap" style="width:160px; margin-top:6px;">
                                 <div class="progress-bar" style="width:{{ min($summary->weighted_average, 100) }}%"></div>
                             </div>
@@ -156,8 +156,8 @@
         <div style="background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
             <div class="empty-state">
                 <div class="empty-icon">📊</div>
-                <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">No results yet</div>
-                <div>No grades have been entered for this semester.</div>
+                <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">{{ __('No results yet') }}</div>
+                <div>{{ __('No grades have been entered for this semester.') }}</div>
             </div>
         </div>
     @endif

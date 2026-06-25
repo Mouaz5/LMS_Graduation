@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Classrooms">
+<x-layouts.app :pageTitle="__('Classrooms')">
     <style>
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
@@ -49,8 +49,8 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">Classrooms</div>
-            <div class="page-desc">View all classrooms and their students</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("Classrooms") }}</div>
+            <div class="page-desc">{{ __("View all classrooms and their students") }}</div>
         </div>
     </div>
 
@@ -58,11 +58,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Classroom</th>
-                    <th>Grade</th>
-                    <th>Students</th>
-                    <th>Capacity</th>
-                    <th>Subjects</th>
+                    <th>{{ __("Classroom") }}</th>
+                    <th>{{ __("Grade") }}</th>
+                    <th>{{ __("Students") }}</th>
+                    <th>{{ __("Capacity") }}</th>
+                    <th>{{ __("Subjects") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,7 +106,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="empty-state">No classrooms found.</td>
+                        <td colspan="5" class="empty-state">{{ __("No classrooms found.") }}</td>
                     </tr>
                 @endforelse
             </tbody>

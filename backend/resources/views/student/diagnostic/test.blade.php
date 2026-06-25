@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Diagnostic Test">
+<x-layouts.app :pageTitle="__('Diagnostic Test')">
 <style>
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
 
@@ -46,8 +46,8 @@
     .alert-success { background: #dcfce7; color: #166534; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
 </style>
 
-<div class="page-title">Diagnostic Test</div>
-<div class="page-desc">Test your knowledge and discover learning gaps.</div>
+<div class="page-title">{{ __("Diagnostic Test") }}</div>
+<div class="page-desc">{{ __("Test your knowledge and discover learning gaps.") }}</div>
 
 @if(session('success'))
     <div class="alert-success">{{ session('success') }}</div>
@@ -57,25 +57,25 @@
 <form method="GET" action="{{ route('student.diagnostic.test') }}">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Subject</label>
+            <label class="filter-label">{{ __("Subject") }}</label>
             <select class="filter-select" name="subject_id" onchange="this.form.submit()">
-                <option value="">-- Select Subject --</option>
+                <option value="">{{ __("-- Select Subject --") }}</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
                 @endforeach
             </select>
         </div>
         @if($subject)
-            <div style="margin-left: auto; display: flex; gap: 10px; align-items: flex-end;">
+            <div style="margin-inline-start: auto; display: flex; gap: 10px; align-items: flex-end;">
                 <form method="POST" action="{{ route('student.diagnostic.start') }}">
                     @csrf
                     <input type="hidden" name="subject_id" value="{{ $subject->id }}">
-                    <button type="submit" class="btn btn-outline" onclick="return confirm('Start a new test? Any in-progress test will end.')">
-                        Start New Test
+                    <button type="submit" class="btn btn-outline" onclick="return confirm(@json(__('Start a new test? Any in-progress test will end.')))">
+                        {{ __("Start New Test") }}
                     </button>
                 </form>
                 <a href="{{ route('student.diagnostic.knowledge-map', ['subject_id' => $subject->id]) }}" class="btn btn-primary">
-                    View Knowledge Map
+                    {{ __("View Knowledge Map") }}
                 </a>
             </div>
         @endif
@@ -91,8 +91,8 @@
             $pct = $totalForSubject > 0 ? round(($answered / $totalForSubject) * 100) : 0;
         @endphp
         <div class="progress-label">
-            <span>Progress</span>
-            <span>{{ $answered }} / {{ $totalForSubject }} questions answered</span>
+            <span>{{ __("Progress") }}</span>
+            <span>{{ __(":answered / :total questions answered", ['answered' => $answered, 'total' => $totalForSubject]) }}</span>
         </div>
         <div class="progress-wrap">
             <div class="progress-fill" style="width: {{ $pct }}%"></div>
@@ -102,7 +102,7 @@
             @csrf
             @foreach($questions as $qi => $q)
                 <div class="question-card">
-                    <div class="question-number">Question {{ $answered + $qi + 1 }}</div>
+                    <div class="question-number">{{ __("Question :number", ['number' => $answered + $qi + 1]) }}</div>
                     <div class="question-text">{{ $q->question_text }}</div>
                     <div class="options-list">
                         @foreach($q->options as $opt)
@@ -117,7 +117,7 @@
 
             <div style="display:flex; justify-content:flex-end; margin-top: 16px;">
                 <button type="submit" class="btn btn-primary" onclick="return confirmSubmit()">
-                    Submit Answers & See Knowledge Map
+                    {{ __("Submit Answers & See Knowledge Map") }}
                 </button>
             </div>
         </form>
@@ -126,10 +126,10 @@
         <div class="card">
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:12px;">🎉</div>
-                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">All questions answered!</div>
-                <div style="margin-bottom:20px;">You have completed all available questions for {{ $subject->name }}.</div>
+                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">{{ __("All questions answered!") }}</div>
+                <div style="margin-bottom:20px;">{{ __("You have completed all available questions for :subject.", ['subject' => $subject->name]) }}</div>
                 <a href="{{ route('student.diagnostic.knowledge-map', ['subject_id' => $subject->id]) }}" class="btn btn-primary">
-                    View Your Knowledge Map
+                    {{ __("View Your Knowledge Map") }}
                 </a>
             </div>
         </div>
@@ -137,12 +137,12 @@
         <div class="card">
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:12px;">📝</div>
-                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">Ready to test your knowledge?</div>
-                <div style="margin-bottom:20px;">Click "Start New Test" to begin a diagnostic test for {{ $subject->name }}.</div>
+                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">{{ __("Ready to test your knowledge?") }}</div>
+                <div style="margin-bottom:20px;">{{ __("Click \"Start New Test\" to begin a diagnostic test for :subject.", ['subject' => $subject->name]) }}</div>
                 <form method="POST" action="{{ route('student.diagnostic.start') }}">
                     @csrf
                     <input type="hidden" name="subject_id" value="{{ $subject->id }}">
-                    <button type="submit" class="btn btn-primary">Start Test</button>
+                    <button type="submit" class="btn btn-primary">{{ __("Start Test") }}</button>
                 </form>
             </div>
         </div>
@@ -154,7 +154,7 @@ function confirmSubmit() {
     const unanswered = document.querySelectorAll('.question-card').length;
     const answered = document.querySelectorAll('input[type=radio]:checked').length;
     if (answered < unanswered) {
-        return confirm(`You have ${unanswered - answered} unanswered question(s). Submit anyway?`);
+        return confirm(@json(__('You have :count unanswered question(s). Submit anyway?')).replace(':count', unanswered - answered));
     }
     return true;
 }

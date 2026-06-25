@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login — SchoolLMS</title>
+    <title>{{ __('Login') }} — SchoolLMS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:wght@600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,11 +20,16 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'DM Sans', 'Cairo', sans-serif;
             min-height: 100vh;
             display: flex;
             -webkit-font-smoothing: antialiased;
             background: #0f0e1a;
+        }
+
+        [dir="rtl"] body,
+        [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+            font-family: 'Cairo', sans-serif;
         }
 
         /* Left panel — brand */
@@ -161,6 +166,13 @@
             justify-content: center;
             background: #ffffff;
             padding: 40px 48px;
+            position: relative;
+        }
+
+        .auth-lang-switcher {
+            position: absolute;
+            top: 24px;
+            inset-inline-end: 24px;
         }
 
         .login-card {
@@ -204,7 +216,7 @@
             border: 1.5px solid #e2e8f0;
             border-radius: 10px;
             font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'DM Sans', 'Cairo', sans-serif;
             color: #0f172a;
             background: #fafafa;
             transition: all 0.2s;
@@ -291,7 +303,7 @@
             border-radius: 10px;
             font-size: 14.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'DM Sans', 'Cairo', sans-serif;
             cursor: pointer;
             transition: all 0.2s;
             letter-spacing: 0.2px;
@@ -380,36 +392,36 @@
                 </div>
                 <div>
                     <div class="brand-name">SchoolLMS</div>
-                    <div class="brand-tagline">Management System</div>
+                    <div class="brand-tagline">{{ __("Management System") }}</div>
                 </div>
             </div>
 
             <h1 class="brand-headline">
-                Education<br>
-                <em>Reimagined</em><br>
-                for the Modern Era
+                {{ __("Education") }}<br>
+                <em>{{ __("Reimagined") }}</em><br>
+                {{ __("for the Modern Era") }}
             </h1>
 
             <p class="brand-desc">
-                A comprehensive school management platform designed for administrators, teachers, students, and parents.
+                {{ __("A comprehensive school management platform designed for administrators, teachers, students, and parents.") }}
             </p>
 
             <div class="brand-features">
                 <div class="brand-feature">
                     <div class="brand-feature-dot"></div>
-                    Role-based access for all stakeholders
+                    {{ __("Role-based access for all stakeholders") }}
                 </div>
                 <div class="brand-feature">
                     <div class="brand-feature-dot"></div>
-                    Real-time grades and attendance tracking
+                    {{ __("Real-time grades and attendance tracking") }}
                 </div>
                 <div class="brand-feature">
                     <div class="brand-feature-dot"></div>
-                    Arabic RTL support built-in
+                    {{ __("Arabic RTL support built-in") }}
                 </div>
                 <div class="brand-feature">
                     <div class="brand-feature-dot"></div>
-                    Mobile-first responsive design
+                    {{ __("Mobile-first responsive design") }}
                 </div>
             </div>
         </div>
@@ -417,17 +429,20 @@
 
     <!-- Form Panel -->
     <div class="form-panel">
+        <div class="auth-lang-switcher">
+            <x-language-switcher />
+        </div>
         <div class="login-card">
             <div class="form-header">
-                <h2 class="form-title">Welcome back</h2>
-                <p class="form-subtitle">Sign in to your school account</p>
+                <h2 class="form-title">{{ __("Welcome back") }}</h2>
+                <p class="form-subtitle">{{ __("Sign in to your school account") }}</p>
             </div>
 
             <form action="{{ route('login.post') }}" method="POST" novalidate>
                 @csrf
 
                 <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
+                    <label class="form-label" for="email">{{ __("Email Address") }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -452,7 +467,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
+                    <label class="form-label" for="password">{{ __("Password") }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -478,13 +493,13 @@
                 <div class="form-footer">
                     <label class="checkbox-label">
                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        Remember me
+                        {{ __("Remember me") }}
                     </label>
-                    <a href="{{ route('password.request') }}" class="forgot-link">Forgot password?</a>
+                    <a href="{{ route('password.request') }}" class="forgot-link">{{ __("Forgot password?") }}</a>
                 </div>
 
                 <button type="submit" class="submit-btn">
-                    Sign In to Dashboard
+                    {{ __("Sign In to Dashboard") }}
                 </button>
             </form>
 

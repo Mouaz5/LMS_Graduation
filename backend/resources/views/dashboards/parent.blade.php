@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Parent Dashboard">
+<x-layouts.app :pageTitle="__('Parent Dashboard')">
     <style>
         .welcome-banner {
             background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 50%, #6d28d9 100%);
@@ -54,15 +54,15 @@
                 {{ now()->format('l, F j, Y') }}
             </div>
             <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px;">
-                Welcome, {{ explode(' ', $user->name)[0] }}!
+                {{ __("Welcome, :name!", ['name' => explode(' ', $user->name)[0]]) }}
             </h2>
-            <p style="font-size: 14px; color: #ede9fe;">Track your children's academic progress in one place.</p>
+            <p style="font-size: 14px; color: #ede9fe;">{{ __("Track your children's academic progress in one place.") }}</p>
         </div>
     </div>
 
     <div class="cards-grid">
         {{-- My Children --}}
-        <x-dashboard.card title="My Children" :subtitle="$children->count() . ' enrolled'" iconBg="#faf5ff">
+        <x-dashboard.card :title="__('My Children')" :subtitle="__(':count enrolled', ['count' => $children->count()])" iconBg="#faf5ff">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             </x-slot:icon>
@@ -79,7 +79,7 @@
                             @if($child->studentProfile)
                                 {{ $child->studentProfile->classroom->grade->name ?? '' }} &mdash; {{ $child->studentProfile->classroom->name ?? '' }}
                             @else
-                                No classroom assigned
+                                {{ __("No classroom assigned") }}
                             @endif
                         </div>
                     </div>
@@ -87,41 +87,41 @@
             @empty
                 <div class="dash-card-empty">
                     <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    No children linked to your account
+                    {{ __("No children linked to your account") }}
                 </div>
             @endforelse
         </x-dashboard.card>
 
         {{-- Recent Grades --}}
-        <x-dashboard.card title="Recent Grades" subtitle="Latest results" iconBg="#fffbeb">
+        <x-dashboard.card :title="__('Recent Grades')" :subtitle="__('Latest results')" iconBg="#fffbeb">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                Grades module coming soon
+                {{ __("Grades module coming soon") }}
             </div>
         </x-dashboard.card>
 
         {{-- Attendance Summary --}}
-        <x-dashboard.card title="Attendance Summary" subtitle="This month" iconBg="#ecfdf5">
+        <x-dashboard.card :title="__('Attendance Summary')" :subtitle="__('This month')" iconBg="#ecfdf5">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Attendance module coming soon
+                {{ __("Attendance module coming soon") }}
             </div>
         </x-dashboard.card>
 
         {{-- Fees --}}
-        <x-dashboard.card title="Fees Overview" subtitle="Payment status" iconBg="#eff6ff">
+        <x-dashboard.card :title="__('Fees Overview')" :subtitle="__('Payment status')" iconBg="#eff6ff">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                Fee management coming soon
+                {{ __("Fee management coming soon") }}
             </div>
         </x-dashboard.card>
     </div>

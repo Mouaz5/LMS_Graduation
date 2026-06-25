@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Grade Entry">
+<x-layouts.app :pageTitle="__('Grade Entry')">
 <style>
     .page-header { margin-bottom: 20px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -46,8 +46,8 @@
 </style>
 
 <div class="page-header">
-    <div class="page-title">Grade Entry</div>
-    <div class="page-desc">Enter student scores per subject and exam type</div>
+    <div class="page-title">{{ __("Grade Entry") }}</div>
+    <div class="page-desc">{{ __("Enter student scores per subject and exam type") }}</div>
 </div>
 
 @if(session('success'))
@@ -61,9 +61,9 @@
 <form method="GET" action="{{ route('teacher.grades.entry') }}" id="filterForm">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Semester</label>
+            <label class="filter-label">{{ __("Semester") }}</label>
             <select class="filter-select" name="semester_id" onchange="this.form.submit()">
-                <option value="">Select semester…</option>
+                <option value="">{{ __("Select semester…") }}</option>
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
                         {{ $sem->academicYear->name ?? '' }} — {{ $sem->name }}
@@ -72,9 +72,9 @@
             </select>
         </div>
         <div class="filter-group">
-            <label class="filter-label">Subject</label>
+            <label class="filter-label">{{ __("Subject") }}</label>
             <select class="filter-select" name="subject_id" onchange="this.form.submit()">
-                <option value="">Select subject…</option>
+                <option value="">{{ __("Select subject…") }}</option>
                 @foreach($assignments->unique('subject_id') as $a)
                     <option value="{{ $a->subject_id }}" {{ $selectedSubjectId == $a->subject_id ? 'selected' : '' }}>
                         {{ $a->subject->name }}
@@ -83,9 +83,9 @@
             </select>
         </div>
         <div class="filter-group">
-            <label class="filter-label">Classroom</label>
+            <label class="filter-label">{{ __("Classroom") }}</label>
             <select class="filter-select" name="classroom_id" onchange="this.form.submit()">
-                <option value="">Select classroom…</option>
+                <option value="">{{ __("Select classroom…") }}</option>
                 @foreach($assignments as $a)
                     <option value="{{ $a->classroom_id }}" {{ $selectedClassroomId == $a->classroom_id ? 'selected' : '' }}>
                         {{ $a->classroom->name }}
@@ -94,9 +94,9 @@
             </select>
         </div>
         <div class="filter-group">
-            <label class="filter-label">Exam Type</label>
+            <label class="filter-label">{{ __("Exam Type") }}</label>
             <select class="filter-select" name="exam_type_id" onchange="this.form.submit()">
-                <option value="">Select exam type…</option>
+                <option value="">{{ __("Select exam type…") }}</option>
                 @foreach($examTypes as $et)
                     <option value="{{ $et->id }}" {{ $selectedExamTypeId == $et->id ? 'selected' : '' }}>
                         {{ $et->name }} ({{ $et->weight_percent }}%)
@@ -116,12 +116,12 @@
 
         <div class="table-card">
             <div class="table-header">
-                <span class="table-title">Student Scores</span>
-                <span class="table-meta">{{ $students->count() }} students</span>
+                <span class="table-title">{{ __("Student Scores") }}</span>
+                <span class="table-meta">{{ __(":count students", ['count' => $students->count()]) }}</span>
             </div>
 
             <div class="max-score-wrap">
-                <label style="font-size:13px; font-weight:600; color:#374151;">Max Score:</label>
+                <label style="font-size:13px; font-weight:600; color:#374151;">{{ __("Max Score:") }}</label>
                 <input type="number" name="max_score" id="maxScore" value="{{ $existingGrades->first()?->max_score ?? 100 }}"
                     step="0.01" min="0.01" style="width:90px; padding:7px 10px; border:1.5px solid #e2e8f0; border-radius:7px; font-size:13px; font-family:'DM Sans',sans-serif; outline:none;">
             </div>
@@ -131,9 +131,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Student</th>
-                            <th>Score</th>
-                            <th>Status</th>
+                            <th>{{ __("Student") }}</th>
+                            <th>{{ __("Score") }}</th>
+                            <th>{{ __("Status") }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -152,11 +152,11 @@
                                 <td>
                                     @if($existing)
                                         <span style="font-size:11px; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:99px; font-weight:700;">
-                                            Saved ({{ $existing->score }}/{{ $existing->max_score }})
+                                            {{ __("Saved") }} ({{ $existing->score }}/{{ $existing->max_score }})
                                         </span>
                                     @else
                                         <span style="font-size:11px; background:#f1f5f9; color:#94a3b8; padding:2px 8px; border-radius:99px; font-weight:700;">
-                                            Not entered
+                                            {{ __("Not entered") }}
                                         </span>
                                     @endif
                                 </td>
@@ -165,12 +165,12 @@
                     </tbody>
                 </table>
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save Grades</button>
+                    <button type="submit" class="btn-primary">{{ __("Save Grades") }}</button>
                 </div>
             @else
                 <div class="empty-state">
                     <div class="empty-icon">👥</div>
-                    <div>No students in this classroom.</div>
+                    <div>{{ __("No students in this classroom.") }}</div>
                 </div>
             @endif
         </div>
@@ -179,8 +179,8 @@
     <div class="table-card">
         <div class="empty-state">
             <div class="empty-icon">📝</div>
-            <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">Select filters above</div>
-            <div>Choose a subject, classroom, and exam type to start entering grades.</div>
+            <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">{{ __("Select filters above") }}</div>
+            <div>{{ __("Choose a subject, classroom, and exam type to start entering grades.") }}</div>
         </div>
     </div>
 @endif
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         if (invalid) {
             e.preventDefault();
-            alert('Some scores exceed the max score. Please correct before saving.');
+            alert(@json(__('Some scores exceed the max score. Please correct before saving.')));
         }
     });
 });

@@ -39,6 +39,6 @@ class AcademicYearWebController extends Controller
             'is_active'  => $request->boolean('is_active'),
         ]);
 
-        return redirect()->route('admin.academic-years.index')->with('success', 'Academic year created successfully.');
+        return redirect()->route('admin.academic-years.index')->with('success', __('Academic year created successfully.'));
     }
 }

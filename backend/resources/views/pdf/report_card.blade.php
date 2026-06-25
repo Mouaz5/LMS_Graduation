@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}" lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <style>
@@ -9,7 +9,7 @@
             font-size: 12px;
             color: #1e293b;
             background: #fff;
-            direction: ltr;
+            direction: {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }};
         }
         .page { padding: 32px 40px; }
         .header {
@@ -58,12 +58,12 @@
     <div class="header">
         <div>
             <div class="school-name">SchoolLMS</div>
-            <div class="report-title">Academic Report Card</div>
+            <div class="report-title">{{ __('Academic Report Card') }}</div>
         </div>
         <div style="text-align:right; color:#64748b; font-size:11px;">
-            <div>Issued: {{ now()->format('Y-m-d') }}</div>
+            <div>{{ __('Issued:') }} {{ now()->format('Y-m-d') }}</div>
             @if($semester)
-                <div>Semester: {{ $semester->name }} — {{ $semester->academicYear->name ?? '' }}</div>
+                <div>{{ __('Semester:') }} {{ $semester->name }} — {{ $semester->academicYear->name ?? '' }}</div>
             @endif
         </div>
     </div>
@@ -71,21 +71,21 @@
     <div class="student-info">
         <div class="info-grid">
             <div class="info-item">
-                <label>Student Name</label>
+                <label>{{ __('Student Name') }}</label>
                 <span>{{ $student->name }}</span>
             </div>
             <div class="info-item">
-                <label>Email</label>
+                <label>{{ __('Email Address') }}</label>
                 <span>{{ $student->email }}</span>
             </div>
             @if($student->studentProfile?->classroom)
                 <div class="info-item">
-                    <label>Classroom</label>
+                    <label>{{ __('Classroom') }}</label>
                     <span>{{ $student->studentProfile->classroom->name }}</span>
                 </div>
                 @if($student->studentProfile->classroom->grade)
                     <div class="info-item">
-                        <label>Grade Level</label>
+                        <label>{{ __('Grade Level') }}</label>
                         <span>{{ $student->studentProfile->classroom->grade->name }}</span>
                     </div>
                 @endif
@@ -93,16 +93,16 @@
         </div>
     </div>
 
-    <div class="section-title">Results by Subject</div>
+    <div class="section-title">{{ __('Results by Subject') }}</div>
     <table>
         <thead>
             <tr>
-                <th>Subject</th>
+                <th>{{ __('Subject') }}</th>
                 @foreach($examTypes as $et)
                     <th>{{ $et->name }} ({{ $et->weight_percent }}%)</th>
                 @endforeach
-                <th>Weighted Avg</th>
-                <th>Grade</th>
+                <th>{{ __('Weighted Avg') }}</th>
+                <th>{{ __('Grade') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -127,7 +127,7 @@
             @if($summaries->isEmpty())
                 <tr>
                     <td colspan="{{ 3 + $examTypes->count() }}" style="text-align:center; color:#94a3b8; padding:20px;">
-                        No results for this semester.
+                        {{ __('No results for this semester.') }}
                     </td>
                 </tr>
             @endif
@@ -135,7 +135,7 @@
     </table>
 
     <div class="footer">
-        Generated automatically by SchoolLMS — {{ now()->format('Y-m-d H:i') }}
+        {{ __('Generated automatically by SchoolLMS') }} — {{ now()->format('Y-m-d H:i') }}
     </div>
 </div>
 </body>

@@ -38,7 +38,7 @@ class ParentWebController extends Controller
 
         // Verify this child belongs to the parent
         if (!$user->children()->where('student_user_id', $child->id)->exists()) {
-            abort(403, 'This student is not linked to your account.');
+            abort(403, __('This student is not linked to your account.'));
         }
 
         $profile = StudentProfile::where('user_id', $child->id)->first();
@@ -198,13 +198,13 @@ class ParentWebController extends Controller
         abort_unless(
             $parent->children()->where('student_user_id', $attendance->student_user_id)->exists(),
             403,
-            'You are not a parent of this student.'
+            __('You are not a parent of this student.')
         );
 
         abort_if(
             $attendance->justification()->exists(),
             422,
-            'A justification already exists for this absence.'
+            __('A justification already exists for this absence.')
         );
 
         $documentUrl = null;
@@ -222,6 +222,6 @@ class ParentWebController extends Controller
         ]);
 
         return redirect()->route('parent.attendance', ['child_id' => $attendance->student_user_id])
-            ->with('success', 'Justification submitted successfully.');
+            ->with('success', __('Justification submitted successfully.'));
     }
 }

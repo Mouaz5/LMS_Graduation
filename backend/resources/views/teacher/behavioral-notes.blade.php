@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Behavioral Notes">
+<x-layouts.app :pageTitle="__('Behavioral Notes')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -88,8 +88,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">Behavioral Notes</div>
-        <div class="page-desc">Create notes for students and view your previously submitted notes</div>
+        <div class="page-title">{{ __("Behavioral Notes") }}</div>
+        <div class="page-desc">{{ __("Create notes for students and view your previously submitted notes") }}</div>
     </div>
 
     @if(session('success'))
@@ -102,16 +102,16 @@
     <div class="two-col">
         {{-- Create Form --}}
         <div class="card">
-            <div class="card-header">Add New Note</div>
+            <div class="card-header">{{ __("Add New Note") }}</div>
             <div class="card-body">
                 <form method="POST" action="{{ route('teacher.behavioral-notes.store') }}">
                     @csrf
 
                     <div class="form-group">
-                        <label class="form-label">Student</label>
+                        <label class="form-label">{{ __("Student") }}</label>
                         <select name="student_user_id" class="form-control" required>
-                            <option value="">— Select Student —</option>
-                            @foreach($students->groupBy(fn($s) => $s->classroom->name ?? 'Unknown') as $classroomName => $classStudents)
+                            <option value="">{{ __("— Select Student —") }}</option>
+                            @foreach($students->groupBy(fn($s) => $s->classroom->name ?? __('Unknown')) as $classroomName => $classStudents)
                                 <optgroup label="{{ $classroomName }}">
                                     @foreach($classStudents as $profile)
                                         <option value="{{ $profile->user_id }}" @selected(old('student_user_id') == $profile->user_id)>
@@ -125,15 +125,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Date</label>
+                        <label class="form-label">{{ __("Date") }}</label>
                         <input type="date" name="date" class="form-control" value="{{ old('date', now()->toDateString()) }}" required>
                         @error('date')<div class="error-msg">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Severity</label>
+                        <label class="form-label">{{ __("Severity") }}</label>
                         <div class="severity-grid">
-                            @foreach(['info' => ['📘','Info'], 'warning' => ['⚠️','Warning'], 'critical' => ['🚨','Critical']] as $val => [$icon, $label])
+                            @foreach(['info' => ['📘', __('Info')], 'warning' => ['⚠️', __('Warning')], 'critical' => ['🚨', __('Critical')]] as $val => [$icon, $label])
                                 <div>
                                     <input type="radio" name="severity" id="sev_{{ $val }}" value="{{ $val }}" class="severity-option"
                                            @checked(old('severity', 'info') === $val)>
@@ -148,12 +148,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Note</label>
-                        <textarea name="note" class="form-control" placeholder="Describe the behavior..." required>{{ old('note') }}</textarea>
+                        <label class="form-label">{{ __("Note") }}</label>
+                        <textarea name="note" class="form-control" placeholder="{{ __('Describe the behavior...') }}" required>{{ old('note') }}</textarea>
                         @error('note')<div class="error-msg">{{ $message }}</div>@enderror
                     </div>
 
-                    <button type="submit" class="btn-submit">Add Note</button>
+                    <button type="submit" class="btn-submit">{{ __("Add Note") }}</button>
                 </form>
             </div>
         </div>
@@ -161,14 +161,14 @@
         {{-- Notes List --}}
         <div class="card">
             <div class="table-header">
-                <div class="table-title">My Notes</div>
-                <div class="table-meta">{{ $notes->total() }} total</div>
+                <div class="table-title">{{ __("My Notes") }}</div>
+                <div class="table-meta">{{ __(":count total", ['count' => $notes->total()]) }}</div>
             </div>
 
             @if($notes->isEmpty())
                 <div class="empty-state">
-                    <div class="empty-title">No Notes Yet</div>
-                    <div class="empty-desc">Submit a note using the form on the left.</div>
+                    <div class="empty-title">{{ __("No Notes Yet") }}</div>
+                    <div class="empty-desc">{{ __("Submit a note using the form on the left.") }}</div>
                 </div>
             @else
                 <div class="notes-list">
@@ -191,17 +191,17 @@
 
                 @if($notes->hasPages())
                     <div class="pagination-row">
-                        <div>Page {{ $notes->currentPage() }} of {{ $notes->lastPage() }}</div>
+                        <div>{{ __("Page :current of :last", ['current' => $notes->currentPage(), 'last' => $notes->lastPage()]) }}</div>
                         <div style="display: flex; gap: 6px;">
                             @if($notes->onFirstPage())
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
                             @else
-                                <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← Prev</a>
+                                <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                             @endif
                             @if($notes->hasMorePages())
-                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">Next →</a>
+                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                             @else
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                             @endif
                         </div>
                     </div>

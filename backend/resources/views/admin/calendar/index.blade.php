@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="School Calendar">
+<x-layouts.app :pageTitle="__('School Calendar')">
     <style>
         .btn-primary {
             display: inline-flex;
@@ -59,12 +59,12 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">School Calendar</div>
-            <div class="page-desc">Manage holidays, events, and exam schedules</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("School Calendar") }}</div>
+            <div class="page-desc">{{ __("Manage holidays, events, and exam schedules") }}</div>
         </div>
         <a href="{{ route('admin.calendar.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            New Event
+            {{ __("New Event") }}
         </a>
     </div>
 
@@ -72,9 +72,9 @@
         <table>
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Description</th>
+                    <th>{{ __("Date") }}</th>
+                    <th>{{ __("Type") }}</th>
+                    <th>{{ __("Description") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,7 +93,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="empty-state">No calendar events found. Add one to get started.</td>
+                        <td colspan="3" class="empty-state">{{ __("No calendar events found. Add one to get started.") }}</td>
                     </tr>
                 @endforelse
             </tbody>

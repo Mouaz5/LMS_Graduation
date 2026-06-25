@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Absence Justifications">
+<x-layouts.app :pageTitle="__('Absence Justifications')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -79,8 +79,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">Absence Justifications</div>
-        <div class="page-desc">Review and approve or reject pending parent justifications</div>
+        <div class="page-title">{{ __("Absence Justifications") }}</div>
+        <div class="page-desc">{{ __("Review and approve or reject pending parent justifications") }}</div>
     </div>
 
     @if(session('success'))
@@ -92,8 +92,8 @@
 
     <div class="table-card">
         <div class="table-header">
-            <div class="table-title">Pending Justifications</div>
-            <div class="table-meta">{{ $justifications->total() }} pending</div>
+            <div class="table-title">{{ __("Pending Justifications") }}</div>
+            <div class="table-meta">{{ __(":count pending", ['count' => $justifications->total()]) }}</div>
         </div>
 
         @if($justifications->isEmpty())
@@ -101,20 +101,20 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <div class="empty-title">All Clear!</div>
-                <div class="empty-desc">No pending justifications to review.</div>
+                <div class="empty-title">{{ __("All Clear!") }}</div>
+                <div class="empty-desc">{{ __("No pending justifications to review.") }}</div>
             </div>
         @else
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Student</th>
-                            <th>Date</th>
-                            <th>Reason</th>
-                            <th>Submitted By</th>
-                            <th>Document</th>
-                            <th>Actions</th>
+                            <th>{{ __("Student") }}</th>
+                            <th>{{ __("Date") }}</th>
+                            <th>{{ __("Reason") }}</th>
+                            <th>{{ __("Submitted By") }}</th>
+                            <th>{{ __("Document") }}</th>
+                            <th>{{ __("Actions") }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,7 +131,7 @@
                                 </td>
                                 <td>
                                     <div style="font-weight: 600; color: #0f172a;">{{ $j->attendance->date?->format('M j, Y') }}</div>
-                                    <span class="badge badge-absent">Absent</span>
+                                    <span class="badge badge-absent">{{ __("Absent") }}</span>
                                 </td>
                                 <td>
                                     <div class="reason-text">{{ $j->reason }}</div>
@@ -141,7 +141,7 @@
                                     @if($j->document_url)
                                         <a href="{{ $j->document_url }}" target="_blank" class="doc-link">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                                            View
+                                            {{ __("View") }}
                                         </a>
                                     @else
                                         <span style="color: #cbd5e1; font-size: 12px;">—</span>
@@ -151,11 +151,11 @@
                                     <div class="action-forms">
                                         <form method="POST" action="{{ route('teacher.justifications.approve', $j) }}">
                                             @csrf
-                                            <button type="submit" class="btn-approve">Approve</button>
+                                            <button type="submit" class="btn-approve">{{ __("Approve") }}</button>
                                         </form>
                                         <form method="POST" action="{{ route('teacher.justifications.reject', $j) }}">
                                             @csrf
-                                            <button type="submit" class="btn-reject">Reject</button>
+                                            <button type="submit" class="btn-reject">{{ __("Reject") }}</button>
                                         </form>
                                     </div>
                                 </td>
@@ -167,17 +167,17 @@
 
             @if($justifications->hasPages())
                 <div class="pagination-row">
-                    <div>Page {{ $justifications->currentPage() }} of {{ $justifications->lastPage() }}</div>
+                    <div>{{ __("Page :current of :last", ['current' => $justifications->currentPage(), 'last' => $justifications->lastPage()]) }}</div>
                     <div style="display: flex; gap: 6px;">
                         @if($justifications->onFirstPage())
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
                         @else
-                            <a href="{{ $justifications->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← Prev</a>
+                            <a href="{{ $justifications->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                         @endif
                         @if($justifications->hasMorePages())
-                            <a href="{{ $justifications->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">Next →</a>
+                            <a href="{{ $justifications->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                         @else
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                         @endif
                     </div>
                 </div>

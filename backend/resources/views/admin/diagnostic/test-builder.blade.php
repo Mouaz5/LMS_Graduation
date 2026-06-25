@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Test Builder">
+<x-layouts.app :pageTitle="__('Test Builder')">
 <style>
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
 
@@ -35,7 +35,7 @@
 
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #4F46E5; color: white; }
-    th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; }
+    th { padding: 10px 12px; text-align: start; font-size: 11px; font-weight: 700; }
     td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
     tbody tr:nth-child(even) { background: #f8fafc; }
 
@@ -51,8 +51,8 @@
     .option-row input[type=radio] { width: 16px; height: 16px; accent-color: #4F46E5; }
 </style>
 
-<div class="page-title">Test Builder</div>
-<div class="page-desc">Create learning objectives and diagnostic questions for each subject.</div>
+<div class="page-title">{{ __('Test Builder') }}</div>
+<div class="page-desc">{{ __('Create learning objectives and diagnostic questions for each subject.') }}</div>
 
 @if(session('success'))
     <div class="alert-success">{{ session('success') }}</div>
@@ -65,9 +65,9 @@
 <form method="GET" action="{{ route('admin.diagnostic.test-builder') }}">
     <div class="filter-card">
         <div class="filter-group">
-            <label class="filter-label">Subject</label>
+            <label class="filter-label">{{ __('Subject') }}</label>
             <select class="filter-select" name="subject_id" onchange="this.form.submit()">
-                <option value="">-- Select Subject --</option>
+                <option value="">-- {{ __('Select Subject') }} --</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
                 @endforeach
@@ -80,23 +80,23 @@
 <div class="grid-two">
     {{-- Add Learning Objective --}}
     <div class="card">
-        <div class="card-header">Add Learning Objective</div>
+        <div class="card-header">{{ __('Add Learning Objective') }}</div>
         <div class="card-body">
             <form method="POST" action="{{ route('admin.diagnostic.objectives.store') }}">
                 @csrf
                 <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                 <div class="form-group">
-                    <label class="form-label">Objective Name</label>
-                    <input type="text" name="name" class="form-input" required placeholder="e.g. Algebra Basics">
+                    <label class="form-label">{{ __('Objective Name') }}</label>
+                    <input type="text" name="name" class="form-input" required placeholder="{{ __('e.g. Algebra Basics') }}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Description (optional)</label>
-                    <textarea name="description" class="form-textarea" placeholder="Brief description..."></textarea>
+                    <label class="form-label">{{ __('Description (optional)') }}</label>
+                    <textarea name="description" class="form-textarea" placeholder="{{ __('Brief description...') }}"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Parent Objective (optional)</label>
+                    <label class="form-label">{{ __('Parent Objective (optional)') }}</label>
                     <select name="parent_id" class="filter-select" style="min-width: unset; width: 100%;">
-                        <option value="">-- None (root) --</option>
+                        <option value="">-- {{ __('None (root)') }} --</option>
                         @foreach($objectives as $obj)
                             <option value="{{ $obj->id }}">{{ $obj->name }}</option>
                             @foreach($obj->children as $child)
@@ -105,22 +105,22 @@
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Objective</button>
+                <button type="submit" class="btn btn-primary">{{ __('Add Objective') }}</button>
             </form>
         </div>
     </div>
 
     {{-- Add Question --}}
     <div class="card">
-        <div class="card-header">Add Question</div>
+        <div class="card-header">{{ __('Add Question') }}</div>
         <div class="card-body">
             <form method="POST" action="{{ route('admin.diagnostic.questions.store') }}" id="questionForm">
                 @csrf
                 <input type="hidden" name="subject_id" value="{{ $subject->id }}">
                 <div class="form-group">
-                    <label class="form-label">Learning Objective</label>
+                    <label class="form-label">{{ __('Learning Objective') }}</label>
                     <select name="learning_objective_id" class="filter-select" style="min-width: unset; width: 100%;" required>
-                        <option value="">-- Select Objective --</option>
+                        <option value="">-- {{ __('Select Objective') }} --</option>
                         @foreach($objectives as $obj)
                             <option value="{{ $obj->id }}">{{ $obj->name }}</option>
                             @foreach($obj->children as $child)
@@ -130,18 +130,18 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Question Text</label>
-                    <textarea name="question_text" class="form-textarea" required placeholder="Enter the question..."></textarea>
+                    <label class="form-label">{{ __('Question Text') }}</label>
+                    <textarea name="question_text" class="form-textarea" required placeholder="{{ __('Enter the question...') }}"></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Question Type</label>
+                    <label class="form-label">{{ __('Question Type') }}</label>
                     <select name="type" class="filter-select" style="min-width: unset; width: 100%;" onchange="toggleOptions(this.value)">
-                        <option value="mcq">Multiple Choice (MCQ)</option>
-                        <option value="true_false">True / False</option>
+                        <option value="mcq">{{ __('Multiple Choice (MCQ)') }}</option>
+                        <option value="true_false">{{ __('True / False') }}</option>
                     </select>
                 </div>
                 <div id="optionsSection" class="form-group">
-                    <label class="form-label">Options <span style="font-size:11px; color:#94a3b8;">(select the correct one)</span></label>
+                    <label class="form-label">{{ __('Options') }} <span style="font-size:11px; color:#94a3b8;">({{ __('select the correct one') }})</span></label>
                     <div class="options-list" id="optionsList">
                         <div class="option-row">
                             <input type="radio" name="correct_option" value="0" checked>
@@ -165,7 +165,7 @@
                 <input type="hidden" name="options[1][is_correct]" value="0">
                 <input type="hidden" name="options[2][is_correct]" value="0">
                 <input type="hidden" name="options[3][is_correct]" value="0">
-                <button type="submit" class="btn btn-primary">Add Question</button>
+                <button type="submit" class="btn btn-primary">{{ __('Add Question') }}</button>
             </form>
         </div>
     </div>
@@ -173,19 +173,19 @@
 
 {{-- Questions Table --}}
 <div class="card">
-    <div class="card-header">Questions for {{ $subject->name }} ({{ $questions->count() }})</div>
+    <div class="card-header">{{ __('Questions for :name (:count)', ['name' => $subject->name, 'count' => $questions->count()]) }}</div>
     @if($questions->isEmpty())
-        <div class="empty-state">No questions yet. Add your first question above.</div>
+        <div class="empty-state">{{ __('No questions yet. Add your first question above.') }}</div>
     @else
         <table>
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Question</th>
-                    <th>Objective</th>
-                    <th>Type</th>
-                    <th>Options</th>
-                    <th>Action</th>
+                    <th>{{ __("Question") }}</th>
+                    <th>{{ __("Objective") }}</th>
+                    <th>{{ __("Type") }}</th>
+                    <th>{{ __("Options") }}</th>
+                    <th>{{ __("Action") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -203,9 +203,9 @@
                             @endforeach
                         </td>
                         <td>
-                            <form method="POST" action="{{ route('admin.diagnostic.questions.destroy', $q) }}" onsubmit="return confirm('Delete this question?')">
+                            <form method="POST" action="{{ route('admin.diagnostic.questions.destroy', $q) }}" onsubmit="return confirm('{{ __('Delete this question?') }}')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm">{{ __('Delete') }}</button>
                             </form>
                         </td>
                     </tr>

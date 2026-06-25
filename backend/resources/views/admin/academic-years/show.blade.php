@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Academic Year Details">
+<x-layouts.app :pageTitle="__('Academic Year Details')">
     <style>
         .back-link {
             font-size: 13px;
@@ -97,7 +97,7 @@
     </style>
 
     <a href="{{ route('admin.academic-years.index') }}" class="back-link">
-        &larr; Back to Academic Years
+        &larr; {{ __("Back to Academic Years") }}
     </a>
 
     <div class="detail-card">
@@ -107,28 +107,28 @@
         </div>
         <div class="detail-body">
             <div class="detail-row">
-                <span class="detail-label">Start Date</span>
+                <span class="detail-label">{{ __("Start Date") }}</span>
                 <span class="detail-value">{{ $year->start_date->format('M d, Y') }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">End Date</span>
+                <span class="detail-label">{{ __("End Date") }}</span>
                 <span class="detail-value">{{ $year->end_date->format('M d, Y') }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Duration</span>
-                <span class="detail-value">{{ $year->start_date->diffInMonths($year->end_date) }} months</span>
+                <span class="detail-label">{{ __("Duration") }}</span>
+                <span class="detail-value">{{ __(":count months", ['count' => $year->start_date->diffInMonths($year->end_date)]) }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Status</span>
+                <span class="detail-label">{{ __("Status") }}</span>
                 @if($year->is_active)
                     <span class="badge" style="background: #ecfdf5; color: #065f46;">
                         <span class="badge-dot" style="background: #10b981;"></span>
-                        Active
+                        {{ __("Active") }}
                     </span>
                 @else
                     <span class="badge" style="background: #f8fafc; color: #94a3b8;">
                         <span class="badge-dot" style="background: #cbd5e1;"></span>
-                        Inactive
+                        {{ __("Inactive") }}
                     </span>
                 @endif
             </div>
@@ -138,7 +138,7 @@
     {{-- Semesters --}}
     @if($year->semesters->count() > 0)
         <div class="related-section">
-            <div class="related-title">Semesters ({{ $year->semesters->count() }})</div>
+            <div class="related-title">{{ __("Semesters (:count)", ['count' => $year->semesters->count()]) }}</div>
             <div class="related-card">
                 @foreach($year->semesters as $semester)
                     <div class="related-item">
@@ -150,7 +150,7 @@
                             <div style="font-size: 12px; color: #94a3b8;">{{ $semester->start_date->format('M d') }} — {{ $semester->end_date->format('M d, Y') }}</div>
                         </div>
                         @if($semester->is_active)
-                            <span class="badge" style="background: #ecfdf5; color: #065f46; font-size: 10px;">Active</span>
+                            <span class="badge" style="background: #ecfdf5; color: #065f46; font-size: 10px;">{{ __("Active") }}</span>
                         @endif
                     </div>
                 @endforeach

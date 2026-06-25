@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Exam Types">
+<x-layouts.app :pageTitle="__('Exam Types')">
 <style>
     .page-header { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -114,8 +114,8 @@
 
 <div class="page-header">
     <div>
-        <div class="page-title">Exam Types</div>
-        <div class="page-desc">Define exam types and their grade weights per semester</div>
+        <div class="page-title">{{ __("Exam Types") }}</div>
+        <div class="page-desc">{{ __("Define exam types and their grade weights per semester") }}</div>
     </div>
 </div>
 
@@ -129,24 +129,24 @@
 {{-- Create form --}}
 <div class="card">
     <div class="card-header">
-        <span class="card-title">Add Exam Type</span>
+        <span class="card-title">{{ __("Add Exam Type") }}</span>
     </div>
     <form method="POST" action="{{ route('admin.exam-types.store') }}">
         @csrf
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Name</label>
-                <input class="form-input" name="name" placeholder="e.g. Midterm" value="{{ old('name') }}" required>
+                <label class="form-label">{{ __("Name") }}</label>
+                <input class="form-input" name="name" placeholder="{{ __('e.g. Midterm') }}" value="{{ old('name') }}" required>
             </div>
             <div class="form-group">
-                <label class="form-label">Weight %</label>
+                <label class="form-label">{{ __("Weight %") }}</label>
                 <input class="form-input" name="weight_percent" type="number" step="0.01" min="0.01" max="100"
-                    placeholder="e.g. 30" value="{{ old('weight_percent') }}" required>
+                    placeholder="{{ __('e.g. 30') }}" value="{{ old('weight_percent') }}" required>
             </div>
             <div class="form-group">
-                <label class="form-label">Semester</label>
+                <label class="form-label">{{ __("Semester") }}</label>
                 <select class="form-select" name="semester_id" required>
-                    <option value="">Select semester…</option>
+                    <option value="">{{ __("Select semester…") }}</option>
                     @foreach($semesters as $sem)
                         <option value="{{ $sem->id }}" {{ old('semester_id') == $sem->id ? 'selected' : '' }}>
                             {{ $sem->academicYear->name ?? '—' }} — {{ $sem->name }}
@@ -155,7 +155,7 @@
                 </select>
             </div>
             <div>
-                <button type="submit" class="btn-primary">Add</button>
+                <button type="submit" class="btn-primary">{{ __("Add") }}</button>
             </div>
         </div>
     </form>
@@ -164,17 +164,17 @@
 {{-- Table --}}
 <div class="card">
     <div class="card-header">
-        <span class="card-title">All Exam Types</span>
-        <span style="font-size:12px; color:#94a3b8;">{{ $examTypes->total() }} total</span>
+        <span class="card-title">{{ __("All Exam Types") }}</span>
+        <span style="font-size:12px; color:#94a3b8;">{{ __(":count total", ['count' => $examTypes->total()]) }}</span>
     </div>
     <table>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Weight</th>
-                <th>Semester</th>
-                <th>Academic Year</th>
-                <th>Actions</th>
+                <th>{{ __("Name") }}</th>
+                <th>{{ __("Weight") }}</th>
+                <th>{{ __("Semester") }}</th>
+                <th>{{ __("Academic Year") }}</th>
+                <th>{{ __("Actions") }}</th>
             </tr>
         </thead>
         <tbody>
@@ -185,17 +185,17 @@
                     <td>{{ $et->semester->name ?? '—' }}</td>
                     <td>{{ $et->semester->academicYear->name ?? '—' }}</td>
                     <td style="display:flex; gap:8px;">
-                        <button class="btn-edit" onclick="openEdit({{ $et->id }}, '{{ addslashes($et->name) }}', {{ $et->weight_percent }})">Edit</button>
+                        <button class="btn-edit" onclick="openEdit({{ $et->id }}, '{{ addslashes($et->name) }}', {{ $et->weight_percent }})">{{ __("Edit") }}</button>
                         <form method="POST" action="{{ route('admin.exam-types.destroy', $et) }}"
-                              onsubmit="return confirm('Delete this exam type?')">
+                              onsubmit="return confirm('{{ __('Delete this exam type?') }}')">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn-danger">Delete</button>
+                            <button type="submit" class="btn-danger">{{ __("Delete") }}</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; color:#94a3b8; padding:32px;">No exam types yet.</td>
+                    <td colspan="5" style="text-align:center; color:#94a3b8; padding:32px;">{{ __("No exam types yet.") }}</td>
                 </tr>
             @endforelse
         </tbody>
@@ -208,20 +208,20 @@
 {{-- Edit Modal --}}
 <div class="modal-overlay" id="editModal">
     <div class="modal-box">
-        <div class="modal-title">Edit Exam Type</div>
+        <div class="modal-title">{{ __("Edit Exam Type") }}</div>
         <form method="POST" id="editForm">
             @csrf @method('PUT')
             <div class="form-group" style="margin-bottom:14px;">
-                <label class="form-label">Name</label>
+                <label class="form-label">{{ __("Name") }}</label>
                 <input class="form-input" name="name" id="editName" required style="width:100%">
             </div>
             <div class="form-group">
-                <label class="form-label">Weight %</label>
+                <label class="form-label">{{ __("Weight %") }}</label>
                 <input class="form-input" name="weight_percent" id="editWeight" type="number" step="0.01" min="0.01" max="100" required style="width:100%">
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeEdit()">Cancel</button>
-                <button type="submit" class="btn-primary">Save</button>
+                <button type="button" class="btn-secondary" onclick="closeEdit()">{{ __("Cancel") }}</button>
+                <button type="submit" class="btn-primary">{{ __("Save") }}</button>
             </div>
         </form>
     </div>

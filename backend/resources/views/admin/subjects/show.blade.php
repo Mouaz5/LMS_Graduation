@@ -83,7 +83,7 @@
             width: 30px; height: 30px; border-radius: 8px;
             background: #eef2ff; color: #4F46E5;
             display: inline-flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 700; margin-right: 8px;
+            font-size: 11px; font-weight: 700; margin-inline-end: 8px;
             vertical-align: middle;
         }
         .classroom-chip {
@@ -182,15 +182,15 @@
     </div>
 
     {{-- Teacher assignments --}}
-    <div class="section-title">Teacher Assignments ({{ $subject->teacherAssignments->count() }})</div>
+    <div class="section-title">{{ __("Teacher Assignments (:count)", ['count' => $subject->teacherAssignments->count()]) }}</div>
     <div class="table-card">
         <table>
             <thead>
                 <tr>
-                    <th>Teacher</th>
-                    <th>Classroom</th>
-                    <th>Grade</th>
-                    <th>Academic Year</th>
+                    <th>{{ __("Teacher") }}</th>
+                    <th>{{ __("Classroom") }}</th>
+                    <th>{{ __("Grade") }}</th>
+                    <th>{{ __("Academic Year") }}</th>
                 </tr>
             </thead>
             <tbody>

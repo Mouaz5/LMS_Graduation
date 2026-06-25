@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Create Assignment">
+<x-layouts.app :pageTitle="__('Create Assignment')">
     <style>
         .page-header { margin-bottom: 28px; }
         .page-header h2 {
@@ -103,14 +103,14 @@
     </style>
 
     <div class="page-header">
-        <h2>Create Teacher Assignment</h2>
-        <p>Assign a teacher to a subject in a specific classroom and academic year</p>
+        <h2>{{ __("Create Teacher Assignment") }}</h2>
+        <p>{{ __("Assign a teacher to a subject in a specific classroom and academic year") }}</p>
     </div>
 
     @if($errors->any())
     <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
-        <div style="color: #991b1b; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Please fix the following errors:</div>
-        <ul style="margin: 0; padding-left: 18px; color: #b91c1c; font-size: 12.5px;">
+        <div style="color: #991b1b; font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ __("Please fix the following errors:") }}</div>
+        <ul style="margin: 0; padding-inline-start: 18px; color: #b91c1c; font-size: 12.5px;">
             @foreach($errors->all() as $e)
                 <li>{{ $e }}</li>
             @endforeach
@@ -123,9 +123,9 @@
 
         <div class="form-card">
             <div class="form-group">
-                <label class="form-label" for="teacher_user_id">Teacher</label>
+                <label class="form-label" for="teacher_user_id">{{ __("Teacher") }}</label>
                 <select class="form-select @error('teacher_user_id') border-red-400 @enderror" id="teacher_user_id" name="teacher_user_id" required>
-                    <option value="">-- Select Teacher --</option>
+                    <option value="">{{ __("-- Select Teacher --") }}</option>
                     @foreach($teachers as $teacher)
                         <option value="{{ $teacher->id }}" @selected(old('teacher_user_id') == $teacher->id)>{{ $teacher->name }}</option>
                     @endforeach
@@ -136,9 +136,9 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="subject_id">Subject</label>
+                <label class="form-label" for="subject_id">{{ __("Subject") }}</label>
                 <select class="form-select @error('subject_id') border-red-400 @enderror" id="subject_id" name="subject_id" required>
-                    <option value="">-- Select Subject --</option>
+                    <option value="">{{ __("-- Select Subject --") }}</option>
                     @foreach($subjects as $subject)
                         <option value="{{ $subject->id }}" @selected(old('subject_id') == $subject->id)>{{ $subject->name }} ({{ $subject->code }})</option>
                     @endforeach
@@ -149,9 +149,9 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="classroom_id">Classroom</label>
+                <label class="form-label" for="classroom_id">{{ __("Classroom") }}</label>
                 <select class="form-select @error('classroom_id') border-red-400 @enderror" id="classroom_id" name="classroom_id" required>
-                    <option value="">-- Select Classroom --</option>
+                    <option value="">{{ __("-- Select Classroom --") }}</option>
                     @foreach($classrooms as $classroom)
                         <option value="{{ $classroom->id }}" @selected(old('classroom_id') == $classroom->id)>{{ $classroom->grade->name }} — {{ $classroom->name }}</option>
                     @endforeach
@@ -162,14 +162,14 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="academic_year_id">Academic Year</label>
+                <label class="form-label" for="academic_year_id">{{ __("Academic Year") }}</label>
                 <select class="form-select @error('academic_year_id') border-red-400 @enderror" id="academic_year_id" name="academic_year_id" required>
-                    <option value="">-- Select Academic Year --</option>
+                    <option value="">{{ __("-- Select Academic Year --") }}</option>
                     @foreach($academicYears as $year)
                         <option value="{{ $year->id }}" @selected(old('academic_year_id') == $year->id)>{{ $year->name }}</option>
                     @endforeach
                 </select>
-                <div class="form-help">Only one assignment per teacher-subject-classroom-year combination is allowed.</div>
+                <div class="form-help">{{ __("Only one assignment per teacher-subject-classroom-year combination is allowed.") }}</div>
                 @error('academic_year_id')
                     <div style="font-size: 12px; color: #dc2626; margin-top: 4px;">{{ $message }}</div>
                 @enderror
@@ -178,9 +178,9 @@
             <div class="form-actions">
                 <button type="submit" class="btn-save">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Create Assignment
+                    {{ __("Create Assignment") }}
                 </button>
-                <a href="{{ route('admin.assignments.index') }}" class="btn-cancel">Cancel</a>
+                <a href="{{ route('admin.assignments.index') }}" class="btn-cancel">{{ __("Cancel") }}</a>
             </div>
         </div>
     </form>

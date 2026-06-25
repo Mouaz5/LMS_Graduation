@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Calendar Event Details">
+<x-layouts.app :pageTitle="__('Calendar Event Details')">
     <style>
         .back-link {
             font-size: 13px;
@@ -66,14 +66,14 @@
     </style>
 
     <a href="{{ route('admin.calendar.index') }}" class="back-link">
-        &larr; Back to Calendar
+        &larr; {{ __("Back to Calendar") }}
     </a>
 
     @php
         $typeConfig = [
-            'holiday' => ['label' => 'Holiday', 'bg' => '#fef3c7', 'color' => '#92400e', 'iconBg' => '#fef3c7', 'iconColor' => '#d97706'],
-            'event'   => ['label' => 'Event',   'bg' => '#dbeafe', 'color' => '#1e40af', 'iconBg' => '#dbeafe', 'iconColor' => '#2563eb'],
-            'exam'    => ['label' => 'Exam',    'bg' => '#fce7f3', 'color' => '#9d174d', 'iconBg' => '#fce7f3', 'iconColor' => '#db2777'],
+            'holiday' => ['label' => __('Holiday'), 'bg' => '#fef3c7', 'color' => '#92400e', 'iconBg' => '#fef3c7', 'iconColor' => '#d97706'],
+            'event'   => ['label' => __('Event'),   'bg' => '#dbeafe', 'color' => '#1e40af', 'iconBg' => '#dbeafe', 'iconColor' => '#2563eb'],
+            'exam'    => ['label' => __('Exam'),    'bg' => '#fce7f3', 'color' => '#9d174d', 'iconBg' => '#fce7f3', 'iconColor' => '#db2777'],
         ];
         $tc = $typeConfig[$event->type] ?? $typeConfig['event'];
     @endphp
@@ -96,25 +96,25 @@
         </div>
         <div class="detail-body">
             <div class="detail-row">
-                <span class="detail-label">Date</span>
+                <span class="detail-label">{{ __("Date") }}</span>
                 <span class="detail-value">{{ $event->date->format('M d, Y') }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Day</span>
+                <span class="detail-label">{{ __("Day") }}</span>
                 <span class="detail-value">{{ $event->date->format('l') }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Type</span>
+                <span class="detail-label">{{ __("Type") }}</span>
                 <span class="badge" style="background: {{ $tc['bg'] }}; color: {{ $tc['color'] }};">
                     {{ $tc['label'] }}
                 </span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">School</span>
+                <span class="detail-label">{{ __("School") }}</span>
                 <span class="detail-value">{{ $event->school->name }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Created</span>
+                <span class="detail-label">{{ __("Created") }}</span>
                 <span class="detail-value">{{ $event->created_at->format('M d, Y') }}</span>
             </div>
         </div>

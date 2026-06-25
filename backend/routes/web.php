@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\ExamTypeWebController;
+use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\ParentWebController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\Web\TeacherWebController;
 use App\Http\Controllers\Web\TeacherAttendanceController;
 use App\Http\Controllers\Web\TeacherBehavioralNoteController;
 use Illuminate\Support\Facades\Route;
+
+// Language switching (public — usable while logged out)
+Route::get('/language/{locale}', [LocaleController::class, 'switch'])->name('language.switch');
 
 // Auth
 Route::get('/login', [AuthWebController::class, 'showLogin'])->name('login');

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Student Dashboard">
+<x-layouts.app :pageTitle="__('Student Dashboard')">
     <style>
         .welcome-banner {
             background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
@@ -63,9 +63,9 @@
                 {{ now()->format('l, F j, Y') }}
             </div>
             <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 6px;">
-                Hello, {{ explode(' ', $user->name)[0] }}!
+                {{ __("Hello, :name!", ['name' => explode(' ', $user->name)[0]]) }}
             </h2>
-            <p style="font-size: 14px; color: #a7f3d0;">Keep up the great work. Your learning journey continues today.</p>
+            <p style="font-size: 14px; color: #a7f3d0;">{{ __("Keep up the great work. Your learning journey continues today.") }}</p>
             @if($classroom)
                 <div style="margin-top: 10px;">
                     <span class="classroom-badge">{{ $classroom->name }} &middot; {{ $classroom->grade->name }}</span>
@@ -76,18 +76,18 @@
 
     <div class="cards-grid">
         {{-- My Grades --}}
-        <x-dashboard.card title="My Grades" subtitle="Latest academic results" iconBg="#fffbeb">
+        <x-dashboard.card :title="__('My Grades')" :subtitle="__('Latest academic results')" iconBg="#fffbeb">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#f59e0b" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                Grades module coming soon
+                {{ __("Grades module coming soon") }}
             </div>
         </x-dashboard.card>
 
         {{-- Schedule --}}
-        <x-dashboard.card title="Today's Schedule" :subtitle="now()->format('l')" iconBg="#eef2ff">
+        <x-dashboard.card :title="__('Today\'s Schedule')" :subtitle="now()->format('l')" iconBg="#eef2ff">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             </x-slot:icon>
@@ -102,30 +102,30 @@
             @empty
                 <div class="dash-card-empty">
                     <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    No classes scheduled for today
+                    {{ __("No classes scheduled for today") }}
                 </div>
             @endforelse
         </x-dashboard.card>
 
         {{-- Announcements --}}
-        <x-dashboard.card title="Announcements" subtitle="School notices" iconBg="#faf5ff">
+        <x-dashboard.card :title="__('Announcements')" :subtitle="__('School notices')" iconBg="#faf5ff">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
-                No announcements yet
+                {{ __("No announcements yet") }}
             </div>
         </x-dashboard.card>
 
         {{-- Attendance --}}
-        <x-dashboard.card title="Attendance" subtitle="This month's record" iconBg="#ecfdf5">
+        <x-dashboard.card :title="__('Attendance')" :subtitle="__('This month\'s record')" iconBg="#ecfdf5">
             <x-slot:icon>
                 <svg width="20" height="20" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Attendance module coming soon
+                {{ __("Attendance module coming soon") }}
             </div>
         </x-dashboard.card>
     </div>

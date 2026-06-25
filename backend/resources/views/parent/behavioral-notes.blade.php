@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Behavioral Notes">
+<x-layouts.app :pageTitle="__('Behavioral Notes')">
     <style>
         .page-header { margin-bottom: 20px; }
         .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
@@ -66,8 +66,8 @@
     </style>
 
     <div class="page-header">
-        <div class="page-title">Behavioral Notes</div>
-        <div class="page-desc">View behavioral notes written by teachers for your child</div>
+        <div class="page-title">{{ __("Behavioral Notes") }}</div>
+        <div class="page-desc">{{ __("View behavioral notes written by teachers for your child") }}</div>
     </div>
 
     {{-- Child selector --}}
@@ -75,7 +75,7 @@
         <form method="GET" action="{{ route('parent.behavioral-notes') }}">
             <div class="child-selector">
                 <div class="filter-group">
-                    <label class="filter-label">Child</label>
+                    <label class="filter-label">{{ __("Child") }}</label>
                     <select name="child_id" class="filter-select" onchange="this.form.submit()">
                         @foreach($children as $child)
                             <option value="{{ $child->id }}" @selected($selectedChild?->id == $child->id)>
@@ -94,15 +94,15 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/></svg>
                 </div>
-                <div class="empty-title">No Children Linked</div>
-                <div class="empty-desc">No children are linked to your account yet.</div>
+                <div class="empty-title">{{ __("No Children Linked") }}</div>
+                <div class="empty-desc">{{ __("No children are linked to your account yet.") }}</div>
             </div>
         </div>
     @else
         <div class="card">
             <div class="card-header">
-                <div class="card-title">{{ $selectedChild->name }}'s Notes</div>
-                <div class="card-meta">{{ $notes->total() }} notes</div>
+                <div class="card-title">{{ __(":name's Notes", ['name' => $selectedChild->name]) }}</div>
+                <div class="card-meta">{{ __(":count notes", ['count' => $notes->total()]) }}</div>
             </div>
 
             @if($notes->isEmpty())
@@ -110,8 +110,8 @@
                     <div class="empty-icon">
                         <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <div class="empty-title">No Notes</div>
-                    <div class="empty-desc">No behavioral notes have been written for {{ $selectedChild->name }} yet.</div>
+                    <div class="empty-title">{{ __("No Notes") }}</div>
+                    <div class="empty-desc">{{ __("No behavioral notes have been written for :name yet.", ['name' => $selectedChild->name]) }}</div>
                 </div>
             @else
                 <div class="notes-list">
@@ -134,17 +134,17 @@
 
                 @if($notes->hasPages())
                     <div class="pagination-row">
-                        <div>Page {{ $notes->currentPage() }} of {{ $notes->lastPage() }}</div>
+                        <div>{{ __("Page :current of :last", ['current' => $notes->currentPage(), 'last' => $notes->lastPage()]) }}</div>
                         <div style="display: flex; gap: 6px;">
                             @if($notes->onFirstPage())
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← Prev</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</span>
                             @else
-                                <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← Prev</a>
+                                <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
                             @endif
                             @if($notes->hasMorePages())
-                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">Next →</a>
+                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
                             @else
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next →</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
                             @endif
                         </div>
                     </div>

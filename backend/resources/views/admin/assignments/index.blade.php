@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Teacher Assignments">
+<x-layouts.app :pageTitle="__('Teacher Assignments')">
     <style>
         .btn-primary {
             display: inline-flex;
@@ -80,29 +80,29 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">Teacher Assignments</div>
-            <div class="page-desc">Manage teacher-subject-classroom assignments</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("Teacher Assignments") }}</div>
+            <div class="page-desc">{{ __("Manage teacher-subject-classroom assignments") }}</div>
         </div>
         <a href="{{ route('admin.assignments.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Create Assignment
+            {{ __("Create Assignment") }}
         </a>
     </div>
 
     <div class="table-card">
         <div class="table-toolbar">
-            <input type="text" class="search-input" placeholder="Search assignments..." oninput="filterTable(this.value)">
-            <div class="table-meta">{{ $assignments->total() }} assignments total</div>
+            <input type="text" class="search-input" placeholder="{{ __('Search assignments...') }}" oninput="filterTable(this.value)">
+            <div class="table-meta">{{ __(":count assignments total", ['count' => $assignments->total()]) }}</div>
         </div>
 
         <div style="overflow-x: auto;">
             <table id="assignmentsTable">
                 <thead>
                     <tr>
-                        <th>Teacher</th>
-                        <th>Subject</th>
-                        <th>Classroom</th>
-                        <th>Academic Year</th>
+                        <th>{{ __("Teacher") }}</th>
+                        <th>{{ __("Subject") }}</th>
+                        <th>{{ __("Classroom") }}</th>
+                        <th>{{ __("Academic Year") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -134,7 +134,7 @@
                         <tr>
                             <td colspan="4" class="empty-state">
                                 <svg width="40" height="40" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                                No assignments found. Create one to get started.
+                                {{ __("No assignments found. Create one to get started.") }}
                             </td>
                         </tr>
                     @endforelse
@@ -144,18 +144,18 @@
 
         @if($assignments->hasPages())
         <div class="pagination-row">
-            <div>Page {{ $assignments->currentPage() }} of {{ $assignments->lastPage() }}</div>
+            <div>{{ __("Page :current of :last", ['current' => $assignments->currentPage(), 'last' => $assignments->lastPage()]) }}</div>
             <div style="display: flex; gap: 6px; align-items: center;">
                 @if($assignments->onFirstPage())
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">&larr; Prev</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</span>
                 @else
-                    <a href="{{ $assignments->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">&larr; Prev</a>
+                    <a href="{{ $assignments->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">&larr; {{ __("Prev") }}</a>
                 @endif
 
                 @if($assignments->hasMorePages())
-                    <a href="{{ $assignments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">Next &rarr;</a>
+                    <a href="{{ $assignments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">{{ __("Next") }} &rarr;</a>
                 @else
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">Next &rarr;</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
                 @endif
             </div>
         </div>

@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Classroom Details">
+<x-layouts.app :pageTitle="__('Classroom Details')">
     <style>
         .back-link {
             font-size: 13px;
@@ -110,7 +110,7 @@
     </style>
 
     <a href="{{ route('classrooms.index') }}" class="back-link">
-        &larr; Back to Classrooms
+        &larr; {{ __("Back to Classrooms") }}
     </a>
 
     <div class="detail-card">
@@ -125,17 +125,17 @@
         </div>
         <div class="detail-body">
             <div class="detail-row">
-                <span class="detail-label">Grade</span>
+                <span class="detail-label">{{ __("Grade") }}</span>
                 <span class="detail-value">{{ $classroom->grade->name }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Students</span>
+                <span class="detail-label">{{ __("Students") }}</span>
                 <span class="badge" style="background: #ecfdf5; color: #065f46;">
                     {{ $classroom->studentProfiles->count() }} / {{ $classroom->capacity }}
                 </span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Capacity</span>
+                <span class="detail-label">{{ __("Capacity") }}</span>
                 <span class="detail-value">{{ $classroom->capacity }}</span>
             </div>
         </div>
@@ -143,7 +143,7 @@
 
     {{-- Students --}}
     <div class="related-section">
-        <div class="related-title">Students ({{ $classroom->studentProfiles->count() }})</div>
+        <div class="related-title">{{ __("Students (:count)", ['count' => $classroom->studentProfiles->count()]) }}</div>
         <div class="related-card">
             @forelse($classroom->studentProfiles as $profile)
                 <div class="related-item">
@@ -154,10 +154,10 @@
                         <div style="font-weight: 600;">{{ $profile->student->name }}</div>
                         <div style="font-size: 12px; color: #94a3b8;">{{ $profile->student->email }}</div>
                     </div>
-                    <span style="font-size: 11px; color: #94a3b8;">Enrolled {{ $profile->enrollment_date->format('M d, Y') }}</span>
+                    <span style="font-size: 11px; color: #94a3b8;">{{ __("Enrolled :date", ['date' => $profile->enrollment_date->format('M d, Y')]) }}</span>
                 </div>
             @empty
-                <div class="empty-msg">No students enrolled yet.</div>
+                <div class="empty-msg">{{ __("No students enrolled yet.") }}</div>
             @endforelse
         </div>
     </div>
@@ -165,7 +165,7 @@
     {{-- Teacher Assignments --}}
     @if($classroom->teacherAssignments->count() > 0)
         <div class="related-section">
-            <div class="related-title">Subject Teachers</div>
+            <div class="related-title">{{ __("Subject Teachers") }}</div>
             <div class="related-card">
                 @foreach($classroom->teacherAssignments->groupBy('subject.name') as $subjectName => $assignments)
                     @foreach($assignments as $assignment)

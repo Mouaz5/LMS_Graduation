@@ -1,4 +1,4 @@
-<x-layouts.app pageTitle="Subjects">
+<x-layouts.app :pageTitle="__('Subjects')">
     <style>
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
@@ -51,12 +51,12 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">Subjects</div>
-            <div class="page-desc">Manage school subjects</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("Subjects") }}</div>
+            <div class="page-desc">{{ __("Manage school subjects") }}</div>
         </div>
         <a href="{{ route('admin.subjects.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            New Subject
+            {{ __("New Subject") }}
         </a>
     </div>
 
@@ -68,10 +68,10 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>School</th>
-                    <th>Actions</th>
+                    <th>{{ __("Name") }}</th>
+                    <th>{{ __("Code") }}</th>
+                    <th>{{ __("School") }}</th>
+                    <th>{{ __("Actions") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,14 +87,14 @@
                             <div class="actions">
                                 <a href="{{ route('admin.subjects.edit', $subject) }}" class="btn-edit">
                                     <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                    Edit
+                                    {{ __("Edit") }}
                                 </a>
                                 <form method="POST" action="{{ route('admin.subjects.destroy', $subject) }}"
                                       onsubmit="return confirm('Delete subject {{ $subject->name }}?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn-delete">
                                         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                        Delete
+                                        {{ __("Delete") }}
                                     </button>
                                 </form>
                             </div>
@@ -102,7 +102,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="empty-state">No subjects found. Create one to get started.</td>
+                        <td colspan="4" class="empty-state">{{ __("No subjects found. Create one to get started.") }}</td>
                     </tr>
                 @endforelse
             </tbody>
