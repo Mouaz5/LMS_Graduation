@@ -39,11 +39,12 @@ Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->nam
 Route::middleware('auth')->group(function () {
     Route::get('/', fn () => redirect()->route('dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/dashboard/impersonate', [DashboardController::class, 'impersonate'])->name('impersonate');
-    Route::post('/dashboard/stop-impersonate', [DashboardController::class, 'stopImpersonate'])->name('impersonate.stop');
 
     // Admin user management
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::post('/impersonate', [DashboardController::class, 'impersonate'])->name('impersonate');
+        Route::post('/stop-impersonate', [DashboardController::class, 'stopImpersonate'])->name('impersonate.stop');
+
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');

@@ -88,13 +88,17 @@ class DashboardController extends Controller
 
     public function impersonate(Request $request): \Illuminate\Http\RedirectResponse
     {
+        abort_unless($request->user()->role === 'admin', 403);
+
         $request->validate(['role' => 'required|in:admin,teacher,student,parent']);
         session(['impersonate_role' => $request->role]);
         return redirect()->route('dashboard');
     }
 
-    public function stopImpersonate(): \Illuminate\Http\RedirectResponse
+    public function stopImpersonate(Request $request): \Illuminate\Http\RedirectResponse
     {
+        abort_unless($request->user()->role === 'admin', 403);
+
         session()->forget('impersonate_role');
         return redirect()->route('dashboard');
     }
