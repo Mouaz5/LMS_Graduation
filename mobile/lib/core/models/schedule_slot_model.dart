@@ -12,6 +12,7 @@ class ScheduleSlotModel {
   final String? classroomName;
   final String? gradeName;
   final String? semesterName;
+  final String? teacherName;
 
   const ScheduleSlotModel({
     required this.id,
@@ -27,6 +28,7 @@ class ScheduleSlotModel {
     this.classroomName,
     this.gradeName,
     this.semesterName,
+    this.teacherName,
   });
 
   factory ScheduleSlotModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class ScheduleSlotModel {
       classroomName: json['classroom']?['name'] as String?,
       gradeName:     json['classroom']?['grade']?['name'] as String?,
       semesterName:  json['semester']?['name'] as String?,
+      teacherName:   json['teacher']?['name'] as String?,
     );
   }
 }

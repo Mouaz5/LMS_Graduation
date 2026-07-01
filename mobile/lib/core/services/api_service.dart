@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../constants/app_constants.dart';
 
@@ -10,6 +11,13 @@ class ApiService {
       : dio = dio ?? _buildDio(),
         _storage = storage ?? const FlutterSecureStorage() {
     this.dio.interceptors.add(_AuthInterceptor(_storage));
+    if (kDebugMode) {
+      this.dio.interceptors.add(LogInterceptor(
+            requestBody: true,
+            responseBody: true,
+            error: true,
+          ));
+    }
   }
 
   static Dio _buildDio() {

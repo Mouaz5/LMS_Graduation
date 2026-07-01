@@ -8,6 +8,7 @@ use App\Http\Requests\Diagnostic\KnowledgeMapRequest;
 use App\Http\Requests\Diagnostic\StartAttemptRequest;
 use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
 use App\Models\DiagnosticAttempt;
+use App\Models\DiagnosticQuestion;
 use App\Models\KnowledgeMapResult;
 use App\Models\LearningObjective;
 use App\Models\User;
@@ -104,7 +105,7 @@ class DiagnosticController extends Controller
                 'name'            => $obj->name,
                 'description'     => $obj->description,
                 'mastery_percent' => $pct,
-                'level'           => MasteryLevel::fromPercent($pct),
+                'level'           => MasteryLevel::fromPercent($pct)->name,
                 'children'        => $this->buildTree($obj->children, $masteryMap),
             ];
         })->values()->toArray();

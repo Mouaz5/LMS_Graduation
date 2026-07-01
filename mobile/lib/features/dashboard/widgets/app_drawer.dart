@@ -6,6 +6,11 @@ import '../../../features/auth/bloc/auth_bloc.dart';
 import '../../../features/auth/bloc/auth_event.dart';
 import '../../../features/auth/bloc/auth_state.dart';
 import '../../../widgets/role_badge.dart';
+import '../../attendance/screens/attendance_screen.dart';
+import '../../diagnostic_test/screens/diagnostic_test_screen.dart';
+import '../../knowledge_map/screens/knowledge_map_screen.dart';
+import '../../results/screens/results_screen.dart';
+import '../../schedule/screens/schedule_screen.dart';
 
 class _NavItem {
   final String label;
@@ -25,12 +30,20 @@ const _navItems = [
   _NavItem(label: 'Dashboard', icon: Icons.home_outlined, permission: '', alwaysVisible: true),
   _NavItem(label: 'Users', icon: Icons.people_outline, permission: 'view_users'),
   _NavItem(label: 'Students', icon: Icons.school_outlined, permission: 'view_students'),
-  _NavItem(label: 'Grades', icon: Icons.star_outline, permission: 'view_grades'),
   _NavItem(label: 'Attendance', icon: Icons.check_circle_outline, permission: 'view_attendance'),
   _NavItem(label: 'Reports', icon: Icons.bar_chart, permission: 'view_reports'),
   _NavItem(label: 'Fees', icon: Icons.payment_outlined, permission: 'view_fees'),
   _NavItem(label: 'Transport', icon: Icons.directions_bus_outlined, permission: 'view_transport'),
   _NavItem(label: 'Settings', icon: Icons.settings_outlined, permission: 'manage_settings'),
+];
+
+const _studentNavItems = [
+  _NavItem(label: 'Dashboard', icon: Icons.home_outlined, permission: '', alwaysVisible: true),
+  _NavItem(label: 'My Schedule', icon: Icons.calendar_today_outlined, permission: '', alwaysVisible: true),
+  _NavItem(label: 'My Results', icon: Icons.bar_chart_outlined, permission: '', alwaysVisible: true),
+  _NavItem(label: 'Attendance', icon: Icons.check_circle_outline, permission: '', alwaysVisible: true),
+  _NavItem(label: 'Knowledge Map', icon: Icons.account_tree_outlined, permission: '', alwaysVisible: true),
+  _NavItem(label: 'Diagnostic', icon: Icons.quiz_outlined, permission: '', alwaysVisible: true),
 ];
 
 class AppDrawer extends StatelessWidget {
@@ -44,9 +57,11 @@ class AppDrawer extends StatelessWidget {
         final user = state.user;
         final permissions = state.permissions;
 
-        final visibleItems = _navItems
-            .where((item) => item.alwaysVisible || permissions.contains(item.permission))
-            .toList();
+        final visibleItems = user.role == 'student'
+            ? _studentNavItems
+            : _navItems
+                .where((item) => item.alwaysVisible || permissions.contains(item.permission))
+                .toList();
 
         return Drawer(
           backgroundColor: AppColors.sidebarBg,
@@ -135,7 +150,11 @@ class AppDrawer extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = visibleItems[index];
                       final isFirst = index == 0;
-                      return _DrawerNavItem(item: item, isActive: isFirst);
+                      return _DrawerNavItem(
+                        item: item,
+                        isActive: isFirst,
+                        user: user,
+                      );
                     },
                   ),
                 ),
@@ -188,8 +207,13 @@ class AppDrawer extends StatelessWidget {
 class _DrawerNavItem extends StatelessWidget {
   final _NavItem item;
   final bool isActive;
+  final UserModel user;
 
-  const _DrawerNavItem({required this.item, required this.isActive});
+  const _DrawerNavItem({
+    required this.item,
+    required this.isActive,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +239,27 @@ class _DrawerNavItem extends StatelessWidget {
             color: isActive ? Colors.white : AppColors.sidebarText,
           ),
         ),
-        onTap: () => Navigator.pop(context),
+        onTap: () => _handleTap(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         hoverColor: Colors.white.withOpacity(0.05),
       ),
     );
+  }
+
+  void _handleTap(BuildContext context) {
+    Navigator.pop(context);
+    if (user.role != 'student') return;
+
+    final screen = switch (item.label) {
+      'My Schedule' => const ScheduleScreen(),
+      'Attendance' => AttendanceScreen(studentId: user.id),
+      'My Results' => ResultsScreen(studentId: user.id),
+      'Knowledge Map' => KnowledgeMapScreen(studentId: user.id),
+      'Diagnostic' => DiagnosticTestScreen(studentId: user.id),
+      _ => null,
+    };
+    if (screen == null) return;
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 }

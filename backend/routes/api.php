@@ -99,9 +99,6 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('schedule-slots', [ScheduleSlotController::class, 'index']);
-    });
-
-    Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {
         Route::get('schedule-slots/my', [ScheduleSlotController::class, 'mySchedule']);
     });
 

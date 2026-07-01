@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/models/user_model.dart';
 import '../../../widgets/role_badge.dart';
+import '../../attendance/screens/attendance_screen.dart';
+import '../../diagnostic_test/screens/diagnostic_test_screen.dart';
+import '../../knowledge_map/screens/knowledge_map_screen.dart';
+import '../../results/screens/results_screen.dart';
+import '../../schedule/screens/schedule_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class StudentDashboard extends StatelessWidget {
@@ -61,124 +66,156 @@ class StudentDashboard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Grades
-            const Text('My Grades', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            const Text('Quick Access', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
             const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Column(
-                children: [
-                  ['Mathematics', 'A', Colors.green],
-                  ['Physics', 'B+', Colors.blue],
-                  ['History', 'A-', Colors.green],
-                  ['English', 'B', Colors.blue],
-                ].asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final g = entry.value;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: i < 3 ? AppColors.border : Colors.transparent),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(g[0] as String,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: (g[2] as Color).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(g[1] as String,
-                              style: TextStyle(
-                                  fontSize: 12.5, fontWeight: FontWeight.w700, color: g[2] as Color)),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-            const Text('Today\'s Schedule', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
-            const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Column(
-                children: [
-                  ['08:00', 'Mathematics', AppColors.primary],
-                  ['10:00', 'Physics', Colors.blue],
-                  ['12:00', 'English', AppColors.accent],
-                  ['14:00', 'History', Colors.amber],
-                ].asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final s = entry.value;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: i < 3 ? AppColors.border : Colors.transparent)),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 8, height: 8,
-                          decoration: BoxDecoration(color: s[2] as Color, shape: BoxShape.circle),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(s[0] as String,
-                            style: const TextStyle(fontSize: 12, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
-                        const SizedBox(width: 12),
-                        Text(s[1] as String,
-                            style: const TextStyle(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-            const Text('Attendance', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                ['18', 'Present', AppColors.accent],
-                ['2', 'Absent', AppColors.error],
-                ['1', 'Late', Colors.orange],
-              ].map((a) => Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: (a[2] as Color).withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: (a[2] as Color).withOpacity(0.2)),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final cards = [
+                  _QuickAccessCard(
+                    icon: Icons.calendar_today_rounded,
+                    label: 'My Schedule',
+                    subtitle: 'Weekly timetable',
+                    color: const Color(0xFF4F46E5),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const ScheduleScreen())),
                   ),
-                  child: Column(
-                    children: [
-                      Text(a[0] as String,
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: a[2] as Color)),
-                      Text(a[1] as String,
-                          style: TextStyle(fontSize: 11, color: a[2] as Color, fontWeight: FontWeight.w500)),
-                    ],
+                  _QuickAccessCard(
+                    icon: Icons.check_circle_rounded,
+                    label: 'Attendance',
+                    subtitle: 'Your attendance record',
+                    color: const Color(0xFF059669),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => AttendanceScreen(studentId: user.id))),
                   ),
-                ),
-              )).toList(),
+                  _QuickAccessCard(
+                    icon: Icons.bar_chart_rounded,
+                    label: 'My Results',
+                    subtitle: 'Grades & report card',
+                    color: const Color(0xFF2563EB),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => ResultsScreen(studentId: user.id))),
+                  ),
+                  _QuickAccessCard(
+                    icon: Icons.account_tree_rounded,
+                    label: 'Knowledge Map',
+                    subtitle: 'Mastery by topic',
+                    color: const Color(0xFF7C3AED),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => KnowledgeMapScreen(studentId: user.id))),
+                  ),
+                  _QuickAccessCard(
+                    icon: Icons.quiz_rounded,
+                    label: 'Diagnostic Test',
+                    subtitle: 'Assess your level',
+                    color: const Color(0xFFD97706),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => DiagnosticTestScreen(studentId: user.id))),
+                  ),
+                ];
+
+                final columns = constraints.maxWidth >= 900
+                    ? 3
+                    : constraints.maxWidth >= 520
+                        ? 2
+                        : 1;
+
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columns,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    mainAxisExtent: 80,
+                  ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cards.length,
+                  itemBuilder: (context, i) => cards[i],
+                );
+              },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAccessCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _QuickAccessCard({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        splashColor: color.withOpacity(0.08),
+        highlightColor: color.withOpacity(0.04),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColors.border),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                alignment: Alignment.center,
+                child: Icon(icon, color: color, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 14.5,
+                            fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: AppColors.textMuted, fontSize: 11.5)),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded,
+                  color: AppColors.textMuted.withOpacity(0.5), size: 20),
+            ],
+          ),
         ),
       ),
     );

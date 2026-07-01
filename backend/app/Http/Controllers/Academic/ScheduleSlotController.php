@@ -7,6 +7,7 @@ use App\Http\Requests\Schedule\IndexScheduleRequest;
 use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
 use App\Http\Requests\Schedule\UpdateScheduleSlotRequest;
 use App\Models\ScheduleSlot;
+use App\Models\StudentProfile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -27,8 +28,24 @@ class ScheduleSlotController extends Controller
 
     public function mySchedule(Request $request): JsonResponse
     {
+        $user = $request->user();
+
+        if ($user->role === 'student') {
+            $classroom = StudentProfile::where('user_id', $user->id)->first()?->classroom;
+
+            $slots = $classroom
+                ? ScheduleSlot::with(['subject', 'teacher', 'classroom.grade', 'semester'])
+                    ->where('classroom_id', $classroom->id)
+                    ->orderBy('day_of_week')
+                    ->orderBy('period_number')
+                    ->get()
+                : collect();
+
+            return response()->json($slots);
+        }
+
         $slots = ScheduleSlot::with(['subject', 'classroom.grade', 'semester'])
-            ->where('teacher_user_id', $request->user()->id)
+            ->where('teacher_user_id', $user->id)
             ->orderBy('day_of_week')
             ->orderBy('period_number')
             ->get();

@@ -234,6 +234,7 @@ class _SlotCard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   [
+                    slot.teacherName,
                     slot.classroomName,
                     slot.gradeName,
                   ].whereType<String>().join(' · '),
