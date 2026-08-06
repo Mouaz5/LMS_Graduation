@@ -14,7 +14,7 @@ use App\Models\Semester;
 use App\Models\StudentGrade;
 use App\Models\StudentProfile;
 use App\Models\User;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\ReportCardPdfService;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -134,10 +134,12 @@ class ParentWebController extends Controller
             ? ExamType::where('semester_id', $semesterId)->orderBy('id')->get()
             : collect();
 
-        $pdf = Pdf::loadView('pdf.report_card', compact('student', 'semester', 'summaries', 'grades', 'examTypes'))
-            ->setPaper('a4', 'portrait');
+        $mpdf = app(ReportCardPdfService::class)
+            ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
 
-        return $pdf->download("report_card_{$child->name}_{$semesterId}.pdf");
+        return response($mpdf->Output("report_card_{$child->name}_{$semesterId}.pdf", \Mpdf\Output\Destination::STRING_RETURN))
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', "attachment; filename=\"report_card_{$child->name}_{$semesterId}.pdf\"");
     }
 
     public function attendance(Request $request): View

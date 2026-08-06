@@ -12,7 +12,7 @@ use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use App\Services\GradeService;
 use App\Services\ReportCardAssembler;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\ReportCardPdfService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -152,10 +152,12 @@ class GradeController extends Controller
         $examTypes = $data->examTypes;
         $grades    = $data->grades->groupBy('subject_id');
 
-        $pdf = Pdf::loadView('pdf.report_card', compact('student', 'semester', 'summaries', 'grades', 'examTypes'))
-            ->setPaper('a4', 'portrait');
+        $mpdf = app(ReportCardPdfService::class)
+            ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
 
-        return $pdf->download("report_card_{$student->name}_{$semesterId}.pdf");
+        return response($mpdf->Output("report_card_{$student->name}_{$semesterId}.pdf", \Mpdf\Output\Destination::STRING_RETURN))
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', "attachment; filename=\"report_card_{$student->name}_{$semesterId}.pdf\"");
     }
 
     private function authorizeReportCardAccess(int $studentId): void

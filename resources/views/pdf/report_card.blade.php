@@ -5,23 +5,18 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: DejaVuSans, sans-serif;
             font-size: 12px;
             color: #1e293b;
             background: #fff;
             direction: {{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }};
         }
         .page { padding: 32px 40px; }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 3px solid #4F46E5;
-            padding-bottom: 18px;
-            margin-bottom: 24px;
-        }
+        .header-table { width: 100%; border-bottom: 3px solid #4F46E5; padding-bottom: 18px; margin-bottom: 24px; }
+        .header-table td { vertical-align: middle; border: none; padding: 0; }
         .school-name { font-size: 20px; font-weight: 700; color: #4F46E5; }
         .report-title { font-size: 14px; color: #64748b; margin-top: 4px; }
+        .header-meta { text-align: {{ app()->getLocale() === 'ar' ? 'left' : 'right' }}; color: #64748b; font-size: 11px; }
         .student-info {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -29,12 +24,13 @@
             padding: 16px 20px;
             margin-bottom: 20px;
         }
-        .info-grid { display: flex; flex-wrap: wrap; gap: 12px 30px; }
+        .info-grid { width: 100%; }
+        .info-grid td { padding: 6px 15px 6px 0; vertical-align: top; border: none; }
         .info-item label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
         .info-item span { display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-top: 2px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        table.results { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
         thead tr { background: #4F46E5; color: white; }
-        th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700; }
+        th { padding: 10px 12px; text-align: {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}; font-size: 11px; font-weight: 700; }
         td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
         tbody tr:nth-child(even) { background: #f8fafc; }
         .badge {
@@ -55,46 +51,50 @@
 </head>
 <body>
 <div class="page">
-    <div class="header">
-        <div>
-            <div class="school-name">SchoolLMS</div>
-            <div class="report-title">{{ __('Academic Report Card') }}</div>
-        </div>
-        <div style="text-align:right; color:#64748b; font-size:11px;">
-            <div>{{ __('Issued:') }} {{ now()->format('Y-m-d') }}</div>
-            @if($semester)
-                <div>{{ __('Semester:') }} {{ $semester->name }} — {{ $semester->academicYear->name ?? '' }}</div>
-            @endif
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="school-name">SchoolLMS</div>
+                <div class="report-title">{{ __('Academic Report Card') }}</div>
+            </td>
+            <td class="header-meta">
+                <div>{{ __('Issued:') }} {{ now()->format('Y-m-d') }}</div>
+                @if($semester)
+                    <div>{{ __('Semester:') }} {{ $semester->name }} — {{ $semester->academicYear->name ?? '' }}</div>
+                @endif
+            </td>
+        </tr>
+    </table>
 
     <div class="student-info">
-        <div class="info-grid">
-            <div class="info-item">
-                <label>{{ __('Student Name') }}</label>
-                <span>{{ $student->name }}</span>
-            </div>
-            <div class="info-item">
-                <label>{{ __('Email Address') }}</label>
-                <span>{{ $student->email }}</span>
-            </div>
-            @if($student->studentProfile?->classroom)
-                <div class="info-item">
-                    <label>{{ __('Classroom') }}</label>
-                    <span>{{ $student->studentProfile->classroom->name }}</span>
-                </div>
-                @if($student->studentProfile->classroom->grade)
-                    <div class="info-item">
-                        <label>{{ __('Grade Level') }}</label>
-                        <span>{{ $student->studentProfile->classroom->grade->name }}</span>
-                    </div>
+        <table class="info-grid">
+            <tr>
+                <td class="info-item">
+                    <label>{{ __('Student Name') }}</label>
+                    <span>{{ $student->name }}</span>
+                </td>
+                <td class="info-item">
+                    <label>{{ __('Email Address') }}</label>
+                    <span>{{ $student->email }}</span>
+                </td>
+                @if($student->studentProfile?->classroom)
+                    <td class="info-item">
+                        <label>{{ __('Classroom') }}</label>
+                        <span>{{ $student->studentProfile->classroom->name }}</span>
+                    </td>
+                    @if($student->studentProfile->classroom->grade)
+                        <td class="info-item">
+                            <label>{{ __('Grade Level') }}</label>
+                            <span>{{ $student->studentProfile->classroom->grade->name }}</span>
+                        </td>
+                    @endif
                 @endif
-            @endif
-        </div>
+            </tr>
+        </table>
     </div>
 
     <div class="section-title">{{ __('Results by Subject') }}</div>
-    <table>
+    <table class="results">
         <thead>
             <tr>
                 <th>{{ __('Subject') }}</th>
