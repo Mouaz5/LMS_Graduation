@@ -147,7 +147,7 @@
                 <label class="filter-label">{{ __("To") }}</label>
                 <input type="date" name="date_to" class="filter-input" value="{{ request('date_to') }}">
             </div>
-            @if($selectedChild)
+            @if($children->count() === 1 && $selectedChild)
                 <input type="hidden" name="child_id" value="{{ $selectedChild->id }}">
             @endif
             <button type="submit" class="btn-filter">{{ __("Filter") }}</button>

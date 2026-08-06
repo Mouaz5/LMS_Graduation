@@ -25,7 +25,10 @@ class AssignmentWebController extends Controller
 
     public function create(): View
     {
-        $teachers = User::where('role', 'teacher')->orderBy('name')->get(['id', 'name']);
+        $teachers = User::where('role', 'teacher')
+            ->with('teacherAssignments:teacher_user_id,subject_id')
+            ->orderBy('name')
+            ->get(['id', 'name']);
         $subjects = Subject::orderBy('name')->get(['id', 'name', 'code']);
         $classrooms = Classroom::with('grade')->orderBy('name')->get();
         $academicYears = AcademicYear::orderByDesc('start_date')->get(['id', 'name']);

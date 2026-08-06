@@ -127,7 +127,9 @@
                 <select class="form-select @error('teacher_user_id') border-red-400 @enderror" id="teacher_user_id" name="teacher_user_id" required>
                     <option value="">{{ __("-- Select Teacher --") }}</option>
                     @foreach($teachers as $teacher)
-                        <option value="{{ $teacher->id }}" @selected(old('teacher_user_id') == $teacher->id)>{{ $teacher->name }}</option>
+                        <option value="{{ $teacher->id }}"
+                                data-subject-ids="{{ $teacher->teacherAssignments->pluck('subject_id')->implode(',') }}"
+                                @selected(old('teacher_user_id') == $teacher->id)>{{ $teacher->name }}</option>
                     @endforeach
                 </select>
                 @error('teacher_user_id')
@@ -184,4 +186,34 @@
             </div>
         </div>
     </form>
+
+    <script>
+        const teacherSelect = document.getElementById('teacher_user_id');
+        const subjectSelect = document.getElementById('subject_id');
+
+        function filterTeachersBySubject() {
+            const subjectId = subjectSelect.value;
+
+            Array.from(teacherSelect.options).forEach((option) => {
+                if (!option.value) {
+                    return;
+                }
+
+                const assignedSubjects = option.dataset.subjectIds
+                    .split(',')
+                    .filter(Boolean);
+                const isAvailable = !subjectId || assignedSubjects.length === 0 || assignedSubjects.includes(subjectId);
+
+                option.hidden = !isAvailable;
+                option.disabled = !isAvailable;
+            });
+
+            if (teacherSelect.selectedOptions[0]?.disabled) {
+                teacherSelect.value = '';
+            }
+        }
+
+        subjectSelect.addEventListener('change', filterTeachersBySubject);
+        filterTeachersBySubject();
+    </script>
 </x-layouts.app>

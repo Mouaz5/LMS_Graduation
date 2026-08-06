@@ -253,6 +253,41 @@
             padding-inline-start: 38px;
         }
 
+        .password-wrapper .form-input {
+            padding-inline-end: 44px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            inset-inline-end: 10px;
+            top: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            color: #94a3b8;
+            background: transparent;
+            border: 0;
+            border-radius: 7px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .password-toggle:hover,
+        .password-toggle:focus-visible {
+            color: var(--primary);
+            background: #eef2ff;
+            outline: none;
+        }
+
+        .password-toggle svg {
+            width: 17px;
+            height: 17px;
+        }
+
         .error-msg {
             font-size: 12px;
             color: #ef4444;
@@ -468,7 +503,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="password">{{ __("Password") }}</label>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper password-wrapper">
                         <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
@@ -481,6 +516,13 @@
                             autocomplete="current-password"
                             required
                         >
+                        <button type="button" class="password-toggle" id="password-toggle"
+                                aria-label="{{ __('Show password') }}" aria-pressed="false">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </button>
                     </div>
                     @error('password')
                         <div class="error-msg">
@@ -505,5 +547,18 @@
 
         </div>
     </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('password-toggle');
+
+        passwordToggle.addEventListener('click', () => {
+            const isVisible = passwordInput.type === 'text';
+
+            passwordInput.type = isVisible ? 'password' : 'text';
+            passwordToggle.setAttribute('aria-pressed', String(!isVisible));
+            passwordToggle.setAttribute('aria-label', isVisible ? @json(__('Show password')) : @json(__('Hide password')));
+        });
+    </script>
 </body>
 </html>

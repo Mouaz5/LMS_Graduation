@@ -56,6 +56,40 @@
             box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
         }
         .form-input.is-error { border-color: #ef4444; }
+        .password-input-wrapper {
+            position: relative;
+        }
+        .password-input-wrapper .form-input {
+            padding-inline-end: 44px;
+        }
+        .password-toggle {
+            position: absolute;
+            inset-inline-end: 10px;
+            top: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            color: #94a3b8;
+            background: transparent;
+            border: 0;
+            border-radius: 7px;
+            cursor: pointer;
+            transform: translateY(-50%);
+            transition: color 0.2s, background 0.2s;
+        }
+        .password-toggle:hover,
+        .password-toggle:focus-visible {
+            color: #4F46E5;
+            background: #eef2ff;
+            outline: none;
+        }
+        .password-toggle svg {
+            width: 17px;
+            height: 17px;
+        }
         .field-error {
             font-size: 11.5px;
             color: #ef4444;
@@ -194,9 +228,18 @@
                     {{-- Password --}}
                     <div class="form-group">
                         <label class="form-label" for="password">{{ __("Password") }} <span class="req">*</span></label>
-                        <input type="password" id="password" name="password"
-                               placeholder="{{ __('Min. 8 characters') }}"
-                               class="form-input {{ $errors->has('password') ? 'is-error' : '' }}">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="password" name="password"
+                                   placeholder="{{ __('Min. 8 characters') }}"
+                                   class="form-input {{ $errors->has('password') ? 'is-error' : '' }}">
+                            <button type="button" class="password-toggle" data-password-toggle="password"
+                                    aria-label="{{ __('Show password') }}" aria-pressed="false">
+                                <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('password')
                             <div class="field-error">
                                 <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -208,9 +251,18 @@
                     {{-- Confirm Password --}}
                     <div class="form-group">
                         <label class="form-label" for="password_confirmation">{{ __("Confirm Password") }} <span class="req">*</span></label>
-                        <input type="password" id="password_confirmation" name="password_confirmation"
-                               placeholder="{{ __('Repeat password') }}"
-                               class="form-input">
+                        <div class="password-input-wrapper">
+                            <input type="password" id="password_confirmation" name="password_confirmation"
+                                   placeholder="{{ __('Repeat password') }}"
+                                   class="form-input">
+                            <button type="button" class="password-toggle" data-password-toggle="password_confirmation"
+                                    aria-label="{{ __('Show password') }}" aria-pressed="false">
+                                <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Role --}}
@@ -250,3 +302,16 @@
         </div>
     </div>
 </x-layouts.app>
+
+<script>
+    document.querySelectorAll('[data-password-toggle]').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const input = document.getElementById(toggle.dataset.passwordToggle);
+            const isVisible = input.type === 'text';
+
+            input.type = isVisible ? 'password' : 'text';
+            toggle.setAttribute('aria-pressed', String(!isVisible));
+            toggle.setAttribute('aria-label', isVisible ? @json(__('Show password')) : @json(__('Hide password')));
+        });
+    });
+</script>

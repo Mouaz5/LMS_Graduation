@@ -95,6 +95,7 @@ Route::middleware('auth')->group(function () {
 
         // Diagnostic Test Builder & Knowledge Map
         Route::get('/diagnostic/test-builder', [DiagnosticWebController::class, 'testBuilder'])->name('diagnostic.test-builder');
+        Route::get('/diagnostic/questions', fn () => redirect()->route('admin.diagnostic.test-builder'))->name('diagnostic.questions.index');
         Route::post('/diagnostic/objectives', [DiagnosticWebController::class, 'storeObjective'])->name('diagnostic.objectives.store');
         Route::post('/diagnostic/questions', [DiagnosticWebController::class, 'storeQuestion'])->name('diagnostic.questions.store');
         Route::delete('/diagnostic/questions/{question}', [DiagnosticWebController::class, 'destroyQuestion'])->name('diagnostic.questions.destroy');
