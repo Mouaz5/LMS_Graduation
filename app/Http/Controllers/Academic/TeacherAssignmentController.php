@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreTeacherAssignmentRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\TeacherSubjectClassroom;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,13 +24,13 @@ class TeacherAssignmentController extends Controller
                 ->get();
         }
 
-        return response()->json($assignments);
+        return ApiResponse::success(data: $assignments);
     }
 
     public function store(StoreTeacherAssignmentRequest $request): JsonResponse
     {
         $assignment = TeacherSubjectClassroom::firstOrCreate($request->validated());
 
-        return response()->json($assignment->load(['subject', 'classroom.grade', 'academicYear']), 201);
+        return ApiResponse::success(data: $assignment->load(['subject', 'classroom.grade', 'academicYear']), status: 201);
     }
 }

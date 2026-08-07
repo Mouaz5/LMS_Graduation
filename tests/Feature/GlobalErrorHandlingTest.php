@@ -15,8 +15,9 @@ class GlobalErrorHandlingTest extends TestCase
             ->assertExactJson([
                 'success' => false,
                 'message' => 'Resource not found.',
+                'data' => null,
                 'errors' => null,
-                'status' => 404,
+                'meta' => null,
             ]);
     }
 
@@ -27,8 +28,9 @@ class GlobalErrorHandlingTest extends TestCase
             ->assertExactJson([
                 'success' => false,
                 'message' => 'Unauthenticated.',
+                'data' => null,
                 'errors' => null,
-                'status' => 401,
+                'meta' => null,
             ]);
     }
 
@@ -37,7 +39,8 @@ class GlobalErrorHandlingTest extends TestCase
         $this->postJson('/api/auth/login', [])
             ->assertUnprocessable()
             ->assertJsonPath('success', false)
-            ->assertJsonPath('status', 422)
+            ->assertJsonPath('data', null)
+            ->assertJsonPath('meta', null)
             ->assertJsonStructure([
                 'message',
                 'errors' => ['email', 'password'],
@@ -57,8 +60,9 @@ class GlobalErrorHandlingTest extends TestCase
             ->assertExactJson([
                 'success' => false,
                 'message' => 'The request cannot be processed.',
+                'data' => null,
                 'errors' => null,
-                'status' => 409,
+                'meta' => null,
             ]);
     }
 
@@ -73,8 +77,9 @@ class GlobalErrorHandlingTest extends TestCase
             ->assertExactJson([
                 'success' => false,
                 'message' => 'An unexpected error occurred.',
+                'data' => null,
                 'errors' => null,
-                'status' => 500,
+                'meta' => null,
             ]);
     }
 

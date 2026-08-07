@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreAcademicYearRequest;
 use App\Http\Requests\Academic\UpdateAcademicYearRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\AcademicYear;
 use Illuminate\Http\JsonResponse;
 
@@ -13,20 +14,22 @@ class AcademicYearController extends Controller
     public function index(): JsonResponse
     {
         $years = AcademicYear::with('semesters')->orderBy('start_date', 'desc')->get();
-        return response()->json($years);
+
+        return ApiResponse::success(data: $years);
     }
 
     public function show(int $id): JsonResponse
     {
         $year = AcademicYear::with('semesters')->findOrFail($id);
-        return response()->json($year);
+
+        return ApiResponse::success(data: $year);
     }
 
     public function store(StoreAcademicYearRequest $request): JsonResponse
     {
         $year = AcademicYear::create($request->validated());
 
-        return response()->json($year, 201);
+        return ApiResponse::success(data: $year, status: 201);
     }
 
     public function update(UpdateAcademicYearRequest $request, int $id): JsonResponse
@@ -35,7 +38,7 @@ class AcademicYearController extends Controller
 
         $year->update($request->validated());
 
-        return response()->json($year);
+        return ApiResponse::success(data: $year);
     }
 
     public function destroy(int $id): JsonResponse
@@ -43,6 +46,6 @@ class AcademicYearController extends Controller
         $year = AcademicYear::findOrFail($id);
         $year->delete();
 
-        return response()->json(['message' => 'Academic year deleted.']);
+        return ApiResponse::success(message: 'Academic year deleted.');
     }
 }

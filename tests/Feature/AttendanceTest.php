@@ -22,14 +22,21 @@ class AttendanceTest extends TestCase
 {
     use RefreshDatabase;
 
-    private User      $admin;
-    private User      $teacher;
-    private User      $otherTeacher;
-    private User      $student;
-    private User      $parent;
+    private User $admin;
+
+    private User $teacher;
+
+    private User $otherTeacher;
+
+    private User $student;
+
+    private User $parent;
+
     private Classroom $classroom;
-    private Semester  $semester;
-    private Subject   $subject;
+
+    private Semester $semester;
+
+    private Subject $subject;
 
     protected function setUp(): void
     {
@@ -38,64 +45,64 @@ class AttendanceTest extends TestCase
         $school = School::create(['name' => 'Test School']);
 
         $year = AcademicYear::create([
-            'school_id'  => $school->id,
-            'name'       => '2025-2026',
+            'school_id' => $school->id,
+            'name' => '2025-2026',
             'start_date' => '2025-09-01',
-            'end_date'   => '2026-06-30',
+            'end_date' => '2026-06-30',
         ]);
 
         $this->semester = Semester::create([
             'academic_year_id' => $year->id,
-            'name'             => 'Fall',
-            'start_date'       => '2025-09-01',
-            'end_date'         => '2026-01-31',
-            'is_active'        => true,
+            'name' => 'Fall',
+            'start_date' => '2025-09-01',
+            'end_date' => '2026-01-31',
+            'is_active' => true,
         ]);
 
         $grade = Grade::create([
-            'school_id'   => $school->id,
-            'name'        => 'Grade 8',
+            'school_id' => $school->id,
+            'name' => 'Grade 8',
             'order_index' => 1,
         ]);
 
         $this->classroom = Classroom::create([
             'grade_id' => $grade->id,
-            'name'     => '8-A',
+            'name' => '8-A',
             'capacity' => 30,
         ]);
 
         $this->subject = Subject::create([
             'school_id' => $school->id,
-            'name'      => 'Math',
-            'code'      => 'MATH',
+            'name' => 'Math',
+            'code' => 'MATH',
         ]);
 
-        $this->admin        = User::factory()->create(['role' => 'admin']);
-        $this->teacher      = User::factory()->create(['role' => 'teacher']);
+        $this->admin = User::factory()->create(['role' => 'admin']);
+        $this->teacher = User::factory()->create(['role' => 'teacher']);
         $this->otherTeacher = User::factory()->create(['role' => 'teacher']);
-        $this->student      = User::factory()->create(['role' => 'student']);
-        $this->parent       = User::factory()->create(['role' => 'parent']);
+        $this->student = User::factory()->create(['role' => 'student']);
+        $this->parent = User::factory()->create(['role' => 'parent']);
 
         // Assign teacher to classroom
         TeacherSubjectClassroom::create([
             'teacher_user_id' => $this->teacher->id,
-            'subject_id'      => $this->subject->id,
-            'classroom_id'    => $this->classroom->id,
-            'academic_year_id'=> $year->id,
+            'subject_id' => $this->subject->id,
+            'classroom_id' => $this->classroom->id,
+            'academic_year_id' => $year->id,
         ]);
 
         // Enroll student in classroom
         StudentProfile::create([
-            'user_id'         => $this->student->id,
-            'classroom_id'    => $this->classroom->id,
+            'user_id' => $this->student->id,
+            'classroom_id' => $this->classroom->id,
             'enrollment_date' => '2025-09-01',
         ]);
 
         // Link parent to student
         \DB::table('parent_student')->insert([
-            'parent_user_id'  => $this->parent->id,
+            'parent_user_id' => $this->parent->id,
             'student_user_id' => $this->student->id,
-            'relation'        => 'father',
+            'relation' => 'father',
         ]);
     }
 
@@ -103,8 +110,8 @@ class AttendanceTest extends TestCase
     {
         return array_merge([
             'classroom_id' => $this->classroom->id,
-            'date'         => '2026-05-18',
-            'entries'      => [
+            'date' => '2026-05-18',
+            'entries' => [
                 ['student_id' => $this->student->id, 'status' => 'present'],
             ],
         ], $overrides);
@@ -119,12 +126,12 @@ class AttendanceTest extends TestCase
         Sanctum::actingAs($this->teacher);
 
         $this->postJson('/api/v1/attendance/bulk', $this->bulkPayload())
-             ->assertStatus(201);
+            ->assertStatus(201);
 
         $this->assertDatabaseHas('attendance', [
             'student_user_id' => $this->student->id,
-            'classroom_id'    => $this->classroom->id,
-            'status'          => 'present',
+            'classroom_id' => $this->classroom->id,
+            'status' => 'present',
         ]);
     }
 
@@ -133,7 +140,7 @@ class AttendanceTest extends TestCase
         Sanctum::actingAs($this->otherTeacher);
 
         $this->postJson('/api/v1/attendance/bulk', $this->bulkPayload())
-             ->assertStatus(403);
+            ->assertStatus(403);
     }
 
     public function test_non_teacher_cannot_submit_bulk_attendance(): void
@@ -141,7 +148,7 @@ class AttendanceTest extends TestCase
         Sanctum::actingAs($this->parent);
 
         $this->postJson('/api/v1/attendance/bulk', $this->bulkPayload())
-             ->assertStatus(403);
+            ->assertStatus(403);
     }
 
     // ---------------------------------------------------------------
@@ -152,36 +159,36 @@ class AttendanceTest extends TestCase
     {
         $attendance = Attendance::create([
             'student_user_id' => $this->student->id,
-            'classroom_id'    => $this->classroom->id,
-            'date'            => '2026-05-18',
-            'status'          => 'absent',
-            'recorded_by'     => $this->teacher->id,
+            'classroom_id' => $this->classroom->id,
+            'date' => '2026-05-18',
+            'status' => 'absent',
+            'recorded_by' => $this->teacher->id,
         ]);
 
         Sanctum::actingAs($this->parent);
 
         $this->postJson('/api/v1/absence-justifications', [
             'attendance_id' => $attendance->id,
-            'reason'        => 'Doctor appointment',
+            'reason' => 'Doctor appointment',
         ])->assertStatus(201)
-           ->assertJsonPath('status', 'pending');
+            ->assertJsonPath('data.status', 'pending');
     }
 
     public function test_teacher_can_approve_justification_and_status_becomes_excused(): void
     {
         $attendance = Attendance::create([
             'student_user_id' => $this->student->id,
-            'classroom_id'    => $this->classroom->id,
-            'date'            => '2026-05-18',
-            'status'          => 'absent',
-            'recorded_by'     => $this->teacher->id,
+            'classroom_id' => $this->classroom->id,
+            'date' => '2026-05-18',
+            'status' => 'absent',
+            'recorded_by' => $this->teacher->id,
         ]);
 
         $justification = AbsenceJustification::create([
             'attendance_id' => $attendance->id,
-            'reason'        => 'Sick',
-            'submitted_by'  => $this->parent->id,
-            'status'        => 'pending',
+            'reason' => 'Sick',
+            'submitted_by' => $this->parent->id,
+            'status' => 'pending',
         ]);
 
         Sanctum::actingAs($this->teacher);
@@ -189,10 +196,10 @@ class AttendanceTest extends TestCase
         $this->putJson("/api/v1/absence-justifications/{$justification->id}", [
             'action' => 'approve',
         ])->assertStatus(200)
-           ->assertJsonPath('status', 'approved');
+            ->assertJsonPath('data.status', 'approved');
 
         $this->assertDatabaseHas('attendance', [
-            'id'     => $attendance->id,
+            'id' => $attendance->id,
             'status' => 'excused',
         ]);
     }
@@ -201,17 +208,17 @@ class AttendanceTest extends TestCase
     {
         $attendance = Attendance::create([
             'student_user_id' => $this->student->id,
-            'classroom_id'    => $this->classroom->id,
-            'date'            => '2026-05-18',
-            'status'          => 'absent',
-            'recorded_by'     => $this->teacher->id,
+            'classroom_id' => $this->classroom->id,
+            'date' => '2026-05-18',
+            'status' => 'absent',
+            'recorded_by' => $this->teacher->id,
         ]);
 
         Sanctum::actingAs($this->teacher);
 
         $this->postJson('/api/v1/absence-justifications', [
             'attendance_id' => $attendance->id,
-            'reason'        => 'Sick',
+            'reason' => 'Sick',
         ])->assertStatus(403);
     }
 
@@ -225,11 +232,11 @@ class AttendanceTest extends TestCase
 
         $this->postJson('/api/v1/behavioral-notes', [
             'student_user_id' => $this->student->id,
-            'note'            => 'Excellent participation today.',
-            'severity'        => 'info',
-            'date'            => '2026-05-18',
+            'note' => 'Excellent participation today.',
+            'severity' => 'info',
+            'date' => '2026-05-18',
         ])->assertStatus(201)
-           ->assertJsonPath('severity', 'info');
+            ->assertJsonPath('data.severity', 'info');
 
         $this->assertDatabaseHas('behavioral_notes', [
             'student_user_id' => $this->student->id,
@@ -242,16 +249,16 @@ class AttendanceTest extends TestCase
         BehavioralNote::create([
             'student_user_id' => $this->student->id,
             'teacher_user_id' => $this->teacher->id,
-            'note'            => 'Great work.',
-            'severity'        => 'info',
-            'date'            => '2026-05-18',
+            'note' => 'Great work.',
+            'severity' => 'info',
+            'date' => '2026-05-18',
         ]);
 
         Sanctum::actingAs($this->teacher);
 
-        $this->getJson('/api/v1/behavioral-notes?student_id=' . $this->student->id)
-             ->assertStatus(200)
-             ->assertJsonCount(1, 'data');
+        $this->getJson('/api/v1/behavioral-notes?student_id='.$this->student->id)
+            ->assertStatus(200)
+            ->assertJsonCount(1, 'data');
     }
 
     public function test_non_teacher_cannot_create_behavioral_note(): void
@@ -260,9 +267,9 @@ class AttendanceTest extends TestCase
 
         $this->postJson('/api/v1/behavioral-notes', [
             'student_user_id' => $this->student->id,
-            'note'            => 'Test',
-            'severity'        => 'info',
-            'date'            => '2026-05-18',
+            'note' => 'Test',
+            'severity' => 'info',
+            'date' => '2026-05-18',
         ])->assertStatus(403);
     }
 }

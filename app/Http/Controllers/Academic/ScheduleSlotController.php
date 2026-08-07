@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\IndexScheduleRequest;
 use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
 use App\Http\Requests\Schedule\UpdateScheduleSlotRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,7 @@ class ScheduleSlotController extends Controller
             ->orderBy('period_number')
             ->get();
 
-        return response()->json($slots);
+        return ApiResponse::success(data: $slots);
     }
 
     public function mySchedule(Request $request): JsonResponse
@@ -41,7 +42,7 @@ class ScheduleSlotController extends Controller
                     ->get()
                 : collect();
 
-            return response()->json($slots);
+            return ApiResponse::success(data: $slots);
         }
 
         $slots = ScheduleSlot::with(['subject', 'classroom.grade', 'semester'])
@@ -50,7 +51,7 @@ class ScheduleSlotController extends Controller
             ->orderBy('period_number')
             ->get();
 
-        return response()->json($slots);
+        return ApiResponse::success(data: $slots);
     }
 
     public function store(StoreScheduleSlotRequest $request): JsonResponse
@@ -66,28 +67,28 @@ class ScheduleSlotController extends Controller
         if ($conflict) {
             throw ValidationException::withMessages([
                 'period_number' => 'This teacher already has a slot in period '
-                    . $validated['period_number'] . ' on '
-                    . $validated['day_of_week'] . ' this semester.',
+                    .$validated['period_number'].' on '
+                    .$validated['day_of_week'].' this semester.',
             ]);
         }
 
         $slot = ScheduleSlot::create($validated);
 
-        return response()->json(
-            $slot->load(['subject', 'teacher', 'classroom.grade', 'semester']),
-            201
+        return ApiResponse::success(
+            data: $slot->load(['subject', 'teacher', 'classroom.grade', 'semester']),
+            status: 201,
         );
     }
 
     public function update(UpdateScheduleSlotRequest $request, int $id): JsonResponse
     {
-        $slot      = ScheduleSlot::findOrFail($id);
+        $slot = ScheduleSlot::findOrFail($id);
         $validated = $request->validated();
 
-        $teacherId  = $validated['teacher_user_id'] ?? $slot->teacher_user_id;
-        $semesterId = $validated['semester_id']      ?? $slot->semester_id;
-        $day        = $validated['day_of_week']      ?? $slot->day_of_week;
-        $period     = $validated['period_number']    ?? $slot->period_number;
+        $teacherId = $validated['teacher_user_id'] ?? $slot->teacher_user_id;
+        $semesterId = $validated['semester_id'] ?? $slot->semester_id;
+        $day = $validated['day_of_week'] ?? $slot->day_of_week;
+        $period = $validated['period_number'] ?? $slot->period_number;
 
         $conflict = ScheduleSlot::where('teacher_user_id', $teacherId)
             ->where('semester_id', $semesterId)
@@ -104,13 +105,13 @@ class ScheduleSlotController extends Controller
 
         $slot->update($validated);
 
-        return response()->json($slot->load(['subject', 'teacher', 'classroom.grade', 'semester']));
+        return ApiResponse::success(data: $slot->load(['subject', 'teacher', 'classroom.grade', 'semester']));
     }
 
     public function destroy(int $id): JsonResponse
     {
         ScheduleSlot::findOrFail($id)->delete();
 
-        return response()->json(['message' => 'Schedule slot deleted.']);
+        return ApiResponse::success(message: 'Schedule slot deleted.');
     }
 }

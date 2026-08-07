@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -34,7 +35,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json([
+        return ApiResponse::success(data: [
             'token' => $token,
             'user' => $this->userResponse($user),
         ]);
@@ -44,12 +45,12 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully.']);
+        return ApiResponse::success(message: 'Logged out successfully.');
     }
 
     public function me(Request $request): JsonResponse
     {
-        return response()->json($this->userResponse($request->user()));
+        return ApiResponse::success(data: $this->userResponse($request->user()));
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -63,7 +64,7 @@ class AuthController extends Controller
             'is_active' => true,
         ]);
 
-        return response()->json(['user' => $this->userResponse($user)], 201);
+        return ApiResponse::success(data: ['user' => $this->userResponse($user)], status: 201);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
@@ -74,7 +75,7 @@ class AuthController extends Controller
             return response()->json(['message' => __($status)], 422);
         }
 
-        return response()->json(['message' => __($status)]);
+        return ApiResponse::success(message: __($status));
     }
 
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
@@ -92,7 +93,7 @@ class AuthController extends Controller
             return response()->json(['message' => __($status)], 422);
         }
 
-        return response()->json(['message' => __($status)]);
+        return ApiResponse::success(message: __($status));
     }
 
     private function userResponse(User $user): array

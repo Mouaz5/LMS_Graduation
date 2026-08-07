@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\ApiResponse;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class ApiErrorResponseMiddleware
         $response = $next($request);
 
         return $response instanceof JsonResponse
-            ? ApiErrorResponse::normalize($response)
+            ? ApiResponse::normalizeError($response)
             : $response;
     }
 }

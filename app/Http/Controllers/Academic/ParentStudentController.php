@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreParentStudentRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -40,11 +41,14 @@ class ParentStudentController extends Controller
             'relation' => $validated['relation'],
         ]);
 
-        return response()->json([
-            'message' => 'Student linked to parent successfully.',
-            'parent' => $parent->only('id', 'name', 'email'),
-            'student' => $student->only('id', 'name', 'email'),
-            'relation' => $validated['relation'],
-        ], 201);
+        return ApiResponse::success(
+            data: [
+                'parent' => $parent->only('id', 'name', 'email'),
+                'student' => $student->only('id', 'name', 'email'),
+                'relation' => $validated['relation'],
+            ],
+            message: 'Student linked to parent successfully.',
+            status: 201,
+        );
     }
 }

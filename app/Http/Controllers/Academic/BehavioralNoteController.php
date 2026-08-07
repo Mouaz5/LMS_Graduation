@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\IndexBehavioralNoteRequest;
 use App\Http\Requests\Academic\StoreBehavioralNoteRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\BehavioralNote;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class BehavioralNoteController extends Controller
             'teacher_user_id' => $request->user()->id,
         ]);
 
-        return response()->json($note->load(['student', 'teacher']), 201);
+        return ApiResponse::success(data: $note->load(['student', 'teacher']), status: 201);
     }
 
     /**
@@ -35,7 +36,7 @@ class BehavioralNoteController extends Controller
      */
     public function index(IndexBehavioralNoteRequest $request): JsonResponse
     {
-        $user      = $request->user();
+        $user = $request->user();
         $studentId = $request->integer('student_id');
 
         $student = User::findOrFail($studentId);
@@ -46,6 +47,14 @@ class BehavioralNoteController extends Controller
             ->orderByDesc('date')
             ->paginate(20);
 
-        return response()->json($notes);
+        return ApiResponse::success(
+            data: $notes->items(),
+            meta: [
+                'current_page' => $notes->currentPage(),
+                'per_page' => $notes->perPage(),
+                'total' => $notes->total(),
+                'last_page' => $notes->lastPage(),
+            ],
+        );
     }
 }

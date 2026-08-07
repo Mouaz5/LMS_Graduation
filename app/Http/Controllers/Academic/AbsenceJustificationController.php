@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreAbsenceJustificationRequest;
 use App\Http\Requests\Academic\UpdateAbsenceJustificationRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Services\AttendanceService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class AbsenceJustificationController extends Controller
@@ -25,7 +25,7 @@ class AbsenceJustificationController extends Controller
         $validated = $request->validated();
 
         $attendance = Attendance::findOrFail($validated['attendance_id']);
-        $parent     = $request->user();
+        $parent = $request->user();
 
         abort_unless(
             $parent->children()->where('student_user_id', $attendance->student_user_id)->exists(),
@@ -41,19 +41,19 @@ class AbsenceJustificationController extends Controller
 
         $documentUrl = null;
         if ($request->hasFile('document')) {
-            $path        = $request->file('document')->store('justifications', 'public');
+            $path = $request->file('document')->store('justifications', 'public');
             $documentUrl = Storage::url($path);
         }
 
         $justification = AbsenceJustification::create([
             'attendance_id' => $validated['attendance_id'],
-            'reason'        => $validated['reason'],
-            'submitted_by'  => $parent->id,
-            'document_url'  => $documentUrl,
-            'status'        => 'pending',
+            'reason' => $validated['reason'],
+            'submitted_by' => $parent->id,
+            'document_url' => $documentUrl,
+            'status' => 'pending',
         ]);
 
-        return response()->json($justification->load('attendance'), 201);
+        return ApiResponse::success(data: $justification->load('attendance'), status: 201);
     }
 
     /**
@@ -80,6 +80,6 @@ class AbsenceJustificationController extends Controller
             $this->service->rejectJustification($justification);
         }
 
-        return response()->json($justification->fresh(['attendance']));
+        return ApiResponse::success(data: $justification->fresh(['attendance']));
     }
 }

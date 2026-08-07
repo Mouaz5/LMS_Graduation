@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Diagnostic\KnowledgeMapRequest;
 use App\Http\Requests\Diagnostic\StartAttemptRequest;
 use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\DiagnosticAttempt;
 use App\Models\DiagnosticQuestion;
 use App\Models\KnowledgeMapResult;
@@ -27,11 +28,14 @@ class DiagnosticController extends Controller
 
         $attempt = DiagnosticAttempt::create([
             'student_user_id' => $request->user()->id,
-            'subject_id'      => $data['subject_id'],
-            'started_at'      => now(),
+            'subject_id' => $data['subject_id'],
+            'started_at' => now(),
         ]);
 
-        return response()->json(['attempt_id' => $attempt->id, 'started_at' => $attempt->started_at], 201);
+        return ApiResponse::success(
+            data: ['attempt_id' => $attempt->id, 'started_at' => $attempt->started_at],
+            status: 201,
+        );
     }
 
     // GET /diagnostic-attempts/{id}/questions
@@ -49,16 +53,16 @@ class DiagnosticController extends Controller
             ->limit(20)
             ->get()
             ->map(fn ($q) => [
-                'id'           => $q->id,
+                'id' => $q->id,
                 'question_text' => $q->question_text,
-                'type'         => $q->type,
-                'options'      => $q->options->map(fn ($o) => [
-                    'id'          => $o->id,
+                'type' => $q->type,
+                'options' => $q->options->map(fn ($o) => [
+                    'id' => $o->id,
                     'option_text' => $o->option_text,
                 ]),
             ]);
 
-        return response()->json(['questions' => $questions]);
+        return ApiResponse::success(data: ['questions' => $questions]);
     }
 
     // POST /diagnostic-attempts/{id}/submit
@@ -71,7 +75,7 @@ class DiagnosticController extends Controller
 
         $this->service->submitAnswers($attempt, $request->validated()['answers']);
 
-        return response()->json(['message' => 'Attempt submitted successfully.']);
+        return ApiResponse::success(message: 'Attempt submitted successfully.');
     }
 
     // GET /knowledge-map?student_id=X&subject_id=Y
@@ -93,20 +97,21 @@ class DiagnosticController extends Controller
 
         $tree = $this->buildTree($rootObjectives, $masteryMap);
 
-        return response()->json(['tree' => $tree]);
+        return ApiResponse::success(data: ['tree' => $tree]);
     }
 
     private function buildTree($objectives, $masteryMap): array
     {
         return $objectives->map(function ($obj) use ($masteryMap) {
             $pct = $masteryMap[$obj->id] ?? null;
+
             return [
-                'id'              => $obj->id,
-                'name'            => $obj->name,
-                'description'     => $obj->description,
+                'id' => $obj->id,
+                'name' => $obj->name,
+                'description' => $obj->description,
                 'mastery_percent' => $pct,
-                'level'           => MasteryLevel::fromPercent($pct)->name,
-                'children'        => $this->buildTree($obj->children, $masteryMap),
+                'level' => MasteryLevel::fromPercent($pct)->name,
+                'children' => $this->buildTree($obj->children, $masteryMap),
             ];
         })->values()->toArray();
     }

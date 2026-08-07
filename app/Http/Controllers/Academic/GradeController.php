@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\BulkStoreGradeRequest;
 use App\Http\Requests\Grade\ClassAverageRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\ExamType;
-use App\Models\GradeSummary;
 use App\Models\StudentGrade;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
@@ -19,6 +19,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Mpdf\Output\Destination;
 
 class GradeController extends Controller
 {
@@ -49,7 +50,7 @@ class GradeController extends Controller
                 ->unique();
 
             foreach ($subjectIds as $sid) {
-                if (!$assignedSubjects->contains($sid)) {
+                if (! $assignedSubjects->contains($sid)) {
                     return response()->json(['message' => "Not assigned to subject #$sid."], 403);
                 }
             }
@@ -64,28 +65,32 @@ class GradeController extends Controller
                 $grade = StudentGrade::updateOrCreate(
                     [
                         'student_user_id' => $row['student_id'],
-                        'subject_id'      => $row['subject_id'],
-                        'exam_type_id'    => $row['exam_type_id'],
+                        'subject_id' => $row['subject_id'],
+                        'exam_type_id' => $row['exam_type_id'],
                     ],
                     [
-                        'semester_id'      => $examType->semester_id,
-                        'teacher_user_id'  => $teacher->id,
-                        'score'            => $row['score'],
-                        'max_score'        => $row['max_score'],
+                        'semester_id' => $examType->semester_id,
+                        'teacher_user_id' => $teacher->id,
+                        'score' => $row['score'],
+                        'max_score' => $row['max_score'],
                     ]
                 );
 
                 $tuples[] = [
                     'student_user_id' => $row['student_id'],
-                    'subject_id'      => $row['subject_id'],
-                    'semester_id'     => $examType->semester_id,
+                    'subject_id' => $row['subject_id'],
+                    'semester_id' => $examType->semester_id,
                 ];
             }
 
             GradeService::refreshSummaries($tuples);
         });
 
-        return response()->json(['message' => 'Grades saved.', 'count' => count($validated['grades'])], 201);
+        return ApiResponse::success(
+            data: ['count' => count($validated['grades'])],
+            message: 'Grades saved.',
+            status: 201,
+        );
     }
 
     /** GET /api/v1/grades?student_id=X&semester_id=Y */
@@ -93,10 +98,10 @@ class GradeController extends Controller
     {
         $actor = Auth::user();
 
-        $studentId  = $request->integer('student_id');
+        $studentId = $request->integer('student_id');
         $semesterId = $request->integer('semester_id');
 
-        if (!$studentId) {
+        if (! $studentId) {
             return response()->json(['message' => 'student_id is required.'], 422);
         }
 
@@ -110,7 +115,7 @@ class GradeController extends Controller
             $query->where('semester_id', $semesterId);
         }
 
-        return response()->json($query->get());
+        return ApiResponse::success(data: $query->get());
     }
 
     /** GET /api/v1/grades/class-average?subject_id=X&exam_type_id=Y */
@@ -121,7 +126,7 @@ class GradeController extends Controller
             ->selectRaw('count(*) as count, avg(score/max_score*100) as average, min(score/max_score*100) as min_pct, max(score/max_score*100) as max_pct')
             ->first();
 
-        return response()->json($stats);
+        return ApiResponse::success(data: $stats);
     }
 
     /** GET /api/v1/students/{id}/report-card?semester_id=Y */
@@ -131,10 +136,10 @@ class GradeController extends Controller
 
         $data = $this->assembler->assemble($id, $request->integer('semester_id') ?: null);
 
-        return response()->json([
-            'student'   => $data->student,
+        return ApiResponse::success(data: [
+            'student' => $data->student,
             'summaries' => $data->summaries,
-            'grades'    => $data->grades->groupBy(fn($g) => "{$g->subject_id}-{$g->semester_id}"),
+            'grades' => $data->grades->groupBy(fn ($g) => "{$g->subject_id}-{$g->semester_id}"),
         ]);
     }
 
@@ -144,18 +149,18 @@ class GradeController extends Controller
         $this->authorizeReportCardAccess($id);
 
         $semesterId = $request->integer('semester_id') ?: null;
-        $data       = $this->assembler->assemble($id, $semesterId);
+        $data = $this->assembler->assemble($id, $semesterId);
 
-        $student   = $data->student;
-        $semester  = $data->semester;
+        $student = $data->student;
+        $semester = $data->semester;
         $summaries = $data->summaries;
         $examTypes = $data->examTypes;
-        $grades    = $data->grades->groupBy('subject_id');
+        $grades = $data->grades->groupBy('subject_id');
 
         $mpdf = app(ReportCardPdfService::class)
             ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
 
-        return response($mpdf->Output("report_card_{$student->name}_{$semesterId}.pdf", \Mpdf\Output\Destination::STRING_RETURN))
+        return response($mpdf->Output("report_card_{$student->name}_{$semesterId}.pdf", Destination::STRING_RETURN))
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', "attachment; filename=\"report_card_{$student->name}_{$semesterId}.pdf\"");
     }

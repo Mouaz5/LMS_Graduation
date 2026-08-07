@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreDiagnosticQuestionRequest;
 use App\Http\Requests\Academic\StoreLearningObjectiveRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\DiagnosticQuestion;
 use App\Models\LearningObjective;
 use App\Models\QuestionOption;
@@ -18,7 +19,7 @@ class LearningObjectiveController extends Controller
     {
         $objective = LearningObjective::create($request->validated());
 
-        return response()->json($objective->load('subject'), 201);
+        return ApiResponse::success(data: $objective->load('subject'), status: 201);
     }
 
     // POST /diagnostic-questions  (admin only)
@@ -28,23 +29,23 @@ class LearningObjectiveController extends Controller
 
         $question = DB::transaction(function () use ($data) {
             $question = DiagnosticQuestion::create([
-                'subject_id'            => $data['subject_id'],
+                'subject_id' => $data['subject_id'],
                 'learning_objective_id' => $data['learning_objective_id'],
-                'question_text'         => $data['question_text'],
-                'type'                  => $data['type'],
+                'question_text' => $data['question_text'],
+                'type' => $data['type'],
             ]);
 
             foreach ($data['options'] as $opt) {
                 QuestionOption::create([
                     'question_id' => $question->id,
                     'option_text' => $opt['option_text'],
-                    'is_correct'  => $opt['is_correct'],
+                    'is_correct' => $opt['is_correct'],
                 ]);
             }
 
             return $question->load('options', 'learningObjective');
         });
 
-        return response()->json($question, 201);
+        return ApiResponse::success(data: $question, status: 201);
     }
 }

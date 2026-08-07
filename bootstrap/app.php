@@ -4,7 +4,7 @@ use App\Http\Middleware\ApiErrorResponseMiddleware;
 use App\Http\Middleware\PermissionMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SetLocale;
-use App\Http\Responses\ApiErrorResponse;
+use App\Http\Responses\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -45,7 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $isJsonRequest = static fn (Request $request, Throwable $exception): bool => $request->is('api/*') || $request->expectsJson();
 
-        $apiError = static fn (string $message, int $status, array $errors = [], array $headers = []): JsonResponse => ApiErrorResponse::make($message, $status, $errors, $headers);
+        $apiError = static fn (string $message, int $status, array $errors = [], array $headers = []): JsonResponse => ApiResponse::error($message, $status, $errors, null, $headers);
 
         $exceptions->shouldRenderJsonWhen($isJsonRequest);
 
@@ -56,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            return ApiErrorResponse::normalize($response);
+            return ApiResponse::normalizeError($response);
         });
 
         $exceptions->render(function (AuthenticationException $exception, Request $request) use ($apiError, $isJsonRequest) {

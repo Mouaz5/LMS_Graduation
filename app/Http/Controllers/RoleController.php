@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\ApiResponse;
 use App\Models\Permission;
 use Illuminate\Http\JsonResponse;
 
@@ -20,6 +21,6 @@ class RoleController extends Controller
                 ->values();
         }
 
-        return response()->json($result);
+        return ApiResponse::success(data: $result);
     }
 }

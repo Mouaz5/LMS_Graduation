@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\BulkAttendanceRequest;
 use App\Http\Requests\Academic\IndexAttendanceRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Services\AttendanceService;
@@ -24,14 +25,14 @@ class AttendanceController extends Controller
         $validated = $request->validated();
 
         $records = $this->service->recordBulk(
-            teacher:        $request->user(),
-            classroomId:    $validated['classroom_id'],
-            date:           $validated['date'],
-            entries:        $validated['entries'],
+            teacher: $request->user(),
+            classroomId: $validated['classroom_id'],
+            date: $validated['date'],
+            entries: $validated['entries'],
             scheduleSlotId: $validated['schedule_slot_id'] ?? null,
         );
 
-        return response()->json($records, 201);
+        return ApiResponse::success(data: $records, status: 201);
     }
 
     /**
@@ -39,7 +40,7 @@ class AttendanceController extends Controller
      */
     public function index(IndexAttendanceRequest $request): JsonResponse
     {
-        $user      = $request->user();
+        $user = $request->user();
         $studentId = $request->integer('student_id');
 
         $student = User::findOrFail($studentId);
@@ -56,6 +57,16 @@ class AttendanceController extends Controller
             $query->whereDate('date', '<=', $request->date_to);
         }
 
-        return response()->json($query->paginate(30));
+        $paginator = $query->paginate(30);
+
+        return ApiResponse::success(
+            data: $paginator->items(),
+            meta: [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'last_page' => $paginator->lastPage(),
+            ],
+        );
     }
 }

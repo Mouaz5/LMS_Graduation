@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreExamTypeRequest;
 use App\Http\Requests\Academic\UpdateExamTypeRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\ExamType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,14 +20,14 @@ class ExamTypeController extends Controller
             $query->where('semester_id', $request->semester_id);
         }
 
-        return response()->json($query->orderBy('semester_id')->orderBy('id')->get());
+        return ApiResponse::success(data: $query->orderBy('semester_id')->orderBy('id')->get());
     }
 
     public function store(StoreExamTypeRequest $request): JsonResponse
     {
         $examType = ExamType::create($request->validated());
 
-        return response()->json($examType->load('semester'), 201);
+        return ApiResponse::success(data: $examType->load('semester'), status: 201);
     }
 
     public function update(UpdateExamTypeRequest $request, int $id): JsonResponse
@@ -35,13 +36,13 @@ class ExamTypeController extends Controller
 
         $examType->update($request->validated());
 
-        return response()->json($examType->load('semester'));
+        return ApiResponse::success(data: $examType->load('semester'));
     }
 
     public function destroy(int $id): JsonResponse
     {
         ExamType::findOrFail($id)->delete();
 
-        return response()->json(['message' => 'Deleted.']);
+        return ApiResponse::success(message: 'Deleted.');
     }
 }
