@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\AbsenceJustificationStatus;
+use App\Enums\AttendanceStatus;
 use App\Models\Attendance;
 use App\Models\AbsenceJustification;
 use App\Models\ScheduleSlot;
@@ -61,7 +63,7 @@ class AttendanceService
                     'date'            => $date,
                 ],
                 [
-                    'status'           => $entry['status'],
+                    'status'           => AttendanceStatus::from($entry['status']),
                     'schedule_slot_id' => $scheduleSlotId,
                     'recorded_by'      => $teacher->id,
                 ]
@@ -77,8 +79,8 @@ class AttendanceService
      */
     public function approveJustification(AbsenceJustification $justification): void
     {
-        $justification->update(['status' => 'approved']);
-        $justification->attendance->update(['status' => 'excused']);
+        $justification->update(['status' => AbsenceJustificationStatus::APPROVED]);
+        $justification->attendance->update(['status' => AttendanceStatus::EXCUSED]);
     }
 
     /**
@@ -86,7 +88,7 @@ class AttendanceService
      */
     public function rejectJustification(AbsenceJustification $justification): void
     {
-        $justification->update(['status' => 'rejected']);
+        $justification->update(['status' => AbsenceJustificationStatus::REJECTED]);
     }
 
     /**

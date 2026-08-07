@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BehavioralSeverity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -19,6 +20,7 @@ class BehavioralNote extends Model
     {
         return [
             'date' => 'date',
+            'severity' => BehavioralSeverity::class,
         ];
     }
 

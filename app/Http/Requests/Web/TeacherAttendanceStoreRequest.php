@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Web;
 
+use App\Enums\AttendanceStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TeacherAttendanceStoreRequest extends FormRequest
 {
@@ -15,7 +17,7 @@ class TeacherAttendanceStoreRequest extends FormRequest
             'date'             => 'required|date',
             'schedule_slot_id' => 'nullable|exists:schedule_slots,id',
             'statuses'         => 'required|array|min:1',
-            'statuses.*'       => 'required|in:present,absent,late,excused',
+            'statuses.*'       => ['required', Rule::enum(AttendanceStatus::class)],
         ];
     }
 }

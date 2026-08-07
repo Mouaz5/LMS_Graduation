@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CalendarEventType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('school_id')->constrained('schools')->cascadeOnDelete();
             $table->date('date');
-            $table->enum('type', ['holiday', 'event', 'exam']);
+            $table->enum('type', CalendarEventType::values());
             $table->string('description');
             $table->timestamps();
         });

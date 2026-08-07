@@ -92,7 +92,7 @@
         @else
             <div class="empty-state">
                 {{ __('No learning objectives defined for :name.', ['name' => $subject->name]) }}
-                @if(auth()->user()->role === 'admin')
+                @if(auth()->user()->role->value === 'admin')
                     <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">{{ __('Go to Test Builder') }} →</a>
                 @endif
             </div>

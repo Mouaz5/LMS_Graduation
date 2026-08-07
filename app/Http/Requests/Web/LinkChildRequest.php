@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Web;
 
+use App\Enums\FamilyRelation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LinkChildRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class LinkChildRequest extends FormRequest
     {
         return [
             'student_user_id' => 'required|exists:users,id',
-            'relation'        => 'required|in:father,mother,guardian',
+            'relation'        => ['required', Rule::enum(FamilyRelation::class)],
         ];
     }
 }

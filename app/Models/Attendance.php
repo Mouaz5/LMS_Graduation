@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AttendanceStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -23,13 +24,14 @@ class Attendance extends Model
     {
         return [
             'date' => 'date',
+            'status' => AttendanceStatus::class,
         ];
     }
 
-    public function isPresent(): bool  { return $this->status === 'present'; }
-    public function isAbsent(): bool   { return $this->status === 'absent'; }
-    public function isLate(): bool     { return $this->status === 'late'; }
-    public function isExcused(): bool  { return $this->status === 'excused'; }
+    public function isPresent(): bool  { return $this->status === AttendanceStatus::PRESENT; }
+    public function isAbsent(): bool   { return $this->status === AttendanceStatus::ABSENT; }
+    public function isLate(): bool     { return $this->status === AttendanceStatus::LATE; }
+    public function isExcused(): bool  { return $this->status === AttendanceStatus::EXCUSED; }
 
     public function student(): BelongsTo
     {

@@ -400,7 +400,8 @@
 <body>
 @php
     $user = auth()->user();
-    $currentRole = session('impersonate_role', $user->role);
+    $currentRole = session('impersonate_role', $user->role->value);
+    $currentRole = is_string($currentRole) ? $currentRole : $currentRole->value;
     $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
 
     $allMenuItems = [

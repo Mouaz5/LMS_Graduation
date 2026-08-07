@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
 
         Schema::create('role_permissions', function (Blueprint $table) {
             $table->id();
-            $table->enum('role', ['admin', 'teacher', 'student', 'parent']);
+            $table->enum('role', UserRole::values());
             $table->foreignId('permission_id')->constrained()->cascadeOnDelete();
             $table->unique(['role', 'permission_id']);
         });

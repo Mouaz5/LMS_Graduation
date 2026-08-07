@@ -224,7 +224,7 @@
                                                     <input type="radio"
                                                            name="statuses[{{ $profile->user_id }}]"
                                                            value="{{ $val }}"
-                                                           @checked(($existing?->status ?? 'present') === $val)>
+                                                           @checked(($existing?->status?->value ?? 'present') === $val)>
                                                     {{ $label }}
                                                 </label>
                                             @endforeach

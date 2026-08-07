@@ -175,7 +175,7 @@
                                         @php
                                             $key = $year->id . '-' . $child->id;
                                             $existingPayment = $existingPayments->get($key);
-                                            $childStatus = $existingPayment?->status ?? 'available';
+                                            $childStatus = $existingPayment?->status?->value ?? 'available';
                                         @endphp
                                         <option value="{{ $child->id }}" data-status="{{ $childStatus }}" data-name="{{ $child->name }}">
                                             {{ $child->name }}

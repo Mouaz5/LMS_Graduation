@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\IndexScheduleRequest;
 use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
@@ -31,7 +32,7 @@ class ScheduleSlotController extends Controller
     {
         $user = $request->user();
 
-        if ($user->role === 'student') {
+        if ($user->role === UserRole::STUDENT) {
             $classroom = StudentProfile::where('user_id', $user->id)->first()?->classroom;
 
             $slots = $classroom

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\BulkStoreGradeRequest;
 use App\Http\Requests\Grade\ClassAverageRequest;
@@ -42,7 +43,7 @@ class GradeController extends Controller
         }
 
         // Verify teacher is assigned to each subject (skip for admin)
-        if ($teacher->role !== 'admin') {
+        if ($teacher->role !== UserRole::ADMIN) {
             $subjectIds = collect($validated['grades'])->pluck('subject_id')->unique();
             $assignedSubjects = TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
                 ->whereIn('subject_id', $subjectIds)

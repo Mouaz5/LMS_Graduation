@@ -105,7 +105,7 @@
             'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
             'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
         ];
-        $rb = $roleBadge[$user->role] ?? $roleBadge['student'];
+        $rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
         $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
         $avatarColors = [
             'admin'   => ['from' => '#818cf8', 'to' => '#4F46E5'],
@@ -113,7 +113,7 @@
             'student' => ['from' => '#34d399', 'to' => '#059669'],
             'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
         ];
-        $ac = $avatarColors[$user->role] ?? $avatarColors['student'];
+        $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
     @endphp
 
     {{-- Core detail card --}}
@@ -161,7 +161,7 @@
     </div>
 
     {{-- ── STUDENT: classroom + parents ─────────────────────────────── --}}
-    @if($user->role === 'student')
+    @if($user->role->value === 'student')
 
         @if($user->studentProfile)
             <div class="related-section">
@@ -238,7 +238,7 @@
     @endif
 
     {{-- ── PARENT: children list + link form ────────────────────────── --}}
-    @if($user->role === 'parent')
+    @if($user->role->value === 'parent')
 
         <div class="related-section">
             <div class="related-header">
@@ -299,7 +299,7 @@
     @endif
 
     {{-- ── TEACHER: subject assignments ─────────────────────────────── --}}
-    @if($user->role === 'teacher' && $user->teacherAssignments->count() > 0)
+    @if($user->role->value === 'teacher' && $user->teacherAssignments->count() > 0)
         <div class="related-section">
             <div class="related-title" style="margin-bottom: 12px;">{{ __('Subject Assignments') }}</div>
             <div class="related-card">

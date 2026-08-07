@@ -204,7 +204,7 @@
                                     <div style="font-weight: 600; color: #0f172a;">{{ $payment->created_at?->format('M j, Y') }}</div>
                                     <div style="font-size: 11.5px; color: #94a3b8;">{{ $payment->created_at?->format('H:i') }}</div>
                                 </td>
-                                <td><span class="badge badge-{{ $payment->status }}">{{ ucfirst($payment->status) }}</span></td>
+                                <td><span class="badge badge-{{ $payment->status->value }}">{{ ucfirst($payment->status->value) }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>

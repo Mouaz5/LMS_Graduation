@@ -7,7 +7,7 @@ $roleBadge = [
     'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
     'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
 ];
-$rb = $roleBadge[$user->role] ?? $roleBadge['student'];
+$rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
 $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
 
 $avatarColors = [
@@ -16,7 +16,7 @@ $avatarColors = [
     'student' => ['from' => '#34d399', 'to' => '#059669'],
     'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
 ];
-$ac = $avatarColors[$user->role] ?? $avatarColors['student'];
+$ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
 @endphp
 
 <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s; cursor: pointer;"

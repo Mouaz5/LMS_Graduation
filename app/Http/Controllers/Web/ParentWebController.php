@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\AbsenceJustificationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreJustificationWebRequest;
 use App\Models\AbsenceJustification;
@@ -220,7 +221,7 @@ class ParentWebController extends Controller
             'reason'        => $request->reason,
             'submitted_by'  => $parent->id,
             'document_url'  => $documentUrl,
-            'status'        => 'pending',
+            'status'        => AbsenceJustificationStatus::PENDING,
         ]);
 
         return redirect()->route('parent.attendance', ['child_id' => $attendance->student_user_id])

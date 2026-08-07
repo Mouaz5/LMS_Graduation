@@ -75,7 +75,7 @@
         @if(!$payment->isSucceeded())
             <div class="pending-note">
                 {{ __("Payment status:") }}
-                <span class="badge badge-{{ $payment->status }}">{{ ucfirst($payment->status) }}</span>
+                <span class="badge badge-{{ $payment->status->value }}">{{ ucfirst($payment->status->value) }}</span>
                 <br><br>
                 {{ __("We are waiting for confirmation from the payment provider. This usually takes a few moments.") }}
             </div>
@@ -96,7 +96,7 @@
             </div>
             <div class="receipt-row">
                 <span class="receipt-label">{{ __("Status") }}</span>
-                <span class="receipt-value"><span class="badge badge-{{ $payment->status }}">{{ ucfirst($payment->status) }}</span></span>
+                <span class="receipt-value"><span class="badge badge-{{ $payment->status->value }}">{{ ucfirst($payment->status->value) }}</span></span>
             </div>
             <div class="receipt-total">
                 <span class="receipt-label">{{ __("Total") }}</span>

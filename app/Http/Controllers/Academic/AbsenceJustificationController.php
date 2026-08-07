@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\AbsenceJustificationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreAbsenceJustificationRequest;
 use App\Http\Requests\Academic\UpdateAbsenceJustificationRequest;
@@ -50,7 +51,7 @@ class AbsenceJustificationController extends Controller
             'reason' => $validated['reason'],
             'submitted_by' => $parent->id,
             'document_url' => $documentUrl,
-            'status' => 'pending',
+            'status' => AbsenceJustificationStatus::PENDING,
         ]);
 
         return ApiResponse::success(data: $justification->load('attendance'), status: 201);

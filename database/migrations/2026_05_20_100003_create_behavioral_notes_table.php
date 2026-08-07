@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BehavioralSeverity;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
             $table->foreignId('student_user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('teacher_user_id')->constrained('users')->cascadeOnDelete();
             $table->text('note');
-            $table->enum('severity', ['info', 'warning', 'critical'])->default('info');
+            $table->enum('severity', BehavioralSeverity::values())->default(BehavioralSeverity::INFO->value);
             $table->date('date');
             $table->timestamps();
         });

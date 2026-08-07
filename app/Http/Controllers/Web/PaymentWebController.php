@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\Payment;
@@ -28,7 +29,7 @@ class PaymentWebController extends Controller
         }])->orderBy('start_date', 'desc')->get();
 
         $existingPayments = Payment::where('parent_user_id', $parent->id)
-            ->whereIn('status', ['pending', 'succeeded'])
+            ->whereIn('status', [PaymentStatus::PENDING->value, PaymentStatus::SUCCEEDED->value])
             ->get()
             ->keyBy(fn ($p) => $p->academic_year_id . '-' . $p->student_user_id);
 
@@ -61,7 +62,7 @@ class PaymentWebController extends Controller
         $existingPending = Payment::where('parent_user_id', $parent->id)
             ->where('academic_year_id', $tuitionFee->academic_year_id)
             ->where('student_user_id', $child->id)
-            ->where('status', 'pending')
+            ->where('status', PaymentStatus::PENDING->value)
             ->first();
 
         if ($existingPending) {
@@ -71,7 +72,7 @@ class PaymentWebController extends Controller
         $existingSucceeded = Payment::where('parent_user_id', $parent->id)
             ->where('academic_year_id', $tuitionFee->academic_year_id)
             ->where('student_user_id', $child->id)
-            ->where('status', 'succeeded')
+            ->where('status', PaymentStatus::SUCCEEDED->value)
             ->exists();
 
         if ($existingSucceeded) {
@@ -109,7 +110,7 @@ class PaymentWebController extends Controller
             'tuition_fee_id' => $tuitionFee->id,
             'amount' => $tuitionFee->amount,
             'currency' => $tuitionFee->currency,
-            'status' => 'pending',
+            'status' => PaymentStatus::PENDING,
             'stripe_checkout_session_id' => $session->id,
         ]);
 
@@ -134,7 +135,7 @@ class PaymentWebController extends Controller
         $existingSucceeded = Payment::where('parent_user_id', $parent->id)
             ->where('academic_year_id', $tuitionFee->academic_year_id)
             ->where('student_user_id', $child->id)
-            ->where('status', 'succeeded')
+            ->where('status', PaymentStatus::SUCCEEDED->value)
             ->exists();
 
         if ($existingSucceeded) {
@@ -151,7 +152,7 @@ class PaymentWebController extends Controller
             'tuition_fee_id' => $tuitionFee->id,
             'amount' => $tuitionFee->amount,
             'currency' => $tuitionFee->currency,
-            'status' => 'succeeded',
+            'status' => PaymentStatus::SUCCEEDED,
             'stripe_checkout_session_id' => $testSessionId,
             'stripe_payment_intent_id' => 'pi_test_' . uniqid(),
             'paid_at' => now(),

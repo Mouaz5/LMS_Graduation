@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Services\Payment\StripeService;
@@ -80,12 +81,12 @@ class StripeWebhookController extends Controller
             return;
         }
 
-        if ($payment->status === 'succeeded') {
+        if ($payment->status === PaymentStatus::SUCCEEDED) {
             return;
         }
 
         $payment->update([
-            'status' => 'succeeded',
+            'status' => PaymentStatus::SUCCEEDED,
             'stripe_payment_intent_id' => $session->payment_intent,
             'paid_at' => now(),
         ]);
@@ -102,7 +103,7 @@ class StripeWebhookController extends Controller
         }
 
         $payment->update([
-            'status' => 'failed',
+            'status' => PaymentStatus::FAILED,
             'failure_reason' => 'Checkout session expired',
         ]);
     }
@@ -117,14 +118,14 @@ class StripeWebhookController extends Controller
             return;
         }
 
-        if ($payment->status === 'succeeded') {
+        if ($payment->status === PaymentStatus::SUCCEEDED) {
             return;
         }
 
         $lastError = $intent->last_payment_error?->message ?? 'Payment failed';
 
         $payment->update([
-            'status' => 'failed',
+            'status' => PaymentStatus::FAILED,
             'failure_reason' => $lastError,
         ]);
     }
@@ -140,7 +141,7 @@ class StripeWebhookController extends Controller
         }
 
         $payment->update([
-            'status' => 'refunded',
+            'status' => PaymentStatus::REFUNDED,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AbsenceJustificationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,13 @@ class AbsenceJustification extends Model
         'document_url',
         'status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status' => AbsenceJustificationStatus::class,
+        ];
+    }
 
     public function attendance(): BelongsTo
     {

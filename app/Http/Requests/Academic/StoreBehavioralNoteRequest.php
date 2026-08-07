@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Academic;
 
+use App\Enums\BehavioralSeverity;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBehavioralNoteRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class StoreBehavioralNoteRequest extends FormRequest
         return [
             'student_user_id' => 'required|exists:users,id',
             'note'            => 'required|string|max:2000',
-            'severity'        => 'required|in:info,warning,critical',
+            'severity'        => ['required', Rule::enum(BehavioralSeverity::class)],
             'date'            => 'required|date|date_format:Y-m-d',
         ];
     }

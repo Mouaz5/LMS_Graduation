@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'teacher', 'student', 'parent'])->default('student');
+            $table->enum('role', UserRole::values())->default(UserRole::STUDENT->value);
             $table->string('phone')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();

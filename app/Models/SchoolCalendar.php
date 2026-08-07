@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CalendarEventType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,6 +16,7 @@ class SchoolCalendar extends Model
     {
         return [
             'date' => 'date',
+            'type' => CalendarEventType::class,
         ];
     }
 

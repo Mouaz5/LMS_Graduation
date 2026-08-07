@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Models\Classroom;
@@ -14,7 +15,7 @@ class ClassroomController extends Controller
     {
         $user = $request->user();
 
-        if ($user->role === 'teacher') {
+        if ($user->role === UserRole::TEACHER) {
             // Teachers see only classrooms they're assigned to
             $classroomIds = $user->teacherAssignments()
                 ->pluck('classroom_id')

@@ -117,14 +117,14 @@
                 <div class="notes-list">
                     @foreach($notes as $note)
                         <div class="note-item">
-                            <div class="note-severity-bar sev-{{ $note->severity }}"></div>
+                            <div class="note-severity-bar sev-{{ $note->severity->value }}"></div>
                             <div class="note-content">
                                 <div class="note-header">
                                     <div>
                                         <div class="note-teacher">{{ $note->teacher->name ?? '—' }}</div>
                                         <div class="note-meta">{{ $note->date?->format('l, M j, Y') }}</div>
                                     </div>
-                                    <span class="badge badge-{{ $note->severity }}">{{ ucfirst($note->severity) }}</span>
+                                    <span class="badge badge-{{ $note->severity->value }}">{{ ucfirst($note->severity->value) }}</span>
                                 </div>
                                 <div class="note-text">{{ $note->note }}</div>
                             </div>

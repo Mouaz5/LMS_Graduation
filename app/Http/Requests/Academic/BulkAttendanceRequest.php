@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Academic;
 
+use App\Enums\AttendanceStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BulkAttendanceRequest extends FormRequest
 {
@@ -16,7 +18,7 @@ class BulkAttendanceRequest extends FormRequest
             'schedule_slot_id'     => 'nullable|exists:schedule_slots,id',
             'entries'              => 'required|array|min:1',
             'entries.*.student_id' => 'required|exists:users,id',
-            'entries.*.status'     => 'required|in:present,absent,late,excused',
+            'entries.*.status'     => ['required', Rule::enum(AttendanceStatus::class)],
         ];
     }
 }

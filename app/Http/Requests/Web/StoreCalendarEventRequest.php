@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Web;
 
+use App\Enums\CalendarEventType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCalendarEventRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class StoreCalendarEventRequest extends FormRequest
     {
         return [
             'date'        => 'required|date',
-            'type'        => 'required|in:holiday,event,exam',
+            'type'        => ['required', Rule::enum(CalendarEventType::class)],
             'description' => 'required|string|max:500',
         ];
     }

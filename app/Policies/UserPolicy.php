@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\UserRole;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 
@@ -16,7 +17,7 @@ class UserPolicy
      */
     public function viewRecords(User $actor, User $student): bool
     {
-        if ($actor->role === 'admin') {
+        if ($actor->role === UserRole::ADMIN) {
             return true;
         }
 
@@ -24,11 +25,11 @@ class UserPolicy
             return true;
         }
 
-        if ($actor->role === 'parent') {
+        if ($actor->role === UserRole::PARENT) {
             return $actor->children()->where('student_user_id', $student->id)->exists();
         }
 
-        if ($actor->role === 'teacher') {
+        if ($actor->role === UserRole::TEACHER) {
             return TeacherSubjectClassroom::where('teacher_user_id', $actor->id)
                 ->whereHas('classroom.studentProfiles', fn ($q) => $q->where('user_id', $student->id))
                 ->exists();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AttendanceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
             $table->foreignId('student_user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('classroom_id')->constrained('classrooms')->cascadeOnDelete();
             $table->date('date');
-            $table->enum('status', ['present', 'absent', 'late', 'excused'])->default('present');
+            $table->enum('status', AttendanceStatus::values())->default(AttendanceStatus::PRESENT->value);
             $table->foreignId('schedule_slot_id')->nullable()->constrained('schedule_slots')->nullOnDelete();
             $table->foreignId('recorded_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();

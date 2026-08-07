@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreParentStudentRequest;
 use App\Http\Responses\ApiResponse;
@@ -18,11 +19,11 @@ class ParentStudentController extends Controller
         $parent = User::findOrFail($validated['parent_user_id']);
         $student = User::findOrFail($validated['student_user_id']);
 
-        if ($parent->role !== 'parent') {
+        if ($parent->role !== UserRole::PARENT) {
             return response()->json(['message' => 'The specified user is not a parent.'], 422);
         }
 
-        if ($student->role !== 'student') {
+        if ($student->role !== UserRole::STUDENT) {
             return response()->json(['message' => 'The specified user is not a student.'], 422);
         }
 

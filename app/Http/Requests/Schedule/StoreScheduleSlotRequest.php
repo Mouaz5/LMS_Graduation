@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Schedule;
 
+use App\Enums\Weekday;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreScheduleSlotRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class StoreScheduleSlotRequest extends FormRequest
             'classroom_id'    => 'required|exists:classrooms,id',
             'subject_id'      => 'required|exists:subjects,id',
             'teacher_user_id' => 'required|exists:users,id',
-            'day_of_week'     => 'required|in:sunday,monday,tuesday,wednesday,thursday',
+            'day_of_week'     => ['required', Rule::enum(Weekday::class)],
             'period_number'   => 'required|integer|min:1|max:8',
             'start_time'      => 'required|date_format:H:i',
             'end_time'        => 'required|date_format:H:i|after:start_time',

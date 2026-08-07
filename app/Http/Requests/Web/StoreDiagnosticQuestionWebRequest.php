@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Web;
 
+use App\Enums\DiagnosticQuestionType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDiagnosticQuestionWebRequest extends FormRequest
 {
@@ -14,7 +16,7 @@ class StoreDiagnosticQuestionWebRequest extends FormRequest
             'subject_id'            => 'required|exists:subjects,id',
             'learning_objective_id' => 'required|exists:learning_objectives,id',
             'question_text'         => 'required|string',
-            'type'                  => 'required|in:mcq,true_false',
+            'type'                  => ['required', Rule::enum(DiagnosticQuestionType::class)],
             'options'               => 'required|array|min:2',
             'options.*.option_text' => 'required|string',
             'options.*.is_correct'  => 'nullable',

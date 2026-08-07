@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Weekday;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -22,6 +23,7 @@ class ScheduleSlot extends Model
     {
         return [
             'period_number' => 'integer',
+            'day_of_week' => Weekday::class,
         ];
     }
 

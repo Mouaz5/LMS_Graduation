@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\UserRole;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,11 @@ class RoleMiddleware
         }
 
         // Respect impersonation session for web routes
-        $effectiveRole = session('impersonate_role', $request->user()->role);
+        $effectiveRole = session('impersonate_role', $request->user()->role->value);
 
-        if (! in_array($effectiveRole, $roles)) {
+        $actualRole = $request->user()->role->value;
+
+        if (! in_array($effectiveRole, $roles) && ! in_array($actualRole, $roles)) {
             return $request->expectsJson()
                 ? response()->json(['message' => 'Forbidden.'], 403)
                 : abort(403);

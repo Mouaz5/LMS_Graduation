@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\SalaryTransferStatus;
 use App\Http\Controllers\Controller;
 use App\Models\SalaryTransfer;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class SalaryWebController extends Controller
             ->paginate(20);
 
         $totalPaid = SalaryTransfer::where('teacher_user_id', $teacher->id)
-            ->where('status', 'paid')
+            ->where('status', SalaryTransferStatus::PAID->value)
             ->sum('amount');
 
         $currency = config('services.stripe.currency', 'usd');

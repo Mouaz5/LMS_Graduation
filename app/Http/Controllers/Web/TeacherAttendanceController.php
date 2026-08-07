@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\AbsenceJustificationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TeacherAttendanceStoreRequest;
 use App\Models\AbsenceJustification;
@@ -92,7 +93,7 @@ class TeacherAttendanceController extends Controller
                 'submittedBy',
             ])
             ->whereHas('attendance', fn ($q) => $q->whereIn('classroom_id', $classroomIds))
-            ->where('status', 'pending')
+            ->where('status', AbsenceJustificationStatus::PENDING->value)
             ->orderByDesc('created_at')
             ->paginate(15);
 

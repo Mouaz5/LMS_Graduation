@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -26,6 +27,7 @@ class Payment extends Model
         return [
             'amount' => 'decimal:2',
             'paid_at' => 'datetime',
+            'status' => PaymentStatus::class,
         ];
     }
 
@@ -51,11 +53,11 @@ class Payment extends Model
 
     public function isSucceeded(): bool
     {
-        return $this->status === 'succeeded';
+        return $this->status === PaymentStatus::SUCCEEDED;
     }
 
     public function isPending(): bool
     {
-        return $this->status === 'pending';
+        return $this->status === PaymentStatus::PENDING;
     }
 }

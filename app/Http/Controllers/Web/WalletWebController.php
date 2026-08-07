@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\PaymentStatus;
+use App\Enums\SalaryTransferStatus;
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreSalaryTransferWebRequest;
 use App\Http\Requests\Web\StoreTuitionFeeWebRequest;
@@ -44,9 +47,9 @@ class WalletWebController extends Controller
 
         $payments = $query->paginate(20)->withQueryString();
 
-        $totalCollected = Payment::where('status', 'succeeded')->sum('amount');
-        $totalPending = Payment::where('status', 'pending')->sum('amount');
-        $totalFailed = Payment::where('status', 'failed')->sum('amount');
+        $totalCollected = Payment::where('status', PaymentStatus::SUCCEEDED->value)->sum('amount');
+        $totalPending = Payment::where('status', PaymentStatus::PENDING->value)->sum('amount');
+        $totalFailed = Payment::where('status', PaymentStatus::FAILED->value)->sum('amount');
         $currency = config('services.stripe.currency', 'usd');
 
         return view('admin.wallet.index', compact(
@@ -92,7 +95,7 @@ class WalletWebController extends Controller
 
         $transfers = $query->paginate(20)->withQueryString();
         $teachers = User::where('role', 'teacher')->orderBy('name')->get();
-        $totalPaid = SalaryTransfer::where('status', 'paid')->sum('amount');
+        $totalPaid = SalaryTransfer::where('status', SalaryTransferStatus::PAID->value)->sum('amount');
         $currency = config('services.stripe.currency', 'usd');
 
         return view('admin.wallet.salaries', compact('transfers', 'teachers', 'totalPaid', 'currency'));
@@ -104,7 +107,7 @@ class WalletWebController extends Controller
             'teacher_user_id' => $request->teacher_user_id,
             'amount'          => $request->amount,
             'currency'        => $request->currency,
-            'status'          => 'paid',
+            'status'          => SalaryTransferStatus::PAID,
             'transfer_date'   => $request->transfer_date,
             'description'     => $request->description,
             'paid_at'         => now(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreTeacherAssignmentRequest;
 use App\Http\Responses\ApiResponse;
@@ -15,7 +16,7 @@ class TeacherAssignmentController extends Controller
     {
         $user = $request->user();
 
-        if ($user->role === 'teacher') {
+        if ($user->role === UserRole::TEACHER) {
             $assignments = TeacherSubjectClassroom::with(['subject', 'classroom.grade', 'academicYear'])
                 ->where('teacher_user_id', $user->id)
                 ->get();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SalaryTransferStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -24,6 +25,7 @@ class SalaryTransfer extends Model
             'amount' => 'decimal:2',
             'transfer_date' => 'date',
             'paid_at' => 'datetime',
+            'status' => SalaryTransferStatus::class,
         ];
     }
 
