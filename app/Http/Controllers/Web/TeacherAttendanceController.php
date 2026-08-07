@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Enums\AbsenceJustificationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TeacherAttendanceStoreRequest;
 use App\Models\AbsenceJustification;
-use App\Models\Attendance;
-use App\Models\Classroom;
+use App\Services\Attendance\AbsenceJustificationService;
+use App\Services\Attendance\TeacherAttendanceQueryService;
 use App\Services\AttendanceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +15,11 @@ use Illuminate\View\View;
 
 class TeacherAttendanceController extends Controller
 {
-    public function __construct(private AttendanceService $service) {}
+    public function __construct(
+        private AttendanceService $service,
+        private TeacherAttendanceQueryService $queries,
+        private AbsenceJustificationService $justifications,
+    ) {}
 
     /**
      * GET /teacher/attendance
@@ -25,27 +28,13 @@ class TeacherAttendanceController extends Controller
      */
     public function index(Request $request): View
     {
-        $teacher    = Auth::user();
-        $classrooms = $this->getTeacherClassrooms($teacher);
+        $data = $this->queries->formData(
+            Auth::user(),
+            $request->input('classroom_id'),
+            $request->input('date', now()->toDateString()),
+        );
 
-        $selectedDate        = $request->input('date', now()->toDateString());
-        $selectedClassroomId = $request->input('classroom_id');
-        $students            = collect();
-        $existingAttendance  = collect();
-
-        if ($selectedClassroomId) {
-            $students = $this->service->getClassroomStudents((int) $selectedClassroomId);
-
-            $existingAttendance = Attendance::where('classroom_id', $selectedClassroomId)
-                ->whereDate('date', $selectedDate)
-                ->get()
-                ->keyBy('student_user_id');
-        }
-
-        return view('teacher.attendance', compact(
-            'classrooms', 'selectedDate', 'selectedClassroomId',
-            'students', 'existingAttendance'
-        ));
+        return view('teacher.attendance', $data);
     }
 
     /**
@@ -58,21 +47,21 @@ class TeacherAttendanceController extends Controller
         foreach ($request->statuses as $studentId => $status) {
             $entries[] = [
                 'student_id' => (int) $studentId,
-                'status'     => $status,
+                'status' => $status,
             ];
         }
 
         $this->service->recordBulk(
-            teacher:        Auth::user(),
-            classroomId:    (int) $request->classroom_id,
-            date:           $request->date,
-            entries:        $entries,
+            teacher: Auth::user(),
+            classroomId: (int) $request->classroom_id,
+            date: $request->date,
+            entries: $entries,
             scheduleSlotId: $request->schedule_slot_id ? (int) $request->schedule_slot_id : null,
         );
 
         return redirect()
             ->route('teacher.attendance', [
-                'date'         => $request->date,
+                'date' => $request->date,
                 'classroom_id' => $request->classroom_id,
             ])
             ->with('success', __('Attendance recorded successfully.'));
@@ -84,18 +73,7 @@ class TeacherAttendanceController extends Controller
      */
     public function justifications(): View
     {
-        $teacher      = Auth::user();
-        $classroomIds = $teacher->teacherAssignments()->pluck('classroom_id');
-
-        $justifications = AbsenceJustification::with([
-                'attendance.student',
-                'attendance.classroom',
-                'submittedBy',
-            ])
-            ->whereHas('attendance', fn ($q) => $q->whereIn('classroom_id', $classroomIds))
-            ->where('status', AbsenceJustificationStatus::PENDING->value)
-            ->orderByDesc('created_at')
-            ->paginate(15);
+        $justifications = $this->queries->pendingJustifications(Auth::user());
 
         return view('teacher.justifications', compact('justifications'));
     }
@@ -105,13 +83,7 @@ class TeacherAttendanceController extends Controller
      */
     public function approveJustification(AbsenceJustification $justification): RedirectResponse
     {
-        $this->service->assertTeacherCanRecord(
-            Auth::user(),
-            $justification->attendance->classroom_id,
-            null
-        );
-
-        $this->service->approveJustification($justification);
+        $this->justifications->approve(Auth::user(), $justification);
 
         return redirect()->route('teacher.justifications')
             ->with('success', __('Justification approved and attendance marked as excused.'));
@@ -122,22 +94,9 @@ class TeacherAttendanceController extends Controller
      */
     public function rejectJustification(AbsenceJustification $justification): RedirectResponse
     {
-        $this->service->assertTeacherCanRecord(
-            Auth::user(),
-            $justification->attendance->classroom_id,
-            null
-        );
-
-        $this->service->rejectJustification($justification);
+        $this->justifications->reject(Auth::user(), $justification);
 
         return redirect()->route('teacher.justifications')
             ->with('success', __('Justification rejected.'));
-    }
-
-    private function getTeacherClassrooms($teacher)
-    {
-        return Classroom::whereHas('teacherAssignments', fn ($q) => $q->where('teacher_user_id', $teacher->id))
-            ->with('grade')
-            ->get();
     }
 }

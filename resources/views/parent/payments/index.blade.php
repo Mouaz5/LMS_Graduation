@@ -212,6 +212,7 @@
         </div>
     @endif
 
+@if(app()->environment(['local', 'testing']) && config('services.stripe.test_mode'))
     {{-- Test Payment Modal --}}
     <div class="modal-overlay" id="payment-modal">
         <div class="modal">
@@ -313,4 +314,12 @@
         });
     });
     </script>
+@else
+    <script>
+    function openPaymentModal(feeId, studentId) {
+        const checkoutUrl = '{{ route("parent.payments.checkout", "__FEE__") }}'.replace('__FEE__', feeId);
+        window.location.href = checkoutUrl + '?student=' + encodeURIComponent(studentId);
+    }
+    </script>
+@endif
 </x-layouts.app>

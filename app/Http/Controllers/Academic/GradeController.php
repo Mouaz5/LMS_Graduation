@@ -2,93 +2,38 @@
 
 namespace App\Http\Controllers\Academic;
 
-use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\BulkStoreGradeRequest;
 use App\Http\Requests\Grade\ClassAverageRequest;
 use App\Http\Responses\ApiResponse;
-use App\Models\ExamType;
 use App\Models\StudentGrade;
-use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
-use App\Services\GradeService;
-use App\Services\ReportCardAssembler;
+use App\Services\Grade\GradeEntryService;
+use App\Services\Grade\ReportCardService;
 use App\Services\ReportCardPdfService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Mpdf\Output\Destination;
 
 class GradeController extends Controller
 {
-    public function __construct(private ReportCardAssembler $assembler) {}
+    public function __construct(
+        private GradeEntryService $entries,
+        private ReportCardService $reports,
+        private ReportCardPdfService $pdf,
+    ) {}
 
     /** POST /api/v1/grades/bulk */
     public function bulkStore(BulkStoreGradeRequest $request): JsonResponse
     {
-        $teacher = Auth::user();
-
-        $validated = $request->validated();
-
-        // Validate score <= max_score per row
-        foreach ($validated['grades'] as $i => $row) {
-            if ($row['score'] > $row['max_score']) {
-                throw ValidationException::withMessages([
-                    "grades.$i.score" => 'Score cannot exceed max_score.',
-                ]);
-            }
-        }
-
-        // Verify teacher is assigned to each subject (skip for admin)
-        if ($teacher->role !== UserRole::ADMIN) {
-            $subjectIds = collect($validated['grades'])->pluck('subject_id')->unique();
-            $assignedSubjects = TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
-                ->whereIn('subject_id', $subjectIds)
-                ->pluck('subject_id')
-                ->unique();
-
-            foreach ($subjectIds as $sid) {
-                if (! $assignedSubjects->contains($sid)) {
-                    return response()->json(['message' => "Not assigned to subject #$sid."], 403);
-                }
-            }
-        }
-
-        $tuples = [];
-
-        DB::transaction(function () use ($validated, $teacher, &$tuples) {
-            foreach ($validated['grades'] as $row) {
-                $examType = ExamType::findOrFail($row['exam_type_id']);
-
-                $grade = StudentGrade::updateOrCreate(
-                    [
-                        'student_user_id' => $row['student_id'],
-                        'subject_id' => $row['subject_id'],
-                        'exam_type_id' => $row['exam_type_id'],
-                    ],
-                    [
-                        'semester_id' => $examType->semester_id,
-                        'teacher_user_id' => $teacher->id,
-                        'score' => $row['score'],
-                        'max_score' => $row['max_score'],
-                    ]
-                );
-
-                $tuples[] = [
-                    'student_user_id' => $row['student_id'],
-                    'subject_id' => $row['subject_id'],
-                    'semester_id' => $examType->semester_id,
-                ];
-            }
-
-            GradeService::refreshSummaries($tuples);
-        });
+        $count = $this->entries->storeBulk(
+            $request->user(),
+            $request->validated('grades'),
+        );
 
         return ApiResponse::success(
-            data: ['count' => count($validated['grades'])],
+            data: ['count' => $count],
             message: 'Grades saved.',
             status: 201,
         );
@@ -97,8 +42,6 @@ class GradeController extends Controller
     /** GET /api/v1/grades?student_id=X&semester_id=Y */
     public function index(Request $request): JsonResponse
     {
-        $actor = Auth::user();
-
         $studentId = $request->integer('student_id');
         $semesterId = $request->integer('semester_id');
 
@@ -134,13 +77,12 @@ class GradeController extends Controller
     public function reportCard(Request $request, int $id): JsonResponse
     {
         $this->authorizeReportCardAccess($id);
-
-        $data = $this->assembler->assemble($id, $request->integer('semester_id') ?: null);
+        $data = $this->reports->assembleById($id, $request->integer('semester_id') ?: null);
 
         return ApiResponse::success(data: [
             'student' => $data->student,
             'summaries' => $data->summaries,
-            'grades' => $data->grades->groupBy(fn ($g) => "{$g->subject_id}-{$g->semester_id}"),
+            'grades' => $data->grades->groupBy(fn ($grade) => "{$grade->subject_id}-{$grade->semester_id}"),
         ]);
     }
 
@@ -148,22 +90,20 @@ class GradeController extends Controller
     public function reportCardPdf(Request $request, int $id): Response
     {
         $this->authorizeReportCardAccess($id);
-
         $semesterId = $request->integer('semester_id') ?: null;
-        $data = $this->assembler->assemble($id, $semesterId);
-
+        $data = $this->reports->assembleById($id, $semesterId);
         $student = $data->student;
         $semester = $data->semester;
         $summaries = $data->summaries;
-        $examTypes = $data->examTypes;
         $grades = $data->grades->groupBy('subject_id');
+        $examTypes = $data->examTypes;
 
-        $mpdf = app(ReportCardPdfService::class)
-            ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
+        $mpdf = $this->pdf->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
+        $filename = "report_card_{$student->name}_{$semesterId}.pdf";
 
-        return response($mpdf->Output("report_card_{$student->name}_{$semesterId}.pdf", Destination::STRING_RETURN))
+        return response($mpdf->Output($filename, Destination::STRING_RETURN))
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"report_card_{$student->name}_{$semesterId}.pdf\"");
+            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
     }
 
     private function authorizeReportCardAccess(int $studentId): void

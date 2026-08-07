@@ -151,6 +151,45 @@ class AttendanceTest extends TestCase
             ->assertStatus(403);
     }
 
+    public function test_teacher_can_view_attendance_for_an_assigned_classroom(): void
+    {
+        $this->actingAs($this->teacher)
+            ->get(route('teacher.attendance', [
+                'classroom_id' => $this->classroom->id,
+                'date' => '2026-05-18',
+            ]))
+            ->assertOk();
+    }
+
+    public function test_teacher_cannot_record_attendance_for_a_student_outside_the_classroom(): void
+    {
+        $outsideStudent = User::factory()->create(['role' => 'student']);
+
+        Sanctum::actingAs($this->teacher);
+
+        $this->postJson('/api/v1/attendance/bulk', $this->bulkPayload([
+            'entries' => [
+                ['student_id' => $outsideStudent->id, 'status' => 'present'],
+            ],
+        ]))->assertStatus(403);
+    }
+
+    public function test_teacher_cannot_view_attendance_for_an_unassigned_classroom(): void
+    {
+        $unassignedClassroom = Classroom::create([
+            'grade_id' => $this->classroom->grade_id,
+            'name' => '8-B',
+            'capacity' => 30,
+        ]);
+
+        $this->actingAs($this->teacher)
+            ->get(route('teacher.attendance', [
+                'classroom_id' => $unassignedClassroom->id,
+                'date' => '2026-05-18',
+            ]))
+            ->assertForbidden();
+    }
+
     // ---------------------------------------------------------------
     // UC-14: Absence justification flow
     // ---------------------------------------------------------------

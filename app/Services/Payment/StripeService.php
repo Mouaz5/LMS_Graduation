@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use Stripe\Checkout\Session;
+use Stripe\Event;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Stripe\Webhook;
@@ -37,12 +38,17 @@ class StripeService
         ]);
     }
 
+    public function retrieveCheckoutSession(string $sessionId): Session
+    {
+        return Session::retrieve($sessionId);
+    }
+
     public function retrievePaymentIntent(string $paymentIntentId): PaymentIntent
     {
         return PaymentIntent::retrieve($paymentIntentId);
     }
 
-    public function constructWebhookEvent(string $payload, string $signature): \Stripe\Event
+    public function constructWebhookEvent(string $payload, string $signature): Event
     {
         return Webhook::constructEvent(
             $payload,

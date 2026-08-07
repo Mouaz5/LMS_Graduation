@@ -4,19 +4,23 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
-use App\Models\ExamType;
-use App\Models\GradeSummary;
-use App\Models\Semester;
 use App\Models\ScheduleSlot;
-use App\Models\StudentGrade;
 use App\Models\StudentProfile;
+use App\Services\Grade\ReportCardService;
 use App\Services\ReportCardPdfService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Mpdf\Output\Destination;
 
 class StudentWebController extends Controller
 {
+    public function __construct(
+        private ReportCardService $reports,
+        private ReportCardPdfService $pdf,
+    ) {}
+
     public function schedule(): View
     {
         $user = Auth::user();
@@ -34,7 +38,7 @@ class StudentWebController extends Controller
         $days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
         $selectedDay = request('day', strtolower(now()->format('l')));
 
-        if (!in_array($selectedDay, $days)) {
+        if (! in_array($selectedDay, $days)) {
             $selectedDay = 'sunday';
         }
 
@@ -54,62 +58,34 @@ class StudentWebController extends Controller
 
     public function results(Request $request): View
     {
-        $user = Auth::user();
-
-        $semesters = Semester::with('academicYear')->orderByDesc('id')->get();
-        $selectedSemesterId = $request->integer('semester_id') ?: $semesters->first()?->id;
-
-        $summaries = GradeSummary::where('student_user_id', $user->id)
-            ->where('semester_id', $selectedSemesterId)
-            ->with('subject')
-            ->get();
-
-        $grades = StudentGrade::where('student_user_id', $user->id)
-            ->where('semester_id', $selectedSemesterId)
-            ->with(['subject', 'examType'])
-            ->get()
-            ->groupBy('subject_id');
-
-        $examTypes = $selectedSemesterId
-            ? ExamType::where('semester_id', $selectedSemesterId)->orderBy('id')->get()
-            : collect();
-
-        return view('student.results', compact('user', 'semesters', 'selectedSemesterId', 'summaries', 'grades', 'examTypes'));
+        return view('student.results', $this->reports->studentResults(
+            Auth::user(),
+            $request->integer('semester_id') ?: null,
+        ));
     }
 
-    public function downloadReportCard(Request $request): \Illuminate\Http\Response
+    public function downloadReportCard(Request $request): Response
     {
-        $user       = Auth::user();
-        $semesterId = $request->integer('semester_id');
-        $semester   = $semesterId ? Semester::with('academicYear')->find($semesterId) : null;
-        $student    = $user->load('studentProfile.classroom.grade');
+        $user = Auth::user();
+        $semesterId = $request->integer('semester_id') ?: null;
+        $data = $this->reports->assemble($user, $semesterId);
+        $student = $data->student;
+        $semester = $data->semester;
+        $summaries = $data->summaries;
+        $grades = $data->grades->groupBy('subject_id');
+        $examTypes = $data->examTypes;
 
-        $summaries = GradeSummary::where('student_user_id', $user->id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with('subject')
-            ->get();
+        $mpdf = $this->pdf->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
+        $filename = "report_card_{$student->name}_{$semesterId}.pdf";
 
-        $grades = StudentGrade::where('student_user_id', $user->id)
-            ->when($semesterId, fn($q) => $q->where('semester_id', $semesterId))
-            ->with(['subject', 'examType'])
-            ->get()
-            ->groupBy('subject_id');
-
-        $examTypes = $semesterId
-            ? ExamType::where('semester_id', $semesterId)->orderBy('id')->get()
-            : collect();
-
-        $mpdf = app(ReportCardPdfService::class)
-            ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
-
-        return response($mpdf->Output("report_card_{$user->name}_{$semesterId}.pdf", \Mpdf\Output\Destination::STRING_RETURN))
+        return response($mpdf->Output($filename, Destination::STRING_RETURN))
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"report_card_{$user->name}_{$semesterId}.pdf\"");
+            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
     }
 
     public function attendance(Request $request): View
     {
-        $user    = Auth::user();
+        $user = Auth::user();
         $profile = StudentProfile::where('user_id', $user->id)->first();
 
         $query = Attendance::where('student_user_id', $user->id)

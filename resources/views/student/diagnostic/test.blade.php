@@ -86,8 +86,6 @@
     @if($attempt && $questions->isNotEmpty())
         {{-- Progress --}}
         @php
-            $totalForSubject = \App\Models\DiagnosticQuestion::where('subject_id', $subject->id)->count();
-            $answered = $attempt->answers()->count();
             $pct = $totalForSubject > 0 ? round(($answered / $totalForSubject) * 100) : 0;
         @endphp
         <div class="progress-label">

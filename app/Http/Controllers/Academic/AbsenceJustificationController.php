@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Academic;
 
-use App\Enums\AbsenceJustificationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreAbsenceJustificationRequest;
 use App\Http\Requests\Academic\UpdateAbsenceJustificationRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
-use App\Services\AttendanceService;
+use App\Services\Attendance\AbsenceJustificationService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 
 class AbsenceJustificationController extends Controller
 {
-    public function __construct(private AttendanceService $service) {}
+    public function __construct(private AbsenceJustificationService $service) {}
 
     /**
      * POST /api/v1/absence-justifications
@@ -26,33 +24,12 @@ class AbsenceJustificationController extends Controller
         $validated = $request->validated();
 
         $attendance = Attendance::findOrFail($validated['attendance_id']);
-        $parent = $request->user();
-
-        abort_unless(
-            $parent->children()->where('student_user_id', $attendance->student_user_id)->exists(),
-            403,
-            'You are not a parent of this student.'
+        $justification = $this->service->submit(
+            $request->user(),
+            $attendance,
+            $validated['reason'],
+            $request->file('document'),
         );
-
-        abort_if(
-            $attendance->justification()->exists(),
-            422,
-            'A justification already exists for this absence.'
-        );
-
-        $documentUrl = null;
-        if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('justifications', 'public');
-            $documentUrl = Storage::url($path);
-        }
-
-        $justification = AbsenceJustification::create([
-            'attendance_id' => $validated['attendance_id'],
-            'reason' => $validated['reason'],
-            'submitted_by' => $parent->id,
-            'document_url' => $documentUrl,
-            'status' => AbsenceJustificationStatus::PENDING,
-        ]);
 
         return ApiResponse::success(data: $justification->load('attendance'), status: 201);
     }
@@ -69,16 +46,10 @@ class AbsenceJustificationController extends Controller
 
         $justification = AbsenceJustification::with('attendance.classroom')->findOrFail($id);
 
-        $this->service->assertTeacherCanRecord(
-            $request->user(),
-            $justification->attendance->classroom_id,
-            null
-        );
-
         if ($validated['action'] === 'approve') {
-            $this->service->approveJustification($justification);
+            $this->service->approve($request->user(), $justification);
         } else {
-            $this->service->rejectJustification($justification);
+            $this->service->reject($request->user(), $justification);
         }
 
         return ApiResponse::success(data: $justification->fresh(['attendance']));

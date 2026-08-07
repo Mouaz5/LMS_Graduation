@@ -1,27 +1,29 @@
 <?php
 
 use App\Http\Controllers\Web\AcademicYearWebController;
-use App\Http\Controllers\Web\DiagnosticWebController;
-use App\Http\Controllers\Web\SubjectWebController;
+use App\Http\Controllers\Web\AdminDiagnosticWebController;
 use App\Http\Controllers\Web\AdminUserController;
+use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DiagnosticKnowledgeMapWebController;
 use App\Http\Controllers\Web\ExamTypeWebController;
 use App\Http\Controllers\Web\LocaleController;
-use App\Http\Controllers\Web\ScheduleWebController;
-use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\ParentWebController;
 use App\Http\Controllers\Web\PaymentWebController;
 use App\Http\Controllers\Web\SalaryWebController;
+use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\SettingsWebController;
-use App\Http\Controllers\Web\StudentWebController;
 use App\Http\Controllers\Web\StripeWebhookController;
-use App\Http\Controllers\Web\TeacherGradeController;
-use App\Http\Controllers\Web\TeacherWebController;
+use App\Http\Controllers\Web\StudentDiagnosticWebController;
+use App\Http\Controllers\Web\StudentWebController;
+use App\Http\Controllers\Web\SubjectWebController;
 use App\Http\Controllers\Web\TeacherAttendanceController;
 use App\Http\Controllers\Web\TeacherBehavioralNoteController;
+use App\Http\Controllers\Web\TeacherGradeController;
+use App\Http\Controllers\Web\TeacherWebController;
 use App\Http\Controllers\Web\WalletWebController;
 use Illuminate\Support\Facades\Route;
 
@@ -94,12 +96,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/exam-types/{examType}', [ExamTypeWebController::class, 'destroy'])->name('exam-types.destroy');
 
         // Diagnostic Test Builder & Knowledge Map
-        Route::get('/diagnostic/test-builder', [DiagnosticWebController::class, 'testBuilder'])->name('diagnostic.test-builder');
+        Route::get('/diagnostic/test-builder', [AdminDiagnosticWebController::class, 'testBuilder'])->name('diagnostic.test-builder');
         Route::get('/diagnostic/questions', fn () => redirect()->route('admin.diagnostic.test-builder'))->name('diagnostic.questions.index');
-        Route::post('/diagnostic/objectives', [DiagnosticWebController::class, 'storeObjective'])->name('diagnostic.objectives.store');
-        Route::post('/diagnostic/questions', [DiagnosticWebController::class, 'storeQuestion'])->name('diagnostic.questions.store');
-        Route::delete('/diagnostic/questions/{question}', [DiagnosticWebController::class, 'destroyQuestion'])->name('diagnostic.questions.destroy');
-        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'knowledgeMap'])->name('diagnostic.knowledge-map');
+        Route::post('/diagnostic/objectives', [AdminDiagnosticWebController::class, 'storeObjective'])->name('diagnostic.objectives.store');
+        Route::post('/diagnostic/questions', [AdminDiagnosticWebController::class, 'storeQuestion'])->name('diagnostic.questions.store');
+        Route::delete('/diagnostic/questions/{question}', [AdminDiagnosticWebController::class, 'destroyQuestion'])->name('diagnostic.questions.destroy');
+        Route::get('/diagnostic/knowledge-map', [DiagnosticKnowledgeMapWebController::class, 'admin'])->name('diagnostic.knowledge-map');
 
         // Settings
         Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
@@ -137,7 +139,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/behavioral-notes', [TeacherBehavioralNoteController::class, 'store'])->name('behavioral-notes.store');
 
         // Diagnostic knowledge map (view-only for teacher)
-        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'knowledgeMap'])->name('diagnostic.knowledge-map');
+        Route::get('/diagnostic/knowledge-map', [DiagnosticKnowledgeMapWebController::class, 'admin'])->name('diagnostic.knowledge-map');
 
         // Salaries — teacher sees own salary transfers
         Route::get('/salaries', [SalaryWebController::class, 'index'])->name('salaries');
@@ -152,10 +154,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/attendance', [StudentWebController::class, 'attendance'])->name('attendance');
 
         // Diagnostic
-        Route::get('/diagnostic/test', [DiagnosticWebController::class, 'studentTest'])->name('diagnostic.test');
-        Route::post('/diagnostic/start', [DiagnosticWebController::class, 'studentStartAttempt'])->name('diagnostic.start');
-        Route::post('/diagnostic/attempts/{attempt}/submit', [DiagnosticWebController::class, 'studentSubmitAttempt'])->name('diagnostic.submit');
-        Route::get('/diagnostic/knowledge-map', [DiagnosticWebController::class, 'studentKnowledgeMap'])->name('diagnostic.knowledge-map');
+        Route::get('/diagnostic/test', [StudentDiagnosticWebController::class, 'test'])->name('diagnostic.test');
+        Route::post('/diagnostic/start', [StudentDiagnosticWebController::class, 'start'])->name('diagnostic.start');
+        Route::post('/diagnostic/attempts/{attempt}/submit', [StudentDiagnosticWebController::class, 'submit'])->name('diagnostic.submit');
+        Route::get('/diagnostic/knowledge-map', [StudentDiagnosticWebController::class, 'knowledgeMap'])->name('diagnostic.knowledge-map');
     });
 
     // Parent pages

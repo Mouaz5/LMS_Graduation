@@ -4,14 +4,15 @@ namespace App\Services;
 
 use App\Enums\AbsenceJustificationStatus;
 use App\Enums\AttendanceStatus;
-use App\Models\Attendance;
 use App\Models\AbsenceJustification;
+use App\Models\Attendance;
 use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceService
 {
@@ -19,20 +20,24 @@ class AttendanceService
      * Assert that the given teacher is authorized to record attendance for a classroom.
      * Throws 403 if unauthorized.
      */
-    public function assertTeacherCanRecord(User $teacher, int $classroomId, ?int $scheduleSlotId): void
+    public function teacherCanRecord(User $teacher, int $classroomId, ?int $scheduleSlotId): bool
     {
         if ($scheduleSlotId !== null) {
             $slot = ScheduleSlot::find($scheduleSlotId);
-            $authorized = $slot
+
+            return (bool) ($slot
                 && $slot->teacher_user_id === $teacher->id
-                && $slot->classroom_id === $classroomId;
-        } else {
-            $authorized = TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
-                ->where('classroom_id', $classroomId)
-                ->exists();
+                && $slot->classroom_id === $classroomId);
         }
 
-        if (! $authorized) {
+        return TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
+            ->where('classroom_id', $classroomId)
+            ->exists();
+    }
+
+    public function assertTeacherCanRecord(User $teacher, int $classroomId, ?int $scheduleSlotId): void
+    {
+        if (! $this->teacherCanRecord($teacher, $classroomId, $scheduleSlotId)) {
             throw new HttpResponseException(
                 response()->json(['message' => 'You are not assigned to this classroom.'], 403)
             );
@@ -43,7 +48,7 @@ class AttendanceService
      * Record bulk attendance. Uses updateOrCreate so resubmitting the same day
      * updates existing records instead of creating duplicates.
      *
-     * @param  array $entries  [['student_id' => int, 'status' => string], ...]
+     * @param  array  $entries  [['student_id' => int, 'status' => string], ...]
      */
     public function recordBulk(
         User $teacher,
@@ -54,18 +59,29 @@ class AttendanceService
     ): Collection {
         $this->assertTeacherCanRecord($teacher, $classroomId, $scheduleSlotId);
 
+        $studentIds = collect($entries)->pluck('student_id')->unique();
+        $enrolledStudentIds = StudentProfile::where('classroom_id', $classroomId)
+            ->whereIn('user_id', $studentIds)
+            ->pluck('user_id');
+
+        if ($enrolledStudentIds->count() !== $studentIds->count()) {
+            throw new HttpResponseException(
+                response()->json(['message' => 'One or more students are not enrolled in this classroom.'], 403)
+            );
+        }
+
         $records = collect();
         foreach ($entries as $entry) {
             $record = Attendance::updateOrCreate(
                 [
                     'student_user_id' => $entry['student_id'],
-                    'classroom_id'    => $classroomId,
-                    'date'            => $date,
+                    'classroom_id' => $classroomId,
+                    'date' => $date,
                 ],
                 [
-                    'status'           => AttendanceStatus::from($entry['status']),
+                    'status' => AttendanceStatus::from($entry['status']),
                     'schedule_slot_id' => $scheduleSlotId,
-                    'recorded_by'      => $teacher->id,
+                    'recorded_by' => $teacher->id,
                 ]
             );
             $records->push($record);
@@ -79,8 +95,10 @@ class AttendanceService
      */
     public function approveJustification(AbsenceJustification $justification): void
     {
-        $justification->update(['status' => AbsenceJustificationStatus::APPROVED]);
-        $justification->attendance->update(['status' => AttendanceStatus::EXCUSED]);
+        DB::transaction(function () use ($justification): void {
+            $justification->update(['status' => AbsenceJustificationStatus::APPROVED]);
+            $justification->attendance->update(['status' => AttendanceStatus::EXCUSED]);
+        });
     }
 
     /**

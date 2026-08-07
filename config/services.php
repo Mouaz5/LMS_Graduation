@@ -40,6 +40,7 @@ return [
         'secret' => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         'currency' => env('STRIPE_CURRENCY', 'usd'),
+        'test_mode' => env('STRIPE_TEST_MODE', env('APP_ENV') !== 'production'),
     ],
 
 ];
