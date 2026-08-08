@@ -203,13 +203,14 @@
                                         <div style="font-size: 11.5px; color: #94a3b8;">{{ $record->date?->format('l') }}</div>
                                     </td>
                                     <td style="color: #475569;">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
-                                    <td><span class="badge badge-{{ $record->status->value }}">{{ ucfirst($record->status->value) }}</span></td>
+                                    <td><span class="badge badge-{{ $record->status->value }}">{{ __(ucfirst($record->status->value)) }}</span></td>
                                     <td>
                                         @if($record->justification)
-                                            <span class="badge badge-{{ $record->justification->status->value }}">{{ ucfirst($record->justification->status->value) }}</span>
+                                            <span class="badge badge-{{ $record->justification->status->value }}">{{ __(ucfirst($record->justification->status->value)) }}</span>
                                         @elseif($record->isAbsent())
-                                            <button type="button" class="btn-justify"
-                                                    onclick="openJustifyModal({{ $record->id }}, '{{ $record->date?->format('M j, Y') }}')">
+                                            <button type="button" class="btn-justify justify-button"
+                                                    data-attendance-id="{{ $record->id }}"
+                                                    data-date="{{ $record->date?->format('M j, Y') }}">
                                                 {{ __("Submit Justification") }}
                                             </button>
                                         @else
@@ -258,7 +259,7 @@
                 <input type="file" name="document" class="modal-input" accept=".pdf,.jpg,.jpeg,.png">
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeJustifyModal()">{{ __("Cancel") }}</button>
+                    <button type="button" class="btn-cancel" id="cancel-justify-modal">{{ __("Cancel") }}</button>
                     <button type="submit" class="btn-submit">{{ __("Submit") }}</button>
                 </div>
             </form>
@@ -266,14 +267,20 @@
     </div>
 
     <script>
-    function openJustifyModal(attendanceId, dateStr) {
+    function openJustifyModal(button) {
         document.getElementById('justifyModal').classList.add('open');
-        document.getElementById('modalSubtitle').textContent = 'Absence on ' + dateStr;
-        document.getElementById('justifyForm').action = '/parent/attendance/' + attendanceId + '/justify';
+        document.getElementById('modalSubtitle').textContent = 'Absence on ' + button.dataset.date;
+        document.getElementById('justifyForm').action = '/parent/attendance/' + button.dataset.attendanceId + '/justify';
     }
     function closeJustifyModal() {
         document.getElementById('justifyModal').classList.remove('open');
     }
+    document.querySelectorAll('.justify-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            openJustifyModal(button);
+        });
+    });
+    document.getElementById('cancel-justify-modal').addEventListener('click', closeJustifyModal);
     document.getElementById('justifyModal').addEventListener('click', function(e) {
         if (e.target === this) closeJustifyModal();
     });

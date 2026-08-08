@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TeacherAttendanceController extends Controller
 {
@@ -76,6 +77,11 @@ class TeacherAttendanceController extends Controller
         $justifications = $this->queries->pendingJustifications(Auth::user());
 
         return view('teacher.justifications', compact('justifications'));
+    }
+
+    public function downloadJustificationDocument(AbsenceJustification $justification): StreamedResponse
+    {
+        return $this->justifications->download(Auth::user(), $justification);
     }
 
     /**

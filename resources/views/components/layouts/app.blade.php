@@ -402,6 +402,10 @@
     $user = auth()->user();
     $currentRole = session('impersonate_role', $user->role->value);
     $currentRole = is_string($currentRole) ? $currentRole : $currentRole->value;
+    $impersonating = $user->role->value === 'admin' && session()->has('impersonate_role');
+    $impersonationExpiresAt = $impersonating && is_numeric(session('impersonate_expires_at'))
+        ? \Illuminate\Support\Carbon::createFromTimestamp((int) session('impersonate_expires_at'))
+        : null;
     $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
 
     $allMenuItems = [
@@ -544,6 +548,16 @@
 
         <!-- Content -->
         <main class="content-area">
+            @if($impersonating)
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#fffbeb; border:1px solid #fcd34d; color:#92400e; padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:13px;">
+                    <span>{{ __('Read-only impersonation: :role. Expires at :time.', ['role' => __(ucfirst($currentRole)), 'time' => $impersonationExpiresAt?->format('H:i')]) }}</span>
+                    <form action="{{ route('admin.impersonate.stop') }}" method="POST" style="margin:0;">
+                        @csrf
+                        <button type="submit" style="padding:6px 12px; border:1px solid #d97706; border-radius:7px; background:#fff; color:#92400e; font-size:12px; font-weight:600; cursor:pointer;">{{ __('Stop impersonation') }}</button>
+                    </form>
+                </div>
+            @endif
+
             @if(session('success'))
                 <div class="flash-success">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

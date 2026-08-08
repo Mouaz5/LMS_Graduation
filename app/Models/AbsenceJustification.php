@@ -12,7 +12,7 @@ class AbsenceJustification extends Model
         'attendance_id',
         'reason',
         'submitted_by',
-        'document_url',
+        'document_path',
         'status',
     ];
 

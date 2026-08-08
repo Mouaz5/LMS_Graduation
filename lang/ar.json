@@ -488,5 +488,8 @@
     "Needs Work (&lt;40%)": "يحتاج عمل (&lt;40%)",
     "No learning objectives defined for :name.": "لا توجد أهداف تعليمية محددة لـ:name.",
     "Go to Test Builder": "اذهب إلى منشئ الاختبارات",
-    "Select both a subject and a student to view the knowledge map.": "اختر مادة وطالب لعرض خريطة المعرفة."
+    "Select both a subject and a student to view the knowledge map.": "اختر مادة وطالب لعرض خريطة المعرفة.",
+    "Pending": "قيد الانتظار",
+    "Approved": "مقبول",
+    "Rejected": "مرفوض"
 }

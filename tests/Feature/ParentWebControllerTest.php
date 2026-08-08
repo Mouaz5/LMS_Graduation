@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AbsenceJustification;
 use App\Models\AcademicYear;
 use App\Models\Attendance;
 use App\Models\Classroom;
@@ -11,6 +12,7 @@ use App\Models\StudentProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ParentWebControllerTest extends TestCase
@@ -132,5 +134,35 @@ class ParentWebControllerTest extends TestCase
             ->assertForbidden();
 
         $this->assertDatabaseCount('absence_justifications', 0);
+    }
+
+    public function test_justification_document_is_downloaded_only_by_a_linked_parent(): void
+    {
+        Storage::fake('local');
+
+        $attendance = Attendance::create([
+            'student_user_id' => $this->student->id,
+            'classroom_id' => $this->classroom->id,
+            'date' => '2026-05-18',
+            'status' => 'absent',
+            'recorded_by' => $this->teacher->id,
+        ]);
+        $path = 'justifications/medical-note.pdf';
+        Storage::disk('local')->put($path, 'private document');
+        $justification = AbsenceJustification::create([
+            'attendance_id' => $attendance->id,
+            'reason' => 'Doctor appointment',
+            'submitted_by' => $this->parent->id,
+            'document_path' => $path,
+            'status' => 'pending',
+        ]);
+
+        $this->actingAs($this->parent)
+            ->get(route('parent.attendance.justification.document', $justification))
+            ->assertDownload("justification-{$justification->id}.pdf");
+
+        $this->actingAs(User::factory()->create(['role' => 'parent']))
+            ->get(route('parent.attendance.justification.document', $justification))
+            ->assertForbidden();
     }
 }

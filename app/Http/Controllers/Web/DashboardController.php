@@ -10,16 +10,21 @@ use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
+use App\Services\ImpersonationService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(private ImpersonationService $impersonation) {}
+
     public function index(): View
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = UserRole::tryFrom(session('impersonate_role', $user->role->value)) ?? $user->role;
 
         return match ($role) {
             UserRole::ADMIN => view('dashboards.admin', ['user' => $user, 'stats' => $this->adminStats()]),
@@ -90,20 +95,37 @@ class DashboardController extends Controller
         ];
     }
 
-    public function impersonate(Request $request): \Illuminate\Http\RedirectResponse
+    public function impersonate(Request $request): RedirectResponse
     {
         abort_unless($request->user()->role === UserRole::ADMIN, 403);
 
-        $request->validate(['role' => ['required', \Illuminate\Validation\Rule::enum(UserRole::class)]]);
-        session(['impersonate_role' => $request->role]);
+        $validated = $request->validate([
+            'role' => [
+                'required',
+                Rule::in([
+                    UserRole::TEACHER->value,
+                    UserRole::STUDENT->value,
+                    UserRole::PARENT->value,
+                ]),
+            ],
+            'reason' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $this->impersonation->start(
+            $request->user(),
+            UserRole::from($validated['role']),
+            $validated['reason'] ?? null,
+        );
+
         return redirect()->route('dashboard');
     }
 
-    public function stopImpersonate(Request $request): \Illuminate\Http\RedirectResponse
+    public function stopImpersonate(Request $request): RedirectResponse
     {
         abort_unless($request->user()->role === UserRole::ADMIN, 403);
 
-        session()->forget('impersonate_role');
+        $this->impersonation->stop($request->user());
+
         return redirect()->route('dashboard');
     }
 }

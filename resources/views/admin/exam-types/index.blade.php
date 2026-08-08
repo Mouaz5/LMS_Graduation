@@ -185,9 +185,11 @@
                     <td>{{ $et->semester->name ?? '—' }}</td>
                     <td>{{ $et->semester->academicYear->name ?? '—' }}</td>
                     <td style="display:flex; gap:8px;">
-                        <button class="btn-edit" onclick="openEdit({{ $et->id }}, '{{ addslashes($et->name) }}', {{ $et->weight_percent }})">{{ __("Edit") }}</button>
-                        <form method="POST" action="{{ route('admin.exam-types.destroy', $et) }}"
-                              onsubmit="return confirm('{{ __('Delete this exam type?') }}')">
+                        <button type="button" class="btn-edit edit-exam-type"
+                                data-id="{{ $et->id }}"
+                                data-name="{{ $et->name }}"
+                                data-weight="{{ $et->weight_percent }}">{{ __("Edit") }}</button>
+                        <form method="POST" action="{{ route('admin.exam-types.destroy', $et) }}" class="delete-exam-type">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn-danger">{{ __("Delete") }}</button>
                         </form>
@@ -220,7 +222,7 @@
                 <input class="form-input" name="weight_percent" id="editWeight" type="number" step="0.01" min="0.01" max="100" required style="width:100%">
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn-secondary" onclick="closeEdit()">{{ __("Cancel") }}</button>
+                <button type="button" class="btn-secondary" id="close-edit">{{ __("Cancel") }}</button>
                 <button type="submit" class="btn-primary">{{ __("Save") }}</button>
             </div>
         </form>
@@ -228,17 +230,33 @@
 </div>
 
 <script>
-function openEdit(id, name, weight) {
-    document.getElementById('editName').value = name;
-    document.getElementById('editWeight').value = weight;
-    document.getElementById('editForm').action = `/admin/exam-types/${id}`;
-    document.getElementById('editModal').classList.add('open');
-}
-function closeEdit() {
-    document.getElementById('editModal').classList.remove('open');
-}
-document.getElementById('editModal').addEventListener('click', function(e) {
-    if (e.target === this) closeEdit();
+document.addEventListener('DOMContentLoaded', function() {
+    var editModal = document.getElementById('editModal');
+    var editForm = document.getElementById('editForm');
+
+    function closeEdit() {
+        editModal.classList.remove('open');
+    }
+
+    document.querySelectorAll('.edit-exam-type').forEach(function(button) {
+        button.addEventListener('click', function() {
+            document.getElementById('editName').value = button.dataset.name;
+            document.getElementById('editWeight').value = button.dataset.weight;
+            editForm.action = `/admin/exam-types/${button.dataset.id}`;
+            editModal.classList.add('open');
+        });
+    });
+
+    document.getElementById('close-edit').addEventListener('click', closeEdit);
+    editModal.addEventListener('click', function(e) {
+        if (e.target === editModal) closeEdit();
+    });
+
+    document.querySelectorAll('.delete-exam-type').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            if (!window.confirm('{{ __('Delete this exam type?') }}')) e.preventDefault();
+        });
+    });
 });
 </script>
 </x-layouts.app>

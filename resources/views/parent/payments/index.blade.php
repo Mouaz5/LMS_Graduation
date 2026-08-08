@@ -170,7 +170,7 @@
                         @else
                             <div class="child-select-group">
                                 <label class="child-select-label">{{ __("Pay for student") }}</label>
-                                <select class="child-select" onchange="updatePayButton(this, {{ $fee->id }})">
+                                <select class="child-select" data-fee-id="{{ $fee->id }}">
                                     @foreach($children as $child)
                                         @php
                                             $key = $year->id . '-' . $child->id;
@@ -194,7 +194,8 @@
                                data-year="{{ $year->name }}"
                                data-amount="{{ number_format((float) $fee->amount, 2, '.', '') }}"
                                data-currency="{{ strtoupper($fee->currency) }}"
-                               onclick="openPaymentModal({{ $fee->id }}, {{ $children->first()->id }}, '{{ $year->name }}', {{ number_format((float) $fee->amount, 2, '.', '') }}, '{{ strtoupper($fee->currency) }}', '{{ $children->first()->name }}')"
+                               data-student-id="{{ $children->first()->id }}"
+                               data-student-name="{{ $children->first()->name }}"
                                class="btn-pay">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                                 <span id="pay-label-{{ $fee->id }}">{{ __("Pay Now") }}</span>
@@ -247,7 +248,7 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closePaymentModal()">{{ __("Cancel") }}</button>
+                    <button type="button" class="btn-cancel" id="cancel-payment-modal">{{ __("Cancel") }}</button>
                     <button type="submit" class="btn-submit">{{ __("Pay Now") }}</button>
                 </div>
             </form>
@@ -286,16 +287,17 @@
             payLabel.textContent = '{{ __("Pay Now") }}';
         }
 
-        payBtn.setAttribute('onclick', 'openPaymentModal(' + feeId + ', ' + studentId + ', \'' + payBtn.dataset.year + '\', ' + payBtn.dataset.amount + ', \'' + payBtn.dataset.currency + '\', \'' + studentName + '\')');
+        payBtn.dataset.studentId = studentId;
+        payBtn.dataset.studentName = studentName;
     }
 
-    function openPaymentModal(feeId, studentId, yearName, amount, currency, studentName) {
-        currentFeeId = feeId;
-        document.getElementById('modal-subtitle').textContent = yearName + ' — ' + (studentName || '');
-        document.getElementById('modal-amount').textContent = parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('modal-currency').textContent = currency;
-        document.getElementById('modal-student-id').value = studentId;
-        document.getElementById('test-payment-form').action = '{{ route("parent.payments.test-process", "__FEE__") }}'.replace('__FEE__', feeId);
+    function openPaymentModal(button) {
+        currentFeeId = button.id.replace('pay-btn-', '');
+        document.getElementById('modal-subtitle').textContent = button.dataset.year + ' — ' + (button.dataset.studentName || '');
+        document.getElementById('modal-amount').textContent = parseFloat(button.dataset.amount).toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('modal-currency').textContent = button.dataset.currency;
+        document.getElementById('modal-student-id').value = button.dataset.studentId;
+        document.getElementById('test-payment-form').action = '{{ route("parent.payments.test-process", "__FEE__") }}'.replace('__FEE__', currentFeeId);
         document.getElementById('payment-modal').classList.add('active');
     }
 
@@ -305,10 +307,20 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.child-select').forEach(function(select) {
-            var feeId = select.onchange.toString().match(/(\d+)/)[1];
+            var feeId = select.dataset.feeId;
+            select.addEventListener('change', function() {
+                updatePayButton(select, feeId);
+            });
             updatePayButton(select, feeId);
         });
 
+        document.querySelectorAll('.btn-pay').forEach(function(button) {
+            button.addEventListener('click', function() {
+                openPaymentModal(button);
+            });
+        });
+
+        document.getElementById('cancel-payment-modal').addEventListener('click', closePaymentModal);
         document.getElementById('payment-modal').addEventListener('click', function(e) {
             if (e.target === this) closePaymentModal();
         });
@@ -316,10 +328,14 @@
     </script>
 @else
     <script>
-    function openPaymentModal(feeId, studentId) {
-        const checkoutUrl = '{{ route("parent.payments.checkout", "__FEE__") }}'.replace('__FEE__', feeId);
-        window.location.href = checkoutUrl + '?student=' + encodeURIComponent(studentId);
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-pay').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const checkoutUrl = '{{ route("parent.payments.checkout", "__FEE__") }}'.replace('__FEE__', button.id.replace('pay-btn-', ''));
+                window.location.href = checkoutUrl + '?student=' + encodeURIComponent(button.dataset.studentId);
+            });
+        });
+    });
     </script>
 @endif
 </x-layouts.app>

@@ -3,13 +3,16 @@
 namespace App\Services\Attendance;
 
 use App\Enums\AbsenceJustificationStatus;
+use App\Enums\UserRole;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Services\AttendanceService;
 use App\Services\Parent\ParentAccessService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AbsenceJustificationService
@@ -35,19 +38,44 @@ class AbsenceJustificationService
             throw new HttpException(422, __('A justification already exists for this absence.'));
         }
 
-        $documentUrl = null;
-        if ($document) {
-            $path = $document->store('justifications', 'public');
-            $documentUrl = Storage::url($path);
-        }
+        $documentPath = $document?->store('justifications', 'local');
 
         return AbsenceJustification::create([
             'attendance_id' => $attendance->id,
             'reason' => $reason,
             'submitted_by' => $parent->id,
-            'document_url' => $documentUrl,
+            'document_path' => $documentPath,
             'status' => AbsenceJustificationStatus::PENDING,
         ]);
+    }
+
+    public function download(User $user, AbsenceJustification $justification): StreamedResponse
+    {
+        $justification->loadMissing('attendance');
+        $attendance = $justification->attendance;
+
+        $authorized = false;
+        if ($user->role === UserRole::PARENT) {
+            $this->access->assertStudentBelongsToParent($user, $attendance->student_user_id);
+            $authorized = true;
+        } elseif ($user->role === UserRole::TEACHER) {
+            $authorized = $this->attendance->teacherCanRecord($user, $attendance->classroom_id, null);
+        }
+
+        if (! $authorized) {
+            throw new AuthorizationException(__('You are not authorized to access this document.'));
+        }
+
+        $path = $justification->document_path;
+        $disk = Storage::disk('local');
+
+        if (! $path || ! $disk->exists($path)) {
+            throw new HttpException(404, __('Document not found.'));
+        }
+
+        $extension = pathinfo($path, PATHINFO_EXTENSION) ?: 'bin';
+
+        return $disk->download($path, "justification-{$justification->id}.{$extension}");
     }
 
     public function approve(User $teacher, AbsenceJustification $justification): void

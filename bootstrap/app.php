@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\ActualRoleMiddleware;
 use App\Http\Middleware\ApiErrorResponseMiddleware;
+use App\Http\Middleware\ImpersonationMiddleware;
 use App\Http\Middleware\PermissionMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SetLocale;
@@ -27,6 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'actual-role' => ActualRoleMiddleware::class,
+            'impersonation' => ImpersonationMiddleware::class,
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
         ]);

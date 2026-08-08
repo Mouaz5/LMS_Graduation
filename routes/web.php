@@ -45,14 +45,16 @@ Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->nam
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name('stripe.webhook');
 
 // Authenticated
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'impersonation'])->group(function () {
     Route::get('/', fn () => redirect()->route('dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/admin/stop-impersonate', [DashboardController::class, 'stopImpersonate'])
+        ->middleware('actual-role:admin')
+        ->name('admin.impersonate.stop');
 
     // Admin user management
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::post('/impersonate', [DashboardController::class, 'impersonate'])->name('impersonate');
-        Route::post('/stop-impersonate', [DashboardController::class, 'stopImpersonate'])->name('impersonate.stop');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
@@ -129,6 +131,7 @@ Route::middleware('auth')->group(function () {
 
         // Attendance — justifications must be declared before any future param routes
         Route::get('/attendance/justifications', [TeacherAttendanceController::class, 'justifications'])->name('justifications');
+        Route::get('/attendance/justifications/{justification}/document', [TeacherAttendanceController::class, 'downloadJustificationDocument'])->name('justifications.document');
         Route::post('/attendance/justifications/{justification}/approve', [TeacherAttendanceController::class, 'approveJustification'])->name('justifications.approve');
         Route::post('/attendance/justifications/{justification}/reject', [TeacherAttendanceController::class, 'rejectJustification'])->name('justifications.reject');
         Route::get('/attendance', [TeacherAttendanceController::class, 'index'])->name('attendance');
@@ -168,6 +171,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/grades', [ParentWebController::class, 'grades'])->name('grades');
         Route::get('/results', [ParentWebController::class, 'results'])->name('results');
         Route::get('/attendance', [ParentWebController::class, 'attendance'])->name('attendance');
+        Route::get('/attendance/justifications/{justification}/document', [ParentWebController::class, 'downloadJustificationDocument'])->name('attendance.justification.document');
         Route::post('/attendance/{attendance}/justify', [ParentWebController::class, 'storeJustification'])->name('attendance.justify');
         Route::get('/behavioral-notes', [ParentWebController::class, 'behavioralNotes'])->name('behavioral-notes');
 

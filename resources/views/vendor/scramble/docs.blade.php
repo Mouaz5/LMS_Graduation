@@ -6,48 +6,8 @@
     <meta name="color-scheme" content="{{ $config->renderer()->get('theme', 'light') }}">
     <title>{{ $config->get('ui.title') ?? config('app.name') . ' - API Docs' }}</title>
 
-    <script src="https://unpkg.com/@stoplight/elements@8.4.2/web-components.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements@8.4.2/styles.min.css">
-
-    <script>
-        const originalFetch = window.fetch;
-
-        // intercept TryIt requests and add the XSRF-TOKEN header,
-        // which is necessary for Sanctum cookie-based authentication to work correctly
-        window.fetch = (url, options) => {
-            const CSRF_TOKEN_COOKIE_KEY = "XSRF-TOKEN";
-            const CSRF_TOKEN_HEADER_KEY = "X-XSRF-TOKEN";
-            const getCookieValue = (key) => {
-                const cookie = document.cookie.split(';').find((cookie) => cookie.trim().startsWith(key));
-                return cookie?.split("=")[1];
-            };
-
-            const updateFetchHeaders = (
-                headers,
-                headerKey,
-                headerValue,
-            ) => {
-                if (headers instanceof Headers) {
-                    headers.set(headerKey, headerValue);
-                } else if (Array.isArray(headers)) {
-                    headers.push([headerKey, headerValue]);
-                } else if (headers) {
-                    headers[headerKey] = headerValue;
-                }
-            };
-            const csrfToken = getCookieValue(CSRF_TOKEN_COOKIE_KEY);
-            if (csrfToken) {
-                const { headers = new Headers() } = options || {};
-                updateFetchHeaders(headers, CSRF_TOKEN_HEADER_KEY, decodeURIComponent(csrfToken));
-                return originalFetch(url, {
-                    ...options,
-                    headers,
-                });
-            }
-
-            return originalFetch(url, options);
-        };
-    </script>
+    <script src="{{ asset('vendor/scramble/elements-web-components.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/scramble/elements-styles.min.css') }}">
 
     <style>
         html, body { margin:0; height:100%; }

@@ -17,12 +17,12 @@ class RoleMiddleware
                 : redirect()->route('login');
         }
 
-        // Respect impersonation session for web routes
-        $effectiveRole = session('impersonate_role', $request->user()->role->value);
+        $effectiveRole = $request->is('api/*')
+            ? $request->user()->role->value
+            : session('impersonate_role', $request->user()->role->value);
 
-        $actualRole = $request->user()->role->value;
-
-        if (! in_array($effectiveRole, $roles) && ! in_array($actualRole, $roles)) {
+        if (! in_array($effectiveRole, UserRole::values(), true)
+            || ! in_array($effectiveRole, $roles, true)) {
             return $request->expectsJson()
                 ? response()->json(['message' => 'Forbidden.'], 403)
                 : abort(403);

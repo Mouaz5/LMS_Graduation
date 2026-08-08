@@ -1,6 +1,6 @@
 <?php
 
-use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
+use App\Http\Middleware\AdminDocsAccessMiddleware;
 
 return [
     /*
@@ -56,10 +56,10 @@ return [
         'elements' => [
             'view' => 'scramble::docs',
             'theme' => 'light',
-            'hideTryIt' => false,
+            'hideTryIt' => true,
             'hideSchemas' => false,
             'logo' => '',
-            'tryItCredentialsPolicy' => 'include',
+            'tryItCredentialsPolicy' => 'omit',
             'layout' => 'responsive',
             'router' => 'hash',
         ],
@@ -68,13 +68,12 @@ return [
          */
         'scalar' => [
             'view' => 'scramble::scalar',
-            'cdn' => 'https://cdn.jsdelivr.net/npm/@scalar/api-reference',
+            'cdn' => null,
             'theme' => 'laravel',
-            'proxyUrl' => 'https://proxy.scalar.com',
             'darkMode' => false,
             'showDeveloperTools' => 'never',
             'agent' => ['disabled' => true],
-            'credentials' => 'include',
+            'credentials' => 'omit',
         ],
     ],
 
@@ -132,7 +131,8 @@ return [
 
     'middleware' => [
         'web',
-        RestrictedDocsAccess::class,
+        'auth',
+        AdminDocsAccessMiddleware::class,
     ],
 
     'extensions' => [],

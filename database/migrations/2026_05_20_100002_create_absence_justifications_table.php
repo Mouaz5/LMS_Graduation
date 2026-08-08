@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('attendance_id')->unique()->constrained('attendance')->cascadeOnDelete();
             $table->text('reason');
             $table->foreignId('submitted_by')->constrained('users')->cascadeOnDelete();
-            $table->string('document_url')->nullable();
+            $table->string('document_path')->nullable();
             $table->enum('status', AbsenceJustificationStatus::values())->default(AbsenceJustificationStatus::PENDING->value);
             $table->timestamps();
         });

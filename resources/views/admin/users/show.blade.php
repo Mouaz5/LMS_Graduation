@@ -200,7 +200,8 @@
                         </div>
                         <span class="relation-chip">{{ ucfirst($parent->pivot->relation) }}</span>
                         <form method="POST" action="{{ route('admin.users.unlink-parent', $user) }}"
-                              onsubmit="return confirm('Unlink {{ $parent->name }}?')">
+                              class="unlink-relation-form"
+                              data-confirm="{{ __('Unlink :name?', ['name' => $parent->name]) }}">
                             @csrf @method('DELETE')
                             <input type="hidden" name="parent_user_id" value="{{ $parent->id }}">
                             <button type="submit" class="btn-unlink">{{ __('Unlink') }}</button>
@@ -261,7 +262,8 @@
                         </div>
                         <span class="relation-chip">{{ ucfirst($child->pivot->relation) }}</span>
                         <form method="POST" action="{{ route('admin.users.unlink-child', $user) }}"
-                              onsubmit="return confirm('Unlink {{ $child->name }}?')">
+                              class="unlink-relation-form"
+                              data-confirm="{{ __('Unlink :name?', ['name' => $child->name]) }}">
                             @csrf @method('DELETE')
                             <input type="hidden" name="student_user_id" value="{{ $child->id }}">
                             <button type="submit" class="btn-unlink">{{ __('Unlink') }}</button>
@@ -318,4 +320,13 @@
         </div>
     @endif
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.unlink-relation-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            if (!window.confirm(form.dataset.confirm)) e.preventDefault();
+        });
+    });
+});
+</script>
 </x-layouts.app>
