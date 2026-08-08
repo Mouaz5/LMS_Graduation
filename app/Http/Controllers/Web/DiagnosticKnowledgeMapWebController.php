@@ -18,4 +18,13 @@ class DiagnosticKnowledgeMapWebController extends Controller
             $request->integer('student_id') ?: null,
         ));
     }
+
+    public function teacher(Request $request): View
+    {
+        return view('admin.diagnostic.knowledge-map', $this->maps->teacherData(
+            $request->user(),
+            $request->integer('subject_id') ?: null,
+            $request->integer('student_id') ?: null,
+        ));
+    }
 }

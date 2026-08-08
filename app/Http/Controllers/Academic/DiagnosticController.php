@@ -7,6 +7,7 @@ use App\Http\Requests\Diagnostic\KnowledgeMapRequest;
 use App\Http\Requests\Diagnostic\StartAttemptRequest;
 use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
 use App\Http\Responses\ApiResponse;
+use App\Models\Subject;
 use App\Models\User;
 use App\Services\Diagnostic\DiagnosticKnowledgeMapService;
 use App\Services\DiagnosticAttemptService;
@@ -64,7 +65,8 @@ class DiagnosticController extends Controller
     public function knowledgeMap(KnowledgeMapRequest $request): JsonResponse
     {
         $student = User::findOrFail($request->integer('student_id'));
-        $this->authorize('viewRecords', $student);
+        $subject = Subject::findOrFail($request->integer('subject_id'));
+        $this->authorize('viewKnowledgeMap', [$student, $subject]);
 
         $tree = $this->maps->treeFor(
             $student->id,

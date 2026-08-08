@@ -6,6 +6,7 @@ use App\Domain\MasteryLevel;
 use App\Models\KnowledgeMapResult;
 use App\Models\LearningObjective;
 use App\Models\Subject;
+use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -31,6 +32,35 @@ class DiagnosticKnowledgeMapService
         $tree = $subject ? $this->treeFor($student->id, $subject->id) : [];
 
         return compact('subjects', 'subject', 'tree');
+    }
+
+    public function teacherData(User $teacher, ?int $subjectId, ?int $studentId): array
+    {
+        $assignments = TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
+            ->with(['subject', 'classroom'])
+            ->get();
+        $subjectIds = $assignments->pluck('subject_id')->unique();
+        $classroomIds = $assignments->pluck('classroom_id')->unique();
+        $subjects = Subject::whereIn('id', $subjectIds)->orderBy('name')->get();
+        $students = User::where('role', 'student')
+            ->whereHas('studentProfile', fn ($query) => $query->whereIn('classroom_id', $classroomIds))
+            ->orderBy('name')
+            ->get();
+        $subject = $subjectId && $subjectIds->contains($subjectId) ? Subject::find($subjectId) : null;
+        $student = $studentId && $students->contains('id', $studentId) ? $students->find($studentId) : null;
+        $tree = $subject && $student && $this->teacherCanView($teacher, $student->id, $subject->id)
+            ? $this->treeFor($student->id, $subject->id)
+            : [];
+
+        return compact('subjects', 'students', 'subject', 'student', 'tree');
+    }
+
+    public function teacherCanView(User $teacher, int $studentId, int $subjectId): bool
+    {
+        return TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
+            ->where('subject_id', $subjectId)
+            ->whereHas('classroom.studentProfiles', fn ($query) => $query->where('user_id', $studentId))
+            ->exists();
     }
 
     public function treeFor(int $studentId, int $subjectId): array

@@ -32,14 +32,14 @@ Route::get('/language/{locale}', [LocaleController::class, 'switch'])->name('lan
 
 // Auth
 Route::get('/login', [AuthWebController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthWebController::class, 'login'])->name('login.post');
+Route::post('/login', [AuthWebController::class, 'login'])->middleware('throttle:auth')->name('login.post');
 Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
 
 // Password reset
 Route::get('/forgot-password', [AuthWebController::class, 'showForgotPassword'])->name('password.request');
-Route::post('/forgot-password', [AuthWebController::class, 'sendResetLink'])->name('password.email');
+Route::post('/forgot-password', [AuthWebController::class, 'sendResetLink'])->middleware('throttle:auth')->name('password.email');
 Route::get('/reset-password/{token}', [AuthWebController::class, 'showResetPassword'])->name('password.reset');
-Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->name('password.update');
+Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->middleware('throttle:auth')->name('password.update');
 
 // Stripe Webhook (public — no auth, verified via signature)
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name('stripe.webhook');
@@ -142,7 +142,7 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::post('/behavioral-notes', [TeacherBehavioralNoteController::class, 'store'])->name('behavioral-notes.store');
 
         // Diagnostic knowledge map (view-only for teacher)
-        Route::get('/diagnostic/knowledge-map', [DiagnosticKnowledgeMapWebController::class, 'admin'])->name('diagnostic.knowledge-map');
+        Route::get('/diagnostic/knowledge-map', [DiagnosticKnowledgeMapWebController::class, 'teacher'])->name('diagnostic.knowledge-map');
 
         // Salaries — teacher sees own salary transfers
         Route::get('/salaries', [SalaryWebController::class, 'index'])->name('salaries');
@@ -178,7 +178,9 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         // Payments — E-Payment via Stripe
         Route::get('/payments', [PaymentWebController::class, 'index'])->name('payments.index');
         Route::get('/payments/checkout/{tuitionFee}', [PaymentWebController::class, 'checkout'])->name('payments.checkout');
-        Route::post('/payments/test-process/{tuitionFee}', [PaymentWebController::class, 'testProcess'])->name('payments.test-process');
+        if (app()->environment(['local', 'testing'])) {
+            Route::post('/payments/test-process/{tuitionFee}', [PaymentWebController::class, 'testProcess'])->name('payments.test-process');
+        }
         Route::get('/payments/success', [PaymentWebController::class, 'success'])->name('payments.success');
         Route::get('/payments/history', [PaymentWebController::class, 'history'])->name('payments.history');
     });
