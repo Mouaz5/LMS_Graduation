@@ -7,16 +7,18 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordWebRequest;
 use App\Models\User;
+use App\Services\PasswordResetOtpService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AuthWebController extends Controller
 {
+    public function __construct(private readonly PasswordResetOtpService $otpService) {}
+
     public function showLogin(): View|RedirectResponse
     {
         if (Auth::check()) {
@@ -64,38 +66,40 @@ class AuthWebController extends Controller
 
     public function sendResetLink(ForgotPasswordRequest $request): RedirectResponse
     {
-        $status = Password::sendResetLink($request->only('email'));
+        $user = User::where('email', $request->email)->first();
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
+        if ($user) {
+            $this->otpService->send($user->email);
         }
 
-        return back()->withErrors(['email' => __($status)])->withInput();
+        return redirect()
+            ->route('password.reset', ['email' => $request->email])
+            ->with('status', __('If an account exists for this email, a reset code has been sent.'));
     }
 
-    public function showResetPassword(Request $request, string $token): View
+    public function showResetPassword(Request $request): View
     {
         return view('auth.reset-password', [
-            'token' => $token,
             'email' => $request->query('email'),
         ]);
     }
 
     public function resetPassword(ResetPasswordWebRequest $request): RedirectResponse
     {
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
-                $user->forceFill(['password' => $password])->setRememberToken(Str::random(60));
-                $user->save();
-                event(new PasswordReset($user));
-            }
-        );
-
-        if ($status === Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+        if (! $this->otpService->verify($request->email, $request->otp)) {
+            return back()->withErrors(['otp' => __('This code is invalid or has expired.')])->withInput();
         }
 
-        return back()->withErrors(['email' => __($status)])->withInput();
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            return back()->withErrors(['otp' => __('This code is invalid or has expired.')])->withInput();
+        }
+
+        $user->forceFill(['password' => $request->password])->setRememberToken(Str::random(60));
+        $user->save();
+        event(new PasswordReset($user));
+
+        return redirect()->route('login')->with('status', __('Your password has been reset.'));
     }
 }

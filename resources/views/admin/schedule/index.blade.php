@@ -281,11 +281,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>{{ __("Start Time") }}</label>
-                        <input type="time" name="start_time" step="300" required>
+                        <input type="time" name="start_time" required>
                     </div>
                     <div class="form-group">
                         <label>{{ __("End Time") }}</label>
-                        <input type="time" name="end_time" step="300" required>
+                        <input type="time" name="end_time" required>
                     </div>
                 </div>
 

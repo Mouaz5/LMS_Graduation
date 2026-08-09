@@ -31,7 +31,7 @@ class ScheduleWebController extends Controller
                 ->where('classroom_id', $classroomId)
                 ->where('semester_id', $semesterId)
                 ->get()
-                ->keyBy(fn ($s) => $s->day_of_week . '_' . $s->period_number);
+                ->keyBy(fn ($s) => $s->day_of_week->value . '_' . $s->period_number);
         }
 
         return view('admin.schedule.index', compact(

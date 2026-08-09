@@ -38,7 +38,7 @@ Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
 // Password reset
 Route::get('/forgot-password', [AuthWebController::class, 'showForgotPassword'])->name('password.request');
 Route::post('/forgot-password', [AuthWebController::class, 'sendResetLink'])->middleware('throttle:auth')->name('password.email');
-Route::get('/reset-password/{token}', [AuthWebController::class, 'showResetPassword'])->name('password.reset');
+Route::get('/reset-password', [AuthWebController::class, 'showResetPassword'])->name('password.reset');
 Route::post('/reset-password', [AuthWebController::class, 'resetPassword'])->middleware('throttle:auth')->name('password.update');
 
 // Stripe Webhook (public — no auth, verified via signature)

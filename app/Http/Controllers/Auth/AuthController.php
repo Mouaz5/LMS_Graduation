@@ -9,16 +9,18 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
+use App\Services\PasswordResetOtpService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function __construct(private readonly PasswordResetOtpService $otpService) {}
+
     public function login(LoginRequest $request): JsonResponse
     {
         $user = User::where('email', $request->email)->first();
@@ -69,31 +71,32 @@ class AuthController extends Controller
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
     {
-        $status = Password::sendResetLink($request->only('email'));
+        $user = User::where('email', $request->email)->first();
 
-        if ($status !== Password::RESET_LINK_SENT) {
-            return response()->json(['message' => __($status)], 422);
+        if ($user) {
+            $this->otpService->send($user->email);
         }
 
-        return ApiResponse::success(message: __($status));
+        return ApiResponse::success(message: __('If an account exists for this email, a reset code has been sent.'));
     }
 
     public function resetPassword(ResetPasswordRequest $request): JsonResponse
     {
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function (User $user, string $password) {
-                $user->forceFill(['password' => $password])->setRememberToken(Str::random(60));
-                $user->save();
-                event(new PasswordReset($user));
-            }
-        );
-
-        if ($status !== Password::PASSWORD_RESET) {
-            return response()->json(['message' => __($status)], 422);
+        if (! $this->otpService->verify($request->email, $request->otp)) {
+            return response()->json(['message' => __('This code is invalid or has expired.')], 422);
         }
 
-        return ApiResponse::success(message: __($status));
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json(['message' => __('This code is invalid or has expired.')], 422);
+        }
+
+        $user->forceFill(['password' => $request->password])->setRememberToken(Str::random(60));
+        $user->save();
+        event(new PasswordReset($user));
+
+        return ApiResponse::success(message: __('Your password has been reset.'));
     }
 
     private function userResponse(User $user): array

@@ -26,7 +26,7 @@
         .sub { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 28px; }
         .form-group { margin-bottom: 18px; }
         label { display: block; font-size: 12.5px; font-weight: 600; color: #374151; margin-bottom: 7px; }
-        input[type="email"], input[type="password"] {
+        input[type="email"], input[type="password"], input[type="text"] {
             width: 100%; padding: 11px 14px;
             border: 1.5px solid #e2e8f0; border-radius: 10px;
             font-size: 14px; font-family: 'DM Sans', 'Cairo', sans-serif; color: #0f172a;
@@ -63,17 +63,26 @@
     </div>
     <div class="card">
         <h1>{{ __("Reset your password") }}</h1>
-        <p class="sub">{{ __("Choose a new password for your account.") }}</p>
+        <p class="sub">{{ __("Enter the code we emailed you and choose a new password.") }}</p>
 
         <form action="{{ route('password.update') }}" method="POST">
             @csrf
-            <input type="hidden" name="token" value="{{ $token }}">
 
             <div class="form-group">
                 <label for="email">{{ __("Email Address") }}</label>
                 <input type="email" id="email" name="email" value="{{ old('email', $email ?? '') }}"
                        required autocomplete="email">
                 @error('email')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="otp">{{ __("Reset Code") }}</label>
+                <input type="text" id="otp" name="otp" value="{{ old('otp') }}"
+                       inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+                       placeholder="123456" required autocomplete="one-time-code">
+                @error('otp')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>

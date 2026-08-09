@@ -93,7 +93,7 @@
         </div>
 
         <h1>{{ __("Forgot your password?") }}</h1>
-        <p class="sub">{{ __("Enter your email address and we'll send you a link to reset your password.") }}</p>
+        <p class="sub">{{ __("Enter your email address and we'll send you a code to reset your password.") }}</p>
 
         @if(session('status'))
             <div class="success-banner">
@@ -114,7 +114,7 @@
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
-            <button type="submit" class="btn">{{ __("Send Reset Link") }}</button>
+            <button type="submit" class="btn">{{ __("Send Reset Code") }}</button>
         </form>
 
         <a href="{{ route('login') }}" class="back-link">
