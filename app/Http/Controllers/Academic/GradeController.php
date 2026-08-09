@@ -10,18 +10,15 @@ use App\Models\StudentGrade;
 use App\Models\User;
 use App\Services\Grade\GradeEntryService;
 use App\Services\Grade\ReportCardService;
-use App\Services\ReportCardPdfService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Mpdf\Output\Destination;
 
 class GradeController extends Controller
 {
     public function __construct(
         private GradeEntryService $entries,
         private ReportCardService $reports,
-        private ReportCardPdfService $pdf,
     ) {}
 
     /** POST /api/v1/grades/bulk */
@@ -89,26 +86,16 @@ class GradeController extends Controller
     /** GET /api/v1/students/{id}/report-card/pdf?semester_id=Y */
     public function reportCardPdf(Request $request, int $id): Response
     {
-        $this->authorizeReportCardAccess($id);
-        $semesterId = $request->integer('semester_id') ?: null;
-        $data = $this->reports->assembleById($id, $semesterId);
-        $student = $data->student;
-        $semester = $data->semester;
-        $summaries = $data->summaries;
-        $grades = $data->grades->groupBy('subject_id');
-        $examTypes = $data->examTypes;
+        $student = $this->authorizeReportCardAccess($id);
 
-        $mpdf = $this->pdf->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
-        $filename = "report_card_{$student->name}_{$semesterId}.pdf";
-
-        return response($mpdf->Output($filename, Destination::STRING_RETURN))
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
+        return $this->reports->download($student, $request->integer('semester_id') ?: null);
     }
 
-    private function authorizeReportCardAccess(int $studentId): void
+    private function authorizeReportCardAccess(int $studentId): User
     {
         $student = User::findOrFail($studentId);
         $this->authorize('viewRecords', $student);
+
+        return $student;
     }
 }

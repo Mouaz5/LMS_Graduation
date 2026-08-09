@@ -15,17 +15,6 @@ class ParentAccessService
             ->get();
     }
 
-    public function selectChild(Collection $children, mixed $childId): ?User
-    {
-        if ($childId === null) {
-            return $children->first();
-        }
-
-        return $children->first(
-            fn (User $child): bool => (string) $child->id === (string) $childId
-        );
-    }
-
     public function findChild(User $parent, mixed $childId): ?User
     {
         $query = $parent->children()->with('studentProfile.classroom.grade');
@@ -37,13 +26,15 @@ class ParentAccessService
         return $query->first();
     }
 
-    public function child(User $parent, User $child, ?string $message = null): User
-    {
-        // Verify this child belongs to the parent
-        $authorizedChild = $parent->children()
-            ->with('studentProfile.classroom.grade')
-            ->whereKey($child->getKey())
-            ->first();
+    public function assertChild(
+        User $parent,
+        int|User $child,
+        ?string $message = null,
+    ): User {
+        $authorizedChild = $this->findChild(
+            $parent,
+            $child instanceof User ? $child->getKey() : $child,
+        );
 
         if (! $authorizedChild) {
             throw new AuthorizationException(
@@ -52,21 +43,5 @@ class ParentAccessService
         }
 
         return $authorizedChild;
-    }
-
-    public function assertStudentBelongsToParent(
-        User $parent,
-        int $studentId,
-        ?string $message = null
-    ): void {
-        $belongsToParent = $parent->children()
-            ->where('student_user_id', $studentId)
-            ->exists();
-
-        if (! $belongsToParent) {
-            throw new AuthorizationException(
-                $message ?? __('This student is not linked to your account.')
-            );
-        }
     }
 }

@@ -2,18 +2,20 @@
 
 namespace App\Services\Grade;
 
-use App\Enums\UserRole;
 use App\Models\ExamType;
 use App\Models\StudentGrade;
-use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
-use App\Services\GradeService;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Services\Access\StudentRecordAccessService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class GradeEntryService
 {
+    public function __construct(
+        private StudentRecordAccessService $access,
+        private GradeService $grades,
+    ) {}
+
     public function storeBulk(User $actor, array $rows): int
     {
         foreach ($rows as $index => $row) {
@@ -57,7 +59,7 @@ class GradeEntryService
                 ];
             }
 
-            GradeService::refreshSummaries($tuples);
+            $this->grades->refreshSummaries($tuples);
         });
 
         return count($rows);
@@ -91,17 +93,6 @@ class GradeEntryService
 
     private function assertCanEnterGrade(User $actor, int $subjectId, int $studentId): void
     {
-        if ($actor->role === UserRole::ADMIN) {
-            return;
-        }
-
-        $isAssigned = TeacherSubjectClassroom::where('teacher_user_id', $actor->id)
-            ->where('subject_id', $subjectId)
-            ->whereHas('classroom.studentProfiles', fn ($query) => $query->where('user_id', $studentId))
-            ->exists();
-
-        if (! $isAssigned) {
-            throw new AuthorizationException(__('You are not assigned to this student and subject.'));
-        }
+        $this->access->assertTeacherCanView($actor, $studentId, $subjectId);
     }
 }

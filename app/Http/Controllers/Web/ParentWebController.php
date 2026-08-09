@@ -13,13 +13,11 @@ use App\Services\Parent\ParentAccessService;
 use App\Services\Parent\ParentAttendanceService;
 use App\Services\Parent\ParentBehavioralNoteService;
 use App\Services\Parent\ParentScheduleService;
-use App\Services\ReportCardPdfService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Mpdf\Output\Destination;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ParentWebController extends Controller
@@ -69,27 +67,11 @@ class ParentWebController extends Controller
 
     public function downloadReportCard(Request $request, User $child): Response
     {
-        $data = $this->academic->reportCard(
+        return $this->academic->download(
             Auth::user(),
             $child,
             $request->integer('semester_id') ?: null,
         );
-
-        $student = $data->student;
-        $semester = $data->semester;
-        $summaries = $data->summaries;
-        $grades = $data->grades->groupBy('subject_id');
-        $examTypes = $data->examTypes;
-        $semesterId = $request->integer('semester_id');
-
-        $mpdf = app(ReportCardPdfService::class)
-            ->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
-
-        $filename = "report_card_{$student->name}_{$semesterId}.pdf";
-
-        return response($mpdf->Output($filename, Destination::STRING_RETURN))
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
     }
 
     public function attendance(Request $request): View

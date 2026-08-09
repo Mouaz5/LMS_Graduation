@@ -7,7 +7,6 @@ use App\Enums\UserRole;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Models\User;
-use App\Services\AttendanceService;
 use App\Services\Parent\ParentAccessService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
@@ -28,7 +27,7 @@ class AbsenceJustificationService
         string $reason,
         ?UploadedFile $document,
     ): AbsenceJustification {
-        $this->access->assertStudentBelongsToParent(
+        $this->access->assertChild(
             $parent,
             $attendance->student_user_id,
             __('You are not a parent of this student.'),
@@ -56,7 +55,7 @@ class AbsenceJustificationService
 
         $authorized = false;
         if ($user->role === UserRole::PARENT) {
-            $this->access->assertStudentBelongsToParent($user, $attendance->student_user_id);
+            $this->access->assertChild($user, $attendance->student_user_id);
             $authorized = true;
         } elseif ($user->role === UserRole::TEACHER) {
             $authorized = $this->attendance->teacherCanRecord($user, $attendance->classroom_id, null);

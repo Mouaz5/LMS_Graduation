@@ -7,7 +7,7 @@ use App\Models\User;
 
 class ParentAttendanceService
 {
-    public function __construct(private ParentAccessService $access) {}
+    public function __construct(private ParentChildContextService $context) {}
 
     public function records(
         User $parent,
@@ -15,8 +15,7 @@ class ParentAttendanceService
         ?string $dateFrom,
         ?string $dateTo,
     ): array {
-        $children = $this->access->children($parent);
-        $selectedChild = $this->access->selectChild($children, $childId);
+        ['children' => $children, 'selectedChild' => $selectedChild] = $this->context->forParent($parent, $childId);
         $records = collect();
 
         if ($selectedChild) {

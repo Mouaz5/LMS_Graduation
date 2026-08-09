@@ -13,7 +13,7 @@ class ParentScheduleService
 
     public function forChild(User $parent, User $child, ?string $requestedDay): array
     {
-        $child = $this->access->child($parent, $child);
+        $child = $this->access->assertChild($parent, $child);
         $classroom = $child->studentProfile?->classroom;
 
         $allSlots = $classroom

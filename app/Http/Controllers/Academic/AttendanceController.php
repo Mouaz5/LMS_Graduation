@@ -8,7 +8,7 @@ use App\Http\Requests\Academic\IndexAttendanceRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Attendance;
 use App\Models\User;
-use App\Services\AttendanceService;
+use App\Services\Attendance\AttendanceService;
 use Illuminate\Http\JsonResponse;
 
 class AttendanceController extends Controller

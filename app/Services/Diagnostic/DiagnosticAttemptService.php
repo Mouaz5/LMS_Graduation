@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Diagnostic;
 
 use App\Models\DiagnosticAnswer;
 use App\Models\DiagnosticAttempt;

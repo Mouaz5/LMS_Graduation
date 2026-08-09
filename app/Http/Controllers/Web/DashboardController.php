@@ -11,6 +11,7 @@ use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use App\Services\ImpersonationService;
+use App\Services\Parent\ParentAccessService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,10 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __construct(private ImpersonationService $impersonation) {}
+    public function __construct(
+        private ImpersonationService $impersonation,
+        private ParentAccessService $parentAccess,
+    ) {}
 
     public function index(): View
     {
@@ -78,7 +82,7 @@ class DashboardController extends Controller
 
     private function parentDashboard(User $user): View
     {
-        $children = $user->children()->with('studentProfile.classroom.grade')->get();
+        $children = $this->parentAccess->children($user);
 
         return view('dashboards.parent', compact('user', 'children'));
     }

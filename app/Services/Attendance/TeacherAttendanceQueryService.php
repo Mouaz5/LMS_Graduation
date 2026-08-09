@@ -7,7 +7,6 @@ use App\Models\AbsenceJustification;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\User;
-use App\Services\AttendanceService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;

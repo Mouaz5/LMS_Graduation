@@ -7,12 +7,11 @@ use App\Models\User;
 
 class ParentBehavioralNoteService
 {
-    public function __construct(private ParentAccessService $access) {}
+    public function __construct(private ParentChildContextService $context) {}
 
     public function forParent(User $parent, mixed $childId): array
     {
-        $children = $this->access->children($parent);
-        $selectedChild = $this->access->selectChild($children, $childId);
+        ['children' => $children, 'selectedChild' => $selectedChild] = $this->context->forParent($parent, $childId);
         $notes = collect();
 
         if ($selectedChild) {

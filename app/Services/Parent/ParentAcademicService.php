@@ -5,18 +5,19 @@ namespace App\Services\Parent;
 use App\Domain\ReportCardData;
 use App\Models\User;
 use App\Services\Grade\ReportCardService;
+use Illuminate\Http\Response;
 
 class ParentAcademicService
 {
     public function __construct(
         private ParentAccessService $access,
+        private ParentChildContextService $context,
         private ReportCardService $reports,
     ) {}
 
     public function results(User $parent, mixed $childId, ?int $semesterId): array
     {
-        $children = $this->access->children($parent);
-        $selectedChild = $this->access->selectChild($children, $childId);
+        ['children' => $children, 'selectedChild' => $selectedChild] = $this->context->forParent($parent, $childId);
         $semesters = $this->reports->semesters();
         $selectedSemesterId = $semesterId ?: $semesters->first()?->id;
         $academic = $selectedChild
@@ -44,8 +45,15 @@ class ParentAcademicService
 
     public function reportCard(User $parent, User $child, ?int $semesterId): ReportCardData
     {
-        $child = $this->access->child($parent, $child);
+        $child = $this->access->assertChild($parent, $child);
 
         return $this->reports->assemble($child, $semesterId ?: null);
+    }
+
+    public function download(User $parent, User $child, ?int $semesterId): Response
+    {
+        $child = $this->access->assertChild($parent, $child);
+
+        return $this->reports->download($child, $semesterId);
     }
 }

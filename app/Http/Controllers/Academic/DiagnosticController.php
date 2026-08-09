@@ -9,8 +9,8 @@ use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Subject;
 use App\Models\User;
+use App\Services\Diagnostic\DiagnosticAttemptService;
 use App\Services\Diagnostic\DiagnosticKnowledgeMapService;
-use App\Services\DiagnosticAttemptService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

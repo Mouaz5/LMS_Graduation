@@ -7,19 +7,14 @@ use App\Models\Attendance;
 use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use App\Services\Grade\ReportCardService;
-use App\Services\ReportCardPdfService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Mpdf\Output\Destination;
 
 class StudentWebController extends Controller
 {
-    public function __construct(
-        private ReportCardService $reports,
-        private ReportCardPdfService $pdf,
-    ) {}
+    public function __construct(private ReportCardService $reports) {}
 
     public function schedule(): View
     {
@@ -67,20 +62,8 @@ class StudentWebController extends Controller
     public function downloadReportCard(Request $request): Response
     {
         $user = Auth::user();
-        $semesterId = $request->integer('semester_id') ?: null;
-        $data = $this->reports->assemble($user, $semesterId);
-        $student = $data->student;
-        $semester = $data->semester;
-        $summaries = $data->summaries;
-        $grades = $data->grades->groupBy('subject_id');
-        $examTypes = $data->examTypes;
 
-        $mpdf = $this->pdf->render(compact('student', 'semester', 'summaries', 'grades', 'examTypes'));
-        $filename = "report_card_{$student->name}_{$semesterId}.pdf";
-
-        return response($mpdf->Output($filename, Destination::STRING_RETURN))
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"{$filename}\"");
+        return $this->reports->download($user, $request->integer('semester_id') ?: null);
     }
 
     public function attendance(Request $request): View

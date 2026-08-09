@@ -8,10 +8,13 @@ use App\Models\LearningObjective;
 use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
+use App\Services\Access\StudentRecordAccessService;
 use Illuminate\Support\Collection;
 
 class DiagnosticKnowledgeMapService
 {
+    public function __construct(private StudentRecordAccessService $access) {}
+
     public function adminData(?int $subjectId, ?int $studentId): array
     {
         $subjects = Subject::orderBy('name')->get();
@@ -57,10 +60,7 @@ class DiagnosticKnowledgeMapService
 
     public function teacherCanView(User $teacher, int $studentId, int $subjectId): bool
     {
-        return TeacherSubjectClassroom::where('teacher_user_id', $teacher->id)
-            ->where('subject_id', $subjectId)
-            ->whereHas('classroom.studentProfiles', fn ($query) => $query->where('user_id', $studentId))
-            ->exists();
+        return $this->access->canTeacherView($teacher, $studentId, $subjectId);
     }
 
     public function treeFor(int $studentId, int $subjectId): array

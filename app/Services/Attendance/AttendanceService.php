@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Attendance;
 
 use App\Enums\AbsenceJustificationStatus;
 use App\Enums\AttendanceStatus;
@@ -10,7 +10,7 @@ use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -38,9 +38,7 @@ class AttendanceService
     public function assertTeacherCanRecord(User $teacher, int $classroomId, ?int $scheduleSlotId): void
     {
         if (! $this->teacherCanRecord($teacher, $classroomId, $scheduleSlotId)) {
-            throw new HttpResponseException(
-                response()->json(['message' => 'You are not assigned to this classroom.'], 403)
-            );
+            throw new AuthorizationException(__('You are not assigned to this classroom.'));
         }
     }
 
@@ -65,14 +63,12 @@ class AttendanceService
             ->pluck('user_id');
 
         if ($enrolledStudentIds->count() !== $studentIds->count()) {
-            throw new HttpResponseException(
-                response()->json(['message' => 'One or more students are not enrolled in this classroom.'], 403)
-            );
+            throw new AuthorizationException(__('One or more students are not enrolled in this classroom.'));
         }
 
         $records = collect();
         foreach ($entries as $entry) {
-            $record = Attendance::updateOrCreate(
+            $records->push(Attendance::updateOrCreate(
                 [
                     'student_user_id' => $entry['student_id'],
                     'classroom_id' => $classroomId,
@@ -83,8 +79,7 @@ class AttendanceService
                     'schedule_slot_id' => $scheduleSlotId,
                     'recorded_by' => $teacher->id,
                 ]
-            );
-            $records->push($record);
+            ));
         }
 
         return $records;
