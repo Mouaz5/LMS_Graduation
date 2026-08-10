@@ -1,28 +1,28 @@
 <x-layouts.app :pageTitle="__('Children\'s Attendance')">
     <style>
         .btn-filter {
-            padding: 8px 18px; background: #4F46E5; color: white; border: none;
+            padding: 8px 18px; background: var(--primary); color: white; border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
-        .btn-filter:hover { background: #4338ca; }
+        .btn-filter:hover { background: var(--primary-dark); }
 
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 12px 16px; text-align: start;
-            font-size: 11px; font-weight: 700; color: #94a3b8;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
             letter-spacing: 0.8px; text-transform: uppercase;
         }
         th:first-child { padding-inline-start: 20px; }
         td {
             padding: 14px 16px;
-            border-bottom: 1px solid #f8fafc;
-            font-size: 13.5px; color: #374151;
+            border-bottom: 1px solid var(--surface-2);
+            font-size: 13.5px; color: var(--text-strong);
             vertical-align: middle;
         }
         td:first-child { padding-inline-start: 20px; }
-        tbody tr:hover { background: #fafbff; }
+        tbody tr:hover { background: var(--surface-2); }
         tbody tr:last-child td { border-bottom: none; }
 
         .badge {
@@ -31,21 +31,21 @@
             font-size: 11.5px; font-weight: 600;
         }
         .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-        .badge-present  { background: #d1fae5; color: #059669; }
-        .badge-absent   { background: #fee2e2; color: #dc2626; }
-        .badge-late     { background: #fef3c7; color: #d97706; }
-        .badge-excused  { background: #eef2ff; color: #4F46E5; }
-        .badge-pending  { background: #fef9c3; color: #92400e; }
-        .badge-approved { background: #d1fae5; color: #059669; }
-        .badge-rejected { background: #fee2e2; color: #dc2626; }
+        .badge-present  { background: var(--success-border); color: var(--success-dark); }
+        .badge-absent   { background: var(--danger-tint); color: var(--danger-dark); }
+        .badge-late     { background: var(--warning-tint); color: var(--warning-dark); }
+        .badge-excused  { background: var(--primary-tint); color: var(--primary); }
+        .badge-pending  { background: var(--warning-tint); color: var(--warning-text); }
+        .badge-approved { background: var(--success-border); color: var(--success-dark); }
+        .badge-rejected { background: var(--danger-tint); color: var(--danger-dark); }
 
         .btn-justify {
             padding: 5px 12px;
-            background: #4F46E5; color: white; border: none; border-radius: 8px;
-            font-size: 11.5px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            background: var(--primary); color: white; border: none; border-radius: 8px;
+            font-size: 11.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.15s; white-space: nowrap;
         }
-        .btn-justify:hover { background: #4338ca; }
+        .btn-justify:hover { background: var(--primary-dark); }
 
         /* Modal content */
         .modal-box {
@@ -54,33 +54,33 @@
             padding: 28px; margin: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
-        .modal-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-        .modal-subtitle { font-size: 13px; color: #64748b; margin-bottom: 20px; }
-        .modal-label { font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
+        .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+        .modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
+        .modal-label { font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
         .modal-input, .modal-textarea {
             width: 100%; padding: 9px 14px;
-            border: 1.5px solid #e2e8f0; border-radius: 8px;
-            font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-            background: #fafafa; outline: none; transition: border 0.2s;
+            border: 1.5px solid var(--border); border-radius: 8px;
+            font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+            background: var(--surface-3); outline: none; transition: border 0.2s;
             box-sizing: border-box; margin-bottom: 14px;
         }
         .modal-textarea { resize: vertical; min-height: 80px; }
-        .modal-input:focus, .modal-textarea:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .modal-input:focus, .modal-textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .modal-actions { display: flex; gap: 10px; margin-top: 4px; }
         .btn-submit {
             flex: 1; padding: 10px;
-            background: #4F46E5; color: white; border: none; border-radius: 10px;
-            font-size: 13.5px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            background: var(--primary); color: white; border: none; border-radius: 10px;
+            font-size: 13.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.2s;
         }
-        .btn-submit:hover { background: #4338ca; }
+        .btn-submit:hover { background: var(--primary-dark); }
         .btn-cancel {
             padding: 10px 18px;
-            background: #f8fafc; color: #64748b; border: 1.5px solid #e2e8f0; border-radius: 10px;
-            font-size: 13.5px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            background: var(--surface-2); color: var(--text-secondary); border: 1.5px solid var(--border); border-radius: 10px;
+            font-size: 13.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.15s;
         }
-        .btn-cancel:hover { background: #f1f5f9; }
+        .btn-cancel:hover { background: var(--border-soft); }
 
     </style>
 
@@ -90,7 +90,7 @@
     />
 
     @if(session('success'))
-        <div style="background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -124,7 +124,7 @@
             @endif
             <button type="submit" class="btn-filter">{{ __("Filter") }}</button>
             @if(request('date_from') || request('date_to'))
-                <a href="{{ route('parent.attendance', ['child_id' => $selectedChild?->id]) }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none;">{{ __("Clear") }}</a>
+                <a href="{{ route('parent.attendance', ['child_id' => $selectedChild?->id]) }}" style="align-self: flex-end; padding: 8px 14px; font-size: 12.5px; color: var(--text-secondary); text-decoration: none;">{{ __("Clear") }}</a>
             @endif
         </div>
     </form>
@@ -133,7 +133,7 @@
         <div class="table-card">
             <div class="empty-state">
                 <div class="empty-icon">
-                    <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/></svg>
+                    <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/></svg>
                 </div>
                 <div class="empty-title">{{ __("No Children Linked") }}</div>
                 <div class="empty-desc">{{ __("No children are linked to your account yet.") }}</div>
@@ -151,7 +151,7 @@
             @if($records->isEmpty())
                 <div class="empty-state">
                     <div class="empty-icon">
-                        <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
                     <div class="empty-title">{{ __("No Records Found") }}</div>
                     <div class="empty-desc">{{ __("No attendance has been recorded yet for this period.") }}</div>
@@ -171,8 +171,8 @@
                             @foreach($records as $record)
                                 <tr>
                                     <td>
-                                        <div style="font-weight: 600; color: #0f172a;">{{ $record->date?->format('M j, Y') }}</div>
-                                        <div style="font-size: 11.5px; color: #94a3b8;">{{ $record->date?->format('l') }}</div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">{{ $record->date?->format('M j, Y') }}</div>
+                                        <div style="font-size: 11.5px; color: var(--text-muted);">{{ $record->date?->format('l') }}</div>
                                     </td>
                                     <td style="color: #475569;">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
                                     <td><span class="badge badge-{{ $record->status->value }}">{{ __(ucfirst($record->status->value)) }}</span></td>
@@ -186,7 +186,7 @@
                                                 {{ __("Submit Justification") }}
                                             </button>
                                         @else
-                                            <span style="color: #cbd5e1; font-size: 12px;">—</span>
+                                            <span style="color: var(--text-faint); font-size: 12px;">—</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -200,14 +200,14 @@
                         <div>{{ __("Page :current of :last", ['current' => $records->currentPage(), 'last' => $records->lastPage()]) }}</div>
                         <div style="display: flex; gap: 6px;">
                             @if($records->onFirstPage())
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</span>
                             @else
-                                <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
+                                <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
                             @endif
                             @if($records->hasMorePages())
-                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
+                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
                             @else
-                                <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
+                                <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
                             @endif
                         </div>
                     </div>

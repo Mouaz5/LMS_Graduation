@@ -5,27 +5,27 @@
             align-items: center;
             gap: 6px;
             padding: 9px 20px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .btn-primary:hover {
-            background: #4338ca;
+            background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
         }
         .table-toolbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 16px 20px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
             gap: 12px;
             flex-wrap: wrap;
         }
@@ -34,25 +34,25 @@
             align-items: center;
             gap: 8px;
             padding: 8px 14px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 8px;
             font-size: 13px;
-            font-family: 'DM Sans', sans-serif;
-            color: #374151;
+            font-family: var(--font-body);
+            color: var(--text-strong);
             outline: none;
-            background: #fafafa;
+            background: var(--surface-3);
             width: 220px;
             transition: all 0.2s;
         }
-        .search-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 12px 16px;
             text-align: start;
             font-size: 11px;
             font-weight: 700;
-            color: #94a3b8;
+            color: var(--text-muted);
             letter-spacing: 0.8px;
             text-transform: uppercase;
         }
@@ -62,7 +62,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("All Users") }}</div>
+            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("All Users") }}</div>
             <div class="page-desc">{{ __(':count users registered in the system', ['count' => $users->total()]) }}</div>
         </div>
         <a href="{{ route('admin.users.create') }}" class="btn-primary">
@@ -94,7 +94,7 @@
                         <x-user-table-row :user="$user" />
                     @empty
                         <tr>
-                            <td colspan="6" style="text-align: center; padding: 48px; color: #cbd5e1; font-size: 14px;">
+                            <td colspan="6" style="text-align: center; padding: 48px; color: var(--text-faint); font-size: 14px;">
                                 {{ __("No users found") }}
                             </td>
                         </tr>
@@ -108,15 +108,15 @@
             <div>{{ __('Page :current of :last', ['current' => $users->currentPage(), 'last' => $users->lastPage()]) }}</div>
             <div style="display: flex; gap: 6px; align-items: center;">
                 @if($users->onFirstPage())
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</span>
                 @else
-                    <a href="{{ $users->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">{{ __("← Prev") }}</a>
+                    <a href="{{ $users->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 0.2s;">{{ __("← Prev") }}</a>
                 @endif
 
                 @if($users->hasMorePages())
-                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">{{ __("Next →") }}</a>
+                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 30%, transparent);">{{ __("Next →") }}</a>
                 @else
-                    <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
+                    <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                 @endif
             </div>
         </div>

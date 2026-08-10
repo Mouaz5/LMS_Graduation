@@ -18,15 +18,15 @@
         }
 
         .section-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 18px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
         }
 
         .section-subtitle {
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             margin-top: 2px;
         }
 
@@ -41,7 +41,7 @@
 
         .quick-link {
             background: white;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             border-radius: 12px;
             padding: 18px;
             text-decoration: none;
@@ -52,8 +52,8 @@
         }
 
         .quick-link:hover {
-            border-color: #c7d2fe;
-            box-shadow: 0 4px 14px rgba(79,70,229,0.1);
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 10%, transparent);
             transform: translateY(-1px);
         }
 
@@ -69,12 +69,12 @@
         .quick-link-label {
             font-size: 13.5px;
             font-weight: 600;
-            color: #0f172a;
+            color: var(--text-primary);
         }
 
         .quick-link-sub {
             font-size: 11.5px;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
 
     </style>
@@ -99,8 +99,8 @@
 
     <div class="quick-links-grid">
         <a href="{{ route('admin.users.index') }}" class="quick-link">
-            <div class="quick-link-icon" style="background: #eef2ff;">
-                <svg width="18" height="18" fill="none" stroke="#4F46E5" viewBox="0 0 24 24">
+            <div class="quick-link-icon" style="background: var(--primary-tint);">
+                <svg width="18" height="18" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
             </div>
@@ -109,8 +109,8 @@
         </a>
 
         <a href="{{ route('admin.users.create') }}" class="quick-link">
-            <div class="quick-link-icon" style="background: #ecfdf5;">
-                <svg width="18" height="18" fill="none" stroke="#10b981" viewBox="0 0 24 24">
+            <div class="quick-link-icon" style="background: var(--success-tint);">
+                <svg width="18" height="18" fill="none" stroke="var(--success)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                 </svg>
             </div>
@@ -119,8 +119,8 @@
         </a>
 
         <a href="#" class="quick-link">
-            <div class="quick-link-icon" style="background: #fffbeb;">
-                <svg width="18" height="18" fill="none" stroke="#f59e0b" viewBox="0 0 24 24">
+            <div class="quick-link-icon" style="background: var(--warning-tint);">
+                <svg width="18" height="18" fill="none" stroke="var(--warning)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
             </div>

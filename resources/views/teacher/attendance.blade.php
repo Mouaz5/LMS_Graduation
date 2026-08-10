@@ -1,84 +1,84 @@
 <x-layouts.app :pageTitle="__('Take Attendance')">
     <style>
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 12px 16px;
             text-align: start;
             font-size: 11px;
             font-weight: 700;
-            color: #94a3b8;
+            color: var(--text-muted);
             letter-spacing: 0.8px;
             text-transform: uppercase;
         }
         th:first-child { padding-inline-start: 20px; }
         td {
             padding: 14px 16px;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid var(--surface-2);
             font-size: 13.5px;
-            color: #374151;
+            color: var(--text-strong);
         }
         td:first-child { padding-inline-start: 20px; }
-        tbody tr:hover { background: #fafbff; }
+        tbody tr:hover { background: var(--surface-2); }
         tbody tr:last-child td { border-bottom: none; }
 
         .student-cell { display: flex; align-items: center; gap: 10px; }
         .student-avatar {
             width: 34px; height: 34px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4F46E5, #7c3aed);
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
             display: flex; align-items: center; justify-content: center;
             color: white; font-size: 12px; font-weight: 700; flex-shrink: 0;
         }
-        .student-name { font-weight: 600; color: #0f172a; font-size: 13.5px; }
+        .student-name { font-weight: 600; color: var(--text-primary); font-size: 13.5px; }
 
         .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .radio-label {
             display: flex; align-items: center; gap: 5px;
             padding: 5px 12px;
             border-radius: 20px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             font-size: 12px; font-weight: 600;
             cursor: pointer;
             transition: all 0.15s;
             white-space: nowrap;
         }
         .radio-label input[type="radio"] { display: none; }
-        .radio-label.present { border-color: #10b981; color: #065f46; }
-        .radio-label.present:has(input:checked) { background: #d1fae5; border-color: #10b981; }
-        .radio-label.absent  { border-color: #ef4444; color: #991b1b; }
-        .radio-label.absent:has(input:checked) { background: #fee2e2; border-color: #ef4444; }
-        .radio-label.late    { border-color: #f59e0b; color: #78350f; }
-        .radio-label.late:has(input:checked) { background: #fef3c7; border-color: #f59e0b; }
-        .radio-label.excused { border-color: #6366f1; color: #3730a3; }
-        .radio-label.excused:has(input:checked) { background: #eef2ff; border-color: #6366f1; }
+        .radio-label.present { border-color: var(--success); color: var(--success-text); }
+        .radio-label.present:has(input:checked) { background: var(--success-border); border-color: var(--success); }
+        .radio-label.absent  { border-color: var(--danger); color: var(--danger-text); }
+        .radio-label.absent:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); }
+        .radio-label.late    { border-color: var(--warning); color: #78350f; }
+        .radio-label.late:has(input:checked) { background: var(--warning-tint); border-color: var(--warning); }
+        .radio-label.excused { border-color: var(--primary-light); color: var(--primary-dark); }
+        .radio-label.excused:has(input:checked) { background: var(--primary-tint); border-color: var(--primary-light); }
 
         .submit-bar {
             padding: 16px 20px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid var(--border-soft);
             display: flex; align-items: center; justify-content: space-between;
         }
         .btn-submit {
             padding: 10px 28px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
-        .btn-submit:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-1px); }
 
         .empty-state {
             text-align: center; padding: 56px 20px;
         }
         .empty-icon {
             width: 56px; height: 56px;
-            background: #f1f5f9; border-radius: 50%;
+            background: var(--border-soft); border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 14px;
         }
@@ -89,14 +89,14 @@
         .btn-quick {
             padding: 5px 12px;
             border-radius: 20px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             font-size: 12px; font-weight: 600;
             cursor: pointer;
             background: white;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             transition: all 0.15s;
         }
-        .btn-quick:hover { border-color: #4F46E5; color: #4F46E5; }
+        .btn-quick:hover { border-color: var(--primary); color: var(--primary); }
     </style>
 
     <x-page-header
@@ -105,7 +105,7 @@
     />
 
     @if(session('success'))
-        <div style="background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -135,7 +135,7 @@
         <div class="table-card">
             <div class="empty-state">
                 <div class="empty-icon">
-                    <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+                    <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
                 </div>
                 <div class="empty-title">{{ __("No Students Found") }}</div>
                 <div class="empty-desc">{{ __("This classroom has no enrolled students.") }}</div>
@@ -148,7 +148,7 @@
             <input type="hidden" name="date" value="{{ $selectedDate }}">
 
             @error('statuses')
-                <div style="background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 12px;">{{ $message }}</div>
+                <div style="background: var(--danger-tint); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 12px;">{{ $message }}</div>
             @enderror
 
             <div class="table-card">
@@ -161,7 +161,7 @@
                         <div class="table-meta">{{ __(":count students", ['count' => $students->count()]) }}</div>
                     </div>
                     <div class="bulk-select-bar">
-                        <span style="font-size: 12px; color: #94a3b8; margin-inline-end: 4px;">{{ __("Mark all:") }}</span>
+                        <span style="font-size: 12px; color: var(--text-muted); margin-inline-end: 4px;">{{ __("Mark all:") }}</span>
                         <button type="button" class="btn-quick" data-mark-all="present">{{ __("Present") }}</button>
                         <button type="button" class="btn-quick" data-mark-all="absent">{{ __("Absent") }}</button>
                         <button type="button" class="btn-quick" data-mark-all="late">{{ __("Late") }}</button>
@@ -181,7 +181,7 @@
                             @foreach($students as $i => $profile)
                                 @php $existing = $existingAttendance->get($profile->user_id); @endphp
                                 <tr>
-                                    <td style="color: #94a3b8; font-size: 12.5px;">{{ $i + 1 }}</td>
+                                    <td style="color: var(--text-muted); font-size: 12.5px;">{{ $i + 1 }}</td>
                                     <td>
                                         <div class="student-cell">
                                             <div class="student-avatar">{{ strtoupper(substr($profile->student->name ?? '?', 0, 2)) }}</div>
@@ -208,9 +208,9 @@
                 </div>
 
                 <div class="submit-bar">
-                    <div style="font-size: 13px; color: #64748b;">
+                    <div style="font-size: 13px; color: var(--text-secondary);">
                         @if($existingAttendance->isNotEmpty())
-                            <span style="color: #10b981; font-weight: 600;">{{ __("✓ Attendance already recorded") }}</span> {{ __("— submitting will update existing records.") }}
+                            <span style="color: var(--success); font-weight: 600;">{{ __("✓ Attendance already recorded") }}</span> {{ __("— submitting will update existing records.") }}
                         @else
                             {{ __("Recording attendance for") }} <strong>{{ $students->count() }}</strong> {{ __("students.") }}
                         @endif
@@ -223,7 +223,7 @@
         <div class="table-card">
             <div class="empty-state">
                 <div class="empty-icon">
-                    <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 </div>
                 <div class="empty-title">{{ __("Select a Classroom") }}</div>
                 <div class="empty-desc">{{ __("Choose a classroom and date above to start recording attendance.") }}</div>

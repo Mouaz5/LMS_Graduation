@@ -3,7 +3,7 @@
         .form-card {
             background: white;
             border-radius: 14px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 28px;
             max-width: 560px;
@@ -15,7 +15,7 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #334155;
+            color: var(--text-primary);
             margin-bottom: 6px;
         }
         .form-row {
@@ -31,7 +31,7 @@
         .checkbox-group input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #4F46E5;
+            accent-color: var(--primary);
         }
         .checkbox-group label {
             margin-bottom: 0;
@@ -41,45 +41,45 @@
             align-items: center;
             gap: 6px;
             padding: 10px 24px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .btn-primary:hover {
-            background: #4338ca;
+            background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
         }
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             padding: 10px 24px;
             background: white;
-            color: #64748b;
-            border: 1px solid #e2e8f0;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
         }
         .btn-secondary:hover {
-            border-color: #cbd5e1;
-            color: #334155;
+            border-color: var(--text-faint);
+            color: var(--text-primary);
         }
     </style>
 
     <div style="margin-bottom: 20px;">
-        <a href="{{ route('admin.academic-years.index') }}" style="font-size: 13px; color: #64748b; text-decoration: none;">
+        <a href="{{ route('admin.academic-years.index') }}" style="font-size: 13px; color: var(--text-secondary); text-decoration: none;">
             &larr; {{ __("Back to Academic Years") }}
         </a>
     </div>
@@ -92,7 +92,7 @@
                 <label for="name">{{ __("Academic Year Name") }}</label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="{{ __('e.g. 2025-2026') }}" required>
                 @error('name')
-                    <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                    <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -101,7 +101,7 @@
                     <label for="start_date">{{ __("Start Date") }}</label>
                     <input type="date" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
                     @error('start_date')
-                        <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                        <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -109,7 +109,7 @@
                     <label for="end_date">{{ __("End Date") }}</label>
                     <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
                     @error('end_date')
-                        <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                        <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                     @enderror
                 </div>
             </div>

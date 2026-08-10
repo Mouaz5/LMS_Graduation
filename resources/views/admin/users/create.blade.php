@@ -7,22 +7,22 @@
             background: white;
             border-radius: 16px;
             padding: 32px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .form-header {
             margin-bottom: 28px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
         }
         .form-header-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
-        .form-header-sub { font-size: 13px; color: #64748b; }
+        .form-header-sub { font-size: 13px; color: var(--text-secondary); }
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -34,28 +34,28 @@
         .form-label {
             font-size: 12.5px;
             font-weight: 600;
-            color: #374151;
+            color: var(--text-strong);
             letter-spacing: 0.2px;
         }
-        .form-label .req { color: #ef4444; margin-inline-start: 2px; }
+        .form-label .req { color: var(--danger); margin-inline-start: 2px; }
         .form-input, .form-select {
             padding: 10px 14px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
-            color: #0f172a;
-            background: #fafafa;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            background: var(--surface-3);
             outline: none;
             transition: all 0.2s;
             width: 100%;
         }
         .form-input:focus, .form-select:focus {
-            border-color: #4F46E5;
+            border-color: var(--primary);
             background: white;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
         }
-        .form-input.is-error { border-color: #ef4444; }
+        .form-input.is-error { border-color: var(--danger); }
         .password-input-wrapper {
             position: relative;
         }
@@ -72,7 +72,7 @@
             width: 28px;
             height: 28px;
             padding: 0;
-            color: #94a3b8;
+            color: var(--text-muted);
             background: transparent;
             border: 0;
             border-radius: 7px;
@@ -82,8 +82,8 @@
         }
         .password-toggle:hover,
         .password-toggle:focus-visible {
-            color: #4F46E5;
-            background: #eef2ff;
+            color: var(--primary);
+            background: var(--primary-tint);
             outline: none;
         }
         .password-toggle svg {
@@ -92,7 +92,7 @@
         }
         .field-error {
             font-size: 11.5px;
-            color: #ef4444;
+            color: var(--danger);
             display: flex;
             align-items: center;
             gap: 4px;
@@ -112,20 +112,20 @@
             gap: 6px;
             padding: 12px 8px;
             border-radius: 10px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             cursor: pointer;
             transition: all 0.2s;
             font-size: 12px;
             font-weight: 600;
-            color: #64748b;
+            color: var(--text-secondary);
             text-align: center;
         }
         .role-option input:checked + label {
-            border-color: #4F46E5;
-            background: #eef2ff;
-            color: #4338ca;
+            border-color: var(--primary);
+            background: var(--primary-tint);
+            color: var(--primary-dark);
         }
-        .role-option label:hover { border-color: #c7d2fe; background: #f5f7ff; }
+        .role-option label:hover { border-color: var(--primary-light); background: #f5f7ff; }
         .role-icon { font-size: 20px; }
         .form-actions {
             display: flex;
@@ -133,42 +133,42 @@
             align-items: center;
             margin-top: 28px;
             padding-top: 20px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid var(--border-soft);
         }
         .btn-submit {
             padding: 11px 28px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
-        .btn-submit:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-cancel {
             padding: 11px 20px;
             background: transparent;
-            color: #64748b;
-            border: 1.5px solid #e2e8f0;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
         }
-        .btn-cancel:hover { background: #f8fafc; color: #374151; }
+        .btn-cancel:hover { background: var(--surface-2); color: var(--text-strong); }
     </style>
 
     <div class="form-container">
         {{-- Breadcrumb --}}
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #94a3b8; margin-bottom: 16px;">
-            <a href="{{ route('admin.users.index') }}" style="color: #4F46E5; text-decoration: none; font-weight: 500;">{{ __("Users") }}</a>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            <a href="{{ route('admin.users.index') }}" style="color: var(--primary); text-decoration: none; font-weight: 500;">{{ __("Users") }}</a>
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span>{{ __("Create New User") }}</span>
         </div>

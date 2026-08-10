@@ -2,17 +2,17 @@
     <style>
         .page-header { margin-bottom: 28px; }
         .page-header h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
-        .page-header p { font-size: 13px; color: #64748b; }
+        .page-header p { font-size: 13px; color: var(--text-secondary); }
         .form-card {
             background: white;
             border-radius: 14px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 28px;
             max-width: 600px;
@@ -22,7 +22,7 @@
             display: block;
             font-size: 12.5px;
             font-weight: 700;
-            color: #374151;
+            color: var(--text-strong);
             letter-spacing: 0.5px;
             text-transform: uppercase;
             margin-bottom: 8px;
@@ -30,12 +30,12 @@
         .form-select {
             width: 100%;
             padding: 10px 14px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             color: #1e293b;
-            background: #fafafa;
+            background: var(--surface-3);
             transition: all 0.2s;
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%2394a3b8' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -46,16 +46,16 @@
         }
         .form-select:focus {
             outline: none;
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
             background-color: white;
         }
         .form-select option { padding: 4px 8px; }
-        .form-select optgroup { font-weight: 700; color: #374151; }
-        .form-select option[value=""] { color: #94a3b8; }
+        .form-select optgroup { font-weight: 700; color: var(--text-strong); }
+        .form-select option[value=""] { color: var(--text-muted); }
         .form-help {
             font-size: 12px;
-            color: #94a3b8;
+            color: var(--text-muted);
             margin-top: 6px;
         }
         .form-actions {
@@ -64,42 +64,42 @@
             align-items: center;
             margin-top: 24px;
             padding-top: 20px;
-            border-top: 1px solid #f1f5f9;
+            border-top: 1px solid var(--border-soft);
         }
         .btn-save {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             padding: 10px 22px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border-radius: 10px;
             border: none;
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
-        .btn-save:hover { background: #4338ca; box-shadow: 0 4px 14px rgba(79,70,229,0.4); transform: translateY(-1px); }
+        .btn-save:hover { background: var(--primary-dark); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent); transform: translateY(-1px); }
         .btn-save svg { width: 15px; height: 15px; }
         .btn-cancel {
             display: inline-flex;
             align-items: center;
             padding: 10px 22px;
             background: transparent;
-            color: #64748b;
+            color: var(--text-secondary);
             border-radius: 10px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
         }
-        .btn-cancel:hover { border-color: #cbd5e1; color: #374151; }
+        .btn-cancel:hover { border-color: var(--text-faint); color: var(--text-strong); }
     </style>
 
     <div class="page-header">
@@ -108,8 +108,8 @@
     </div>
 
     @if($errors->any())
-    <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
-        <div style="color: #991b1b; font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ __("Please fix the following errors:") }}</div>
+    <div style="background: var(--danger-tint); border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
+        <div style="color: var(--danger-text); font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ __("Please fix the following errors:") }}</div>
         <ul style="margin: 0; padding-inline-start: 18px; color: #b91c1c; font-size: 12.5px;">
             @foreach($errors->all() as $e)
                 <li>{{ $e }}</li>
@@ -133,7 +133,7 @@
                     @endforeach
                 </select>
                 @error('teacher_user_id')
-                    <div style="font-size: 12px; color: #dc2626; margin-top: 4px;">{{ $message }}</div>
+                    <div style="font-size: 12px; color: var(--danger-dark); margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -146,7 +146,7 @@
                     @endforeach
                 </select>
                 @error('subject_id')
-                    <div style="font-size: 12px; color: #dc2626; margin-top: 4px;">{{ $message }}</div>
+                    <div style="font-size: 12px; color: var(--danger-dark); margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -159,7 +159,7 @@
                     @endforeach
                 </select>
                 @error('classroom_id')
-                    <div style="font-size: 12px; color: #dc2626; margin-top: 4px;">{{ $message }}</div>
+                    <div style="font-size: 12px; color: var(--danger-dark); margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -173,7 +173,7 @@
                 </select>
                 <div class="form-help">{{ __("Only one assignment per teacher-subject-classroom-year combination is allowed.") }}</div>
                 @error('academic_year_id')
-                    <div style="font-size: 12px; color: #dc2626; margin-top: 4px;">{{ $message }}</div>
+                    <div style="font-size: 12px; color: var(--danger-dark); margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 

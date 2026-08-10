@@ -1,29 +1,29 @@
 <x-layouts.app pageTitle="{{ $subject->name }}">
     <style>
         .back-link {
-            font-size: 13px; color: #64748b; text-decoration: none;
+            font-size: 13px; color: var(--text-secondary); text-decoration: none;
             display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px;
         }
-        .back-link:hover { color: #334155; }
+        .back-link:hover { color: var(--text-primary); }
 
         .top-row {
             display: flex; align-items: flex-start; justify-content: space-between;
             gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
         }
         .page-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px; font-weight: 700; color: #0f172a;
+            font-family: var(--font-display);
+            font-size: 24px; font-weight: 700; color: var(--text-primary);
         }
-        .page-subtitle { font-size: 13px; color: #94a3b8; margin-top: 3px; }
+        .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
         .btn-edit {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 9px 18px; background: #4F46E5; color: white;
+            padding: 9px 18px; background: var(--primary); color: white;
             border-radius: 10px; text-decoration: none; font-size: 13px;
-            font-weight: 600; font-family: 'DM Sans', sans-serif;
-            transition: all 0.2s; box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            font-weight: 600; font-family: var(--font-body);
+            transition: all 0.2s; box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
             white-space: nowrap;
         }
-        .btn-edit:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-edit:hover { background: var(--primary-dark); transform: translateY(-1px); }
 
         /* Stats strip */
         .stats-strip {
@@ -31,7 +31,7 @@
             gap: 14px; margin-bottom: 24px;
         }
         .stat-box {
-            background: white; border-radius: 12px; border: 1px solid #f1f5f9;
+            background: white; border-radius: 12px; border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 18px 20px; display: flex; align-items: center; gap: 14px;
         }
@@ -39,49 +39,49 @@
             width: 40px; height: 40px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .stat-value { font-size: 22px; font-weight: 700; color: #0f172a; line-height: 1; }
-        .stat-label { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+        .stat-value { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+        .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
 
         /* Detail card */
         .detail-card {
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
             max-width: 560px; margin-bottom: 28px;
         }
         .detail-row {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 24px; border-bottom: 1px solid #f8fafc;
+            padding: 15px 24px; border-bottom: 1px solid var(--surface-2);
         }
-        .detail-label { font-size: 13px; font-weight: 500; color: #94a3b8; }
-        .detail-value { font-size: 14px; font-weight: 600; color: #0f172a; }
+        .detail-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+        .detail-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
         .code-chip {
             font-family: monospace; font-size: 13px; font-weight: 700;
-            background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;
+            background: var(--border-soft); color: var(--text-primary); border: 1px solid var(--border);
             padding: 4px 12px; border-radius: 6px;
         }
 
         /* Assignments table */
         .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 12px;
+            font-family: var(--font-display);
+            font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;
         }
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 11px 16px; text-align: start;
-            font-size: 11px; font-weight: 700; color: #94a3b8;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
             letter-spacing: 0.8px; text-transform: uppercase;
         }
         th:first-child { padding-inline-start: 20px; }
         td {
-            padding: 13px 16px; font-size: 13.5px; color: #334155;
-            border-bottom: 1px solid #f8fafc;
+            padding: 13px 16px; font-size: 13.5px; color: var(--text-primary);
+            border-bottom: 1px solid var(--surface-2);
         }
         td:first-child { padding-inline-start: 20px; }
         tr:last-child td { border-bottom: none; }
         .avatar {
             width: 30px; height: 30px; border-radius: 8px;
-            background: #eef2ff; color: #4F46E5;
+            background: var(--primary-tint); color: var(--primary);
             display: inline-flex; align-items: center; justify-content: center;
             font-size: 11px; font-weight: 700; margin-inline-end: 8px;
             vertical-align: middle;
@@ -98,7 +98,7 @@
             border: 1px solid #fed7aa; border-radius: 6px;
             font-size: 12px; font-weight: 600;
         }
-        .empty-state { text-align: center; padding: 40px; color: #cbd5e1; font-size: 14px; }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-faint); font-size: 14px; }
     </style>
 
     <a href="{{ route('admin.subjects.index') }}" class="back-link">
@@ -122,8 +122,8 @@
     {{-- Stats --}}
     <div class="stats-strip">
         <div class="stat-box">
-            <div class="stat-icon" style="background: #eef2ff;">
-                <svg width="20" height="20" fill="none" stroke="#4F46E5" viewBox="0 0 24 24">
+            <div class="stat-icon" style="background: var(--primary-tint);">
+                <svg width="20" height="20" fill="none" stroke="var(--primary)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
                 </svg>
@@ -203,7 +203,7 @@
                             {{ $assignment->teacher->name }}
                         </td>
                         <td><span class="classroom-chip">{{ $assignment->classroom->name }}</span></td>
-                        <td style="color: #64748b;">{{ $assignment->classroom->grade->name }}</td>
+                        <td style="color: var(--text-secondary);">{{ $assignment->classroom->grade->name }}</td>
                         <td><span class="year-chip">{{ $assignment->academicYear->name }}</span></td>
                     </tr>
                 @empty

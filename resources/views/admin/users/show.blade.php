@@ -1,27 +1,27 @@
 <x-layouts.app :pageTitle="__('User Details')">
     <style>
         .back-link {
-            font-size: 13px; color: #64748b; text-decoration: none;
+            font-size: 13px; color: var(--text-secondary); text-decoration: none;
             display: inline-flex; align-items: center; gap: 4px; margin-bottom: 20px;
         }
-        .back-link:hover { color: #334155; }
+        .back-link:hover { color: var(--text-primary); }
         .detail-header {
             padding: 28px; display: flex; align-items: center; gap: 16px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
         }
         .detail-avatar {
             width: 56px; height: 56px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
             font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
         }
-        .detail-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-        .detail-email { font-size: 13px; color: #94a3b8; margin-top: 2px; }
+        .detail-name { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
+        .detail-email { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
         .detail-row {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 28px; border-bottom: 1px solid #f8fafc;
+            padding: 16px 28px; border-bottom: 1px solid var(--surface-2);
         }
-        .detail-label { font-size: 13px; font-weight: 500; color: #94a3b8; }
-        .detail-value { font-size: 14px; font-weight: 600; color: #0f172a; }
+        .detail-label { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+        .detail-value { font-size: 14px; font-weight: 600; color: var(--text-primary); }
         .badge {
             display: inline-flex; align-items: center; gap: 5px;
             padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
@@ -34,14 +34,14 @@
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 12px;
         }
-        .related-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0f172a; }
+        .related-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-primary); }
         .related-card {
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
         }
         .related-item {
-            padding: 14px 20px; font-size: 13.5px; color: #334155;
-            border-bottom: 1px solid #f8fafc;
+            padding: 14px 20px; font-size: 13.5px; color: var(--text-primary);
+            border-bottom: 1px solid var(--surface-2);
             display: flex; align-items: center; gap: 10px;
         }
         .related-item:last-child { border-bottom: none; }
@@ -49,34 +49,34 @@
             width: 32px; height: 32px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .empty-state { padding: 24px 20px; text-align: center; color: #94a3b8; font-size: 13.5px; }
+        .empty-state { padding: 24px 20px; text-align: center; color: var(--text-muted); font-size: 13.5px; }
 
         /* Link form inside card */
         .link-form-card {
-            background: white; border-radius: 14px; border: 1px dashed #c7d2fe;
+            background: white; border-radius: 14px; border: 1px dashed var(--primary-light);
             padding: 20px; margin-top: 12px; max-width: 640px;
         }
-        .link-form-title { font-size: 13.5px; font-weight: 600; color: #334155; margin-bottom: 14px; }
+        .link-form-title { font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; }
         .link-form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
         .link-form-row select, .link-form-row .select-wrap select {
-            padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px;
-            font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #0f172a;
-            background: #fafafa; outline: none; transition: all 0.2s; min-width: 180px;
+            padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 10px;
+            font-size: 13.5px; font-family: var(--font-body); color: var(--text-primary);
+            background: var(--surface-3); outline: none; transition: all 0.2s; min-width: 180px;
         }
-        .link-form-row select:focus { border-color: #4F46E5; background: white; }
+        .link-form-row select:focus { border-color: var(--primary); background: white; }
         .btn-link {
-            padding: 9px 18px; background: #4F46E5; color: white; border: none;
+            padding: 9px 18px; background: var(--primary); color: white; border: none;
             border-radius: 10px; font-size: 13px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             white-space: nowrap;
         }
-        .btn-link:hover { background: #4338ca; }
+        .btn-link:hover { background: var(--primary-dark); }
         .btn-unlink {
             margin-inline-start: auto; padding: 4px 10px;
-            background: #fff1f2; color: #e11d48;
+            background: var(--danger-tint); color: #e11d48;
             border: 1px solid #fecdd3; border-radius: 7px;
             font-size: 12px; font-weight: 600; cursor: pointer;
-            font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+            font-family: var(--font-body); transition: all 0.15s;
         }
         .btn-unlink:hover { background: #ffe4e6; }
         .relation-chip {
@@ -85,8 +85,8 @@
             border: 1px solid #e5e7eb;
         }
         .alert-success {
-            background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px;
-            padding: 12px 16px; font-size: 13.5px; color: #065f46; margin-bottom: 16px;
+            background: var(--success-tint); border: 1px solid var(--success-border); border-radius: 10px;
+            padding: 12px 16px; font-size: 13.5px; color: var(--success-text); margin-bottom: 16px;
         }
     </style>
 
@@ -100,17 +100,17 @@
 
     @php
         $roleBadge = [
-            'admin'   => ['label' => __('Admin'),   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
+            'admin'   => ['label' => __('Admin'),   'bg' => 'var(--primary-tint)', 'color' => 'var(--primary-dark)', 'dot' => 'var(--primary)'],
             'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
-            'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
+            'student' => ['label' => __('Student'), 'bg' => 'var(--success-tint)', 'color' => 'var(--success-text)', 'dot' => 'var(--success)'],
             'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
         ];
         $rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
         $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
         $avatarColors = [
-            'admin'   => ['from' => '#818cf8', 'to' => '#4F46E5'],
+            'admin'   => ['from' => 'var(--primary-light)', 'to' => 'var(--primary)'],
             'teacher' => ['from' => '#60a5fa', 'to' => '#2563eb'],
-            'student' => ['from' => '#34d399', 'to' => '#059669'],
+            'student' => ['from' => '#34d399', 'to' => 'var(--success-dark)'],
             'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
         ];
         $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
@@ -142,13 +142,13 @@
             <div class="detail-row">
                 <span class="detail-label">{{ __('Status') }}</span>
                 @if($user->is_active)
-                    <span class="badge" style="background: #ecfdf5; color: #065f46;">
-                        <span class="badge-dot" style="background: #10b981;"></span>
+                    <span class="badge" style="background: var(--success-tint); color: var(--success-text);">
+                        <span class="badge-dot" style="background: var(--success);"></span>
                         {{ __('Active') }}
                     </span>
                 @else
-                    <span class="badge" style="background: #f8fafc; color: #94a3b8;">
-                        <span class="badge-dot" style="background: #cbd5e1;"></span>
+                    <span class="badge" style="background: var(--surface-2); color: var(--text-muted);">
+                        <span class="badge-dot" style="background: var(--text-faint);"></span>
                         {{ __('Inactive') }}
                     </span>
                 @endif
@@ -173,7 +173,7 @@
                         </div>
                         <div>
                             <div style="font-weight: 600;">{{ $user->studentProfile->classroom->name }}</div>
-                            <div style="font-size: 12px; color: #94a3b8;">
+                            <div style="font-size: 12px; color: var(--text-muted);">
                                 {{ $user->studentProfile->classroom->grade->name }} —
                                 {{ __('Enrolled :date', ['date' => $user->studentProfile->enrollment_date->format('M d, Y')]) }}
                             </div>
@@ -196,7 +196,7 @@
                         </div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600;">{{ $parent->name }}</div>
-                            <div style="font-size: 12px; color: #94a3b8;">{{ $parent->email }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">{{ $parent->email }}</div>
                         </div>
                         <span class="relation-chip">{{ ucfirst($parent->pivot->relation) }}</span>
                         <form method="POST" action="{{ route('admin.users.unlink-parent', $user) }}"
@@ -248,12 +248,12 @@
             <div class="related-card">
                 @forelse($user->children as $child)
                     <div class="related-item">
-                        <div class="related-item-icon" style="background: #ecfdf5;">
-                            <svg width="16" height="16" fill="none" stroke="#059669" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/></svg>
+                        <div class="related-item-icon" style="background: var(--success-tint);">
+                            <svg width="16" height="16" fill="none" stroke="var(--success-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/></svg>
                         </div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600;">{{ $child->name }}</div>
-                            <div style="font-size: 12px; color: #94a3b8;">
+                            <div style="font-size: 12px; color: var(--text-muted);">
                                 {{ $child->email }}
                                 @if($child->studentProfile?->classroom)
                                     — {{ $child->studentProfile->classroom->name }}, {{ $child->studentProfile->classroom->grade->name }}
@@ -312,7 +312,7 @@
                         </div>
                         <div>
                             <div style="font-weight: 600;">{{ $assignment->subject->name }} — {{ $assignment->classroom->name }}</div>
-                            <div style="font-size: 12px; color: #94a3b8;">{{ $assignment->classroom->grade->name }} — {{ $assignment->academicYear->name }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">{{ $assignment->classroom->grade->name }} — {{ $assignment->academicYear->name }}</div>
                         </div>
                     </div>
                 @endforeach

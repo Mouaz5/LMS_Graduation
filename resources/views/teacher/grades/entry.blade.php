@@ -1,47 +1,47 @@
 <x-layouts.app :pageTitle="__('Grade Entry')">
 <style>
     .page-header { margin-bottom: 20px; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
+    .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
-        padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-        font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-        background: #fafafa; outline: none; transition: border 0.2s; min-width: 180px;
+        padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+        font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+        background: var(--surface-3); outline: none; transition: border 0.2s; min-width: 180px;
     }
 
     .btn-primary {
-        padding: 9px 20px; background: #4F46E5; color: white; border: none; border-radius: 8px;
-        font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+        padding: 9px 20px; background: var(--primary); color: white; border: none; border-radius: 8px;
+        font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s;
     }
-    .btn-primary:hover { background: #3730a3; }
+    .btn-primary:hover { background: var(--primary-dark); }
 
     table { width: 100%; border-collapse: collapse; }
-    thead tr { background: #f8fafc; }
-    th { padding: 12px 16px; text-align: start; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.8px; text-transform: uppercase; }
-    td { padding: 10px 16px; border-bottom: 1px solid #f8fafc; font-size: 13.5px; color: #374151; }
+    thead tr { background: var(--surface-2); }
+    th { padding: 12px 16px; text-align: start; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; }
+    td { padding: 10px 16px; border-bottom: 1px solid var(--surface-2); font-size: 13.5px; color: var(--text-strong); }
     tbody tr:last-child td { border-bottom: none; }
 
     .score-input {
-        width: 90px; padding: 7px 10px; border: 1.5px solid #e2e8f0; border-radius: 7px;
-        font-size: 13px; font-family: 'DM Sans', sans-serif; text-align: center;
+        width: 90px; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 7px;
+        font-size: 13px; font-family: var(--font-body); text-align: center;
         outline: none; transition: border 0.2s;
     }
-    .score-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79,70,229,0.1); }
-    .score-input.invalid { border-color: #ef4444; }
+    .score-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 10%, transparent); }
+    .score-input.invalid { border-color: var(--danger); }
 
-    .max-score-wrap { display: flex; align-items: center; gap: 8px; padding: 18px 20px; border-top: 1px solid #f1f5f9; }
-    .form-actions { padding: 16px 20px; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; }
+    .max-score-wrap { display: flex; align-items: center; gap: 8px; padding: 18px 20px; border-top: 1px solid var(--border-soft); }
+    .form-actions { padding: 16px 20px; border-top: 1px solid var(--border-soft); display: flex; justify-content: flex-end; }
 
     .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; font-weight: 500; }
-    .alert-success { background: #dcfce7; color: #166534; }
-    .alert-error { background: #fee2e2; color: #991b1b; }
+    .alert-success { background: var(--success-tint); color: var(--success-text); }
+    .alert-error { background: var(--danger-tint); color: var(--danger-text); }
 
-    .empty-state { padding: 48px 20px; text-align: center; color: #94a3b8; }
+    .empty-state { padding: 48px 20px; text-align: center; color: var(--text-muted); }
     .empty-icon { font-size: 40px; margin-bottom: 10px; }
 </style>
 
@@ -121,9 +121,9 @@
             </div>
 
             <div class="max-score-wrap">
-                <label style="font-size:13px; font-weight:600; color:#374151;">{{ __("Max Score:") }}</label>
+                <label style="font-size:13px; font-weight:600; color:var(--text-strong);">{{ __("Max Score:") }}</label>
                 <input type="number" name="max_score" id="maxScore" value="{{ $existingGrades->first()?->max_score ?? 100 }}"
-                    step="0.01" min="0.01" style="width:90px; padding:7px 10px; border:1.5px solid #e2e8f0; border-radius:7px; font-size:13px; font-family:'DM Sans',sans-serif; outline:none;">
+                    step="0.01" min="0.01" style="width:90px; padding:7px 10px; border:1.5px solid var(--border); border-radius:7px; font-size:13px; font-family: var(--font-body); outline:none;">
             </div>
 
             @if($students->isNotEmpty())
@@ -140,7 +140,7 @@
                         @foreach($students as $i => $student)
                             @php $existing = $existingGrades->get($student->id); @endphp
                             <tr>
-                                <td style="color:#94a3b8;">{{ $i + 1 }}</td>
+                                <td style="color:var(--text-muted);">{{ $i + 1 }}</td>
                                 <td style="font-weight:600;">{{ $student->name }}</td>
                                 <td>
                                     <input type="number" class="score-input" step="0.01" min="0"
@@ -151,11 +151,11 @@
                                 </td>
                                 <td>
                                     @if($existing)
-                                        <span style="font-size:11px; background:#dcfce7; color:#166534; padding:2px 8px; border-radius:99px; font-weight:700;">
+                                        <span style="font-size:11px; background:var(--success-tint); color:var(--success-text); padding:2px 8px; border-radius:99px; font-weight:700;">
                                             {{ __("Saved") }} ({{ $existing->score }}/{{ $existing->max_score }})
                                         </span>
                                     @else
-                                        <span style="font-size:11px; background:#f1f5f9; color:#94a3b8; padding:2px 8px; border-radius:99px; font-weight:700;">
+                                        <span style="font-size:11px; background:var(--border-soft); color:var(--text-muted); padding:2px 8px; border-radius:99px; font-weight:700;">
                                             {{ __("Not entered") }}
                                         </span>
                                     @endif
@@ -179,7 +179,7 @@
     <div class="table-card">
         <div class="empty-state">
             <div class="empty-icon">📝</div>
-            <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">{{ __("Select filters above") }}</div>
+            <div style="font-size:14px; font-weight:600; color:var(--text-strong); margin-bottom:6px;">{{ __("Select filters above") }}</div>
             <div>{{ __("Choose a subject, classroom, and exam type to start entering grades.") }}</div>
         </div>
     </div>

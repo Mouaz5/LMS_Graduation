@@ -2,17 +2,17 @@
     <style>
         .back-link {
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
             margin-bottom: 20px;
         }
-        .back-link:hover { color: #334155; }
+        .back-link:hover { color: var(--text-primary); }
         .detail-header {
             padding: 28px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
             display: flex;
             align-items: center;
             gap: 16px;
@@ -27,14 +27,14 @@
             flex-shrink: 0;
         }
         .detail-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 20px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .detail-subtitle {
             font-size: 13px;
-            color: #94a3b8;
+            color: var(--text-muted);
             margin-top: 2px;
         }
         .detail-row {
@@ -42,17 +42,17 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 28px;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid var(--surface-2);
         }
         .detail-label {
             font-size: 13px;
             font-weight: 500;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
         .detail-value {
             font-size: 14px;
             font-weight: 600;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .badge {
             display: inline-flex;
@@ -71,7 +71,7 @@
 
     @php
         $typeConfig = [
-            'holiday' => ['label' => __('Holiday'), 'bg' => '#fef3c7', 'color' => '#92400e', 'iconBg' => '#fef3c7', 'iconColor' => '#d97706'],
+            'holiday' => ['label' => __('Holiday'), 'bg' => 'var(--warning-tint)', 'color' => 'var(--warning-text)', 'iconBg' => 'var(--warning-tint)', 'iconColor' => 'var(--warning-dark)'],
             'event'   => ['label' => __('Event'),   'bg' => '#dbeafe', 'color' => '#1e40af', 'iconBg' => '#dbeafe', 'iconColor' => '#2563eb'],
             'exam'    => ['label' => __('Exam'),    'bg' => '#fce7f3', 'color' => '#9d174d', 'iconBg' => '#fce7f3', 'iconColor' => '#db2777'],
         ];

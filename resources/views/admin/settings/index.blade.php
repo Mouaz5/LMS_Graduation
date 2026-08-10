@@ -11,7 +11,7 @@
         .settings-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            background: linear-gradient(135deg, var(--primary-tint), #e0e7ff);
             border-radius: 24px;
             display: flex;
             align-items: center;
@@ -21,18 +21,18 @@
         .settings-icon svg {
             width: 36px;
             height: 36px;
-            color: #4F46E5;
+            color: var(--primary);
         }
         .settings-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 24px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
         .settings-desc {
             font-size: 15px;
-            color: #64748b;
+            color: var(--text-secondary);
             max-width: 400px;
             line-height: 1.6;
             margin-bottom: 24px;
@@ -42,12 +42,12 @@
             align-items: center;
             gap: 6px;
             padding: 8px 20px;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
+            background: var(--warning-tint);
+            border: 1px solid var(--warning-border);
             border-radius: 100px;
             font-size: 13px;
             font-weight: 600;
-            color: #92400e;
+            color: var(--warning-text);
         }
         .coming-soon-badge svg {
             width: 16px;

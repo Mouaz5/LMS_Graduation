@@ -1,50 +1,50 @@
 <x-layouts.app :pageTitle="__('My Children')">
     <style>
         .page-header { margin-bottom: 24px; }
-        .page-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .page-header p { font-size: 13px; color: #64748b; }
+        .page-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .page-header p { font-size: 13px; color: var(--text-secondary); }
         .children-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
         .child-card {
             background: white; border-radius: 14px; padding: 24px;
-            border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: all 0.2s;
         }
-        .child-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 14px rgba(79,70,229,0.08); }
+        .child-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent); }
         .child-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
         .child-avatar {
             width: 48px; height: 48px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
         }
-        .child-name { font-size: 16px; font-weight: 700; color: #0f172a; }
-        .child-class { font-size: 13px; color: #64748b; margin-top: 2px; }
+        .child-name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .child-class { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
         .child-details { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
         .detail-row {
             display: flex; align-items: center; gap: 8px;
-            font-size: 13px; color: #64748b;
+            font-size: 13px; color: var(--text-secondary);
         }
-        .detail-row svg { width: 16px; height: 16px; color: #94a3b8; flex-shrink: 0; }
-        .detail-label { color: #94a3b8; min-width: 80px; }
-        .detail-value { color: #374151; font-weight: 500; }
-        .child-actions { display: flex; gap: 8px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+        .detail-row svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+        .detail-label { color: var(--text-muted); min-width: 80px; }
+        .detail-value { color: var(--text-strong); font-weight: 500; }
+        .child-actions { display: flex; gap: 8px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
         .btn-sm {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 7px 14px; border-radius: 8px; font-size: 12.5px;
             font-weight: 600; text-decoration: none; transition: all 0.2s;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
         }
         .btn-schedule {
-            background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;
+            background: var(--primary-tint); color: var(--primary-dark); border: 1px solid var(--primary-light);
         }
-        .btn-schedule:hover { background: #4338ca; color: white; }
+        .btn-schedule:hover { background: var(--primary-dark); color: white; }
         .btn-schedule svg { width: 14px; height: 14px; }
         .empty-state {
-            text-align: center; padding: 80px 20px; color: #cbd5e1;
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+            text-align: center; padding: 80px 20px; color: var(--text-faint);
+            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         }
         .empty-state svg { margin-bottom: 16px; }
-        .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: #94a3b8; margin-bottom: 8px; }
-        .empty-state p { font-size: 13px; color: #cbd5e1; }
+        .empty-state h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
+        .empty-state p { font-size: 13px; color: var(--text-faint); }
     </style>
 
     <div class="page-header">
@@ -61,7 +61,7 @@
                         'linear-gradient(135deg, #c084fc, #7c3aed)',
                         'linear-gradient(135deg, #f9a8d4, #ec4899)',
                         'linear-gradient(135deg, #93c5fd, #3b82f6)',
-                        'linear-gradient(135deg, #6ee7b7, #10b981)',
+                        'linear-gradient(135deg, #6ee7b7, var(--success))',
                     ];
                     $profile = $child->studentProfile;
                 @endphp
@@ -113,7 +113,7 @@
         </div>
     @else
         <div class="empty-state">
-            <svg width="56" height="56" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <svg width="56" height="56" fill="none" stroke="var(--border)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             <h3>{{ __("No Children Linked") }}</h3>
             <p>{{ __("Your account doesn't have any children linked yet. Please contact the school administration.") }}</p>
         </div>

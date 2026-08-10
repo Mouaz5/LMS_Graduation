@@ -1,65 +1,65 @@
 <x-layouts.app :pageTitle="__('Exam Types')">
 <style>
     .page-header { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
+    .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .card {
         background: white;
         border-radius: 14px;
-        border: 1px solid #f1f5f9;
+        border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         overflow: hidden;
         margin-bottom: 24px;
     }
     .card-header {
         padding: 18px 20px;
-        border-bottom: 1px solid #f1f5f9;
+        border-bottom: 1px solid var(--border-soft);
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .card-title { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 
     .form-row { display: flex; gap: 12px; flex-wrap: wrap; padding: 20px; align-items: flex-end; }
     .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
-    .form-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; }
     .form-input, .form-select {
         padding: 9px 14px;
-        border: 1.5px solid #e2e8f0;
+        border: 1.5px solid var(--border);
         border-radius: 8px;
         font-size: 13.5px;
-        font-family: 'DM Sans', sans-serif;
-        color: #374151;
-        background: #fafafa;
+        font-family: var(--font-body);
+        color: var(--text-strong);
+        background: var(--surface-3);
         outline: none;
         transition: border 0.2s;
     }
-    .form-input:focus, .form-select:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+    .form-input:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
 
     .btn-primary {
         padding: 9px 20px;
-        background: #4F46E5;
+        background: var(--primary);
         color: white;
         border: none;
         border-radius: 8px;
         font-size: 13px;
         font-weight: 600;
         cursor: pointer;
-        font-family: 'DM Sans', sans-serif;
+        font-family: var(--font-body);
         transition: background 0.2s;
         white-space: nowrap;
     }
-    .btn-primary:hover { background: #3730a3; }
+    .btn-primary:hover { background: var(--primary-dark); }
     .btn-danger {
         padding: 6px 12px;
-        background: #fee2e2;
-        color: #991b1b;
+        background: var(--danger-tint);
+        color: var(--danger-text);
         border: none;
         border-radius: 6px;
         font-size: 12px;
         font-weight: 600;
         cursor: pointer;
-        font-family: 'DM Sans', sans-serif;
+        font-family: var(--font-body);
     }
     .btn-danger:hover { background: #fecaca; }
     .btn-edit {
@@ -71,23 +71,23 @@
         font-size: 12px;
         font-weight: 600;
         cursor: pointer;
-        font-family: 'DM Sans', sans-serif;
+        font-family: var(--font-body);
     }
     .btn-edit:hover { background: #bfdbfe; }
 
     table { width: 100%; border-collapse: collapse; }
-    thead tr { background: #f8fafc; }
-    th { padding: 12px 16px; text-align: start; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.8px; text-transform: uppercase; }
-    td { padding: 12px 16px; border-bottom: 1px solid #f8fafc; font-size: 13.5px; color: #374151; }
+    thead tr { background: var(--surface-2); }
+    th { padding: 12px 16px; text-align: start; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.8px; text-transform: uppercase; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--surface-2); font-size: 13.5px; color: var(--text-strong); }
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: #fafafa; }
+    tbody tr:hover { background: var(--surface-3); }
 
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
-    .badge-purple { background: #ede9fe; color: #5b21b6; }
+    .badge-purple { background: var(--primary-tint); color: #5b21b6; }
 
     .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; font-weight: 500; }
-    .alert-success { background: #dcfce7; color: #166534; }
-    .alert-error { background: #fee2e2; color: #991b1b; }
+    .alert-success { background: var(--success-tint); color: var(--success-text); }
+    .alert-error { background: var(--danger-tint); color: var(--danger-text); }
 
     .modal-overlay {
         display: none;
@@ -106,10 +106,10 @@
         max-width: 440px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     }
-    .modal-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 20px; }
+    .modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-    .btn-secondary { padding: 9px 20px; background: #f1f5f9; color: #374151; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-secondary { padding: 9px 20px; background: var(--border-soft); color: var(--text-strong); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+    .btn-secondary:hover { background: var(--border); }
 </style>
 
 <div class="page-header">
@@ -165,7 +165,7 @@
 <div class="card">
     <div class="card-header">
         <span class="card-title">{{ __("All Exam Types") }}</span>
-        <span style="font-size:12px; color:#94a3b8;">{{ __(":count total", ['count' => $examTypes->total()]) }}</span>
+        <span style="font-size:12px; color:var(--text-muted);">{{ __(":count total", ['count' => $examTypes->total()]) }}</span>
     </div>
     <table>
         <thead>
@@ -197,7 +197,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align:center; color:#94a3b8; padding:32px;">{{ __("No exam types yet.") }}</td>
+                    <td colspan="5" style="text-align:center; color:var(--text-muted); padding:32px;">{{ __("No exam types yet.") }}</td>
                 </tr>
             @endforelse
         </tbody>

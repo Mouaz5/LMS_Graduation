@@ -1,31 +1,31 @@
 <x-layouts.app :pageTitle="__('My Knowledge Map')">
 <style>
-    .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
-        padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-        font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-        background: #fafafa; outline: none; min-width: 220px;
+        padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+        font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+        background: var(--surface-3); outline: none; min-width: 220px;
     }
 
     .btn { padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary { background: #4F46E5; color: white; }
-    .btn-primary:hover { background: #3730a3; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
 
-    .card { background: white; border-radius: 14px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 24px; }
+    .card { background: white; border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 24px; }
 
     /* Summary bar */
     .summary-bar {
         display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
     }
-    .summary-stat { background: #f8fafc; border-radius: 12px; padding: 14px 20px; flex: 1; min-width: 120px; text-align: center; }
-    .stat-value { font-size: 24px; font-weight: 800; color: #4F46E5; }
-    .stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; margin-top: 2px; }
+    .summary-stat { background: var(--surface-2); border-radius: 12px; padding: 14px 20px; flex: 1; min-width: 120px; text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
 
     /* Tree */
     .tree { font-size: 13px; }
@@ -37,26 +37,26 @@
         padding: 10px 14px; border-radius: 10px; transition: background 0.15s;
         border: 1px solid transparent;
     }
-    .node-row:hover { background: #f8fafc; border-color: #e2e8f0; }
+    .node-row:hover { background: var(--surface-2); border-color: var(--border); }
     .node-circle {
         width: 48px; height: 48px; border-radius: 50%; display: flex; flex-direction: column;
         align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0;
     }
-    .mastery-green  { background: #dcfce7; color: #166534; }
-    .mastery-yellow { background: #fef9c3; color: #854d0e; }
-    .mastery-red    { background: #fee2e2; color: #991b1b; }
-    .mastery-grey   { background: #f1f5f9; color: #94a3b8; }
-    .node-name { font-weight: 600; color: #0f172a; flex: 1; }
-    .node-desc { font-size: 11px; color: #94a3b8; }
-    .node-toggle { color: #94a3b8; font-size: 11px; transition: transform 0.2s; }
+    .mastery-green  { background: var(--success-tint); color: var(--success-text); }
+    .mastery-yellow { background: var(--warning-tint); color: #854d0e; }
+    .mastery-red    { background: var(--danger-tint); color: var(--danger-text); }
+    .mastery-grey   { background: var(--border-soft); color: var(--text-muted); }
+    .node-name { font-weight: 600; color: var(--text-primary); flex: 1; }
+    .node-desc { font-size: 11px; color: var(--text-muted); }
+    .node-toggle { color: var(--text-muted); font-size: 11px; transition: transform 0.2s; }
     .node-toggle.open { transform: rotate(90deg); }
     .node-children { display: none; }
     .node-children.open { display: block; }
     .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; font-size: 12px; }
     .legend-item { display: flex; align-items: center; gap: 6px; }
     .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
-    .empty-state { padding: 60px 20px; text-align: center; color: #94a3b8; }
-    .alert-success { background: #dcfce7; color: #166534; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+    .empty-state { padding: 60px 20px; text-align: center; color: var(--text-muted); }
+    .alert-success { background: var(--success-tint); color: var(--success-text); padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
 </style>
 
 <div class="page-title">{{ __("My Knowledge Map") }}</div>
@@ -107,7 +107,7 @@
     @if($assessed->isNotEmpty())
         <div class="summary-bar">
             <div class="summary-stat">
-                <div class="stat-value" style="color:#166534;">{{ $mastered }}</div>
+                <div class="stat-value" style="color:var(--success-text);">{{ $mastered }}</div>
                 <div class="stat-label">{{ __("Mastered") }}</div>
             </div>
             <div class="summary-stat">
@@ -115,7 +115,7 @@
                 <div class="stat-label">{{ __("Developing") }}</div>
             </div>
             <div class="summary-stat">
-                <div class="stat-value" style="color:#991b1b;">{{ $needsWork }}</div>
+                <div class="stat-value" style="color:var(--danger-text);">{{ $needsWork }}</div>
                 <div class="stat-label">{{ __("Needs Work") }}</div>
             </div>
             <div class="summary-stat">
@@ -126,10 +126,10 @@
     @endif
 
     <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#dcfce7; border:1px solid #bbf7d0;"></div> {{ __("Mastered (≥70%)") }}</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fef9c3; border:1px solid #fde68a;"></div> {{ __("Developing (40–69%)") }}</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#fee2e2; border:1px solid #fca5a5;"></div> {{ __("Needs Work (<40%)") }}</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f1f5f9; border:1px solid #e2e8f0;"></div> {{ __("Not Assessed") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--success-tint); border:1px solid #bbf7d0;"></div> {{ __("Mastered (≥70%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--warning-tint); border:1px solid #fde68a;"></div> {{ __("Developing (40–69%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--danger-tint); border:1px solid var(--danger-border);"></div> {{ __("Needs Work (<40%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--border-soft); border:1px solid var(--border);"></div> {{ __("Not Assessed") }}</div>
     </div>
 
     <div class="card">
@@ -144,7 +144,7 @@
         @else
             <div class="empty-state">
                 <div style="font-size:48px; margin-bottom:12px;">🗺️</div>
-                <div style="font-size:15px; font-weight:700; color:#374151; margin-bottom:8px;">{{ __("No objectives defined yet") }}</div>
+                <div style="font-size:15px; font-weight:700; color:var(--text-strong); margin-bottom:8px;">{{ __("No objectives defined yet") }}</div>
                 <div>{{ __("Your teacher hasn't set up learning objectives for :subject yet.", ['subject' => $subject->name]) }}</div>
             </div>
         @endif

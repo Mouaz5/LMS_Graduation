@@ -12,7 +12,7 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 13.5px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             background: white;
             color: var(--text-primary);
             cursor: pointer;
@@ -21,7 +21,7 @@
         .controls-bar select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
         }
 
         .schedule-grid { overflow-x: auto; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
@@ -38,7 +38,7 @@
             text-align: center;
         }
         .grid-table tbody th {
-            background: #f8fafc;
+            background: var(--surface-2);
             color: var(--text-secondary);
             padding: 10px 16px;
             font-size: 12px;
@@ -58,11 +58,11 @@
             cursor: pointer;
             transition: background 0.15s;
         }
-        .grid-cell.empty:hover { background: #eef2ff; }
+        .grid-cell.empty:hover { background: var(--primary-tint); }
         .grid-cell.filled { background: #f0fdf4; }
-        .cell-add { font-size: 24px; color: #c7d2fe; line-height: 1; }
+        .cell-add { font-size: 24px; color: var(--primary-light); line-height: 1; }
         .cell-content { display: flex; flex-direction: column; gap: 2px; align-items: center; }
-        .cell-subject { color: #4338ca; font-size: 12.5px; font-weight: 700; }
+        .cell-subject { color: var(--primary-dark); font-size: 12.5px; font-weight: 700; }
         .cell-teacher { color: var(--text-secondary); font-size: 11px; }
         .cell-time { color: var(--text-muted); font-size: 10.5px; }
 
@@ -87,7 +87,7 @@
         }
         .modal-header { margin-bottom: 24px; }
         .modal-header h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 19px;
             color: var(--text-primary);
             margin-bottom: 4px;
@@ -110,7 +110,7 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 13.5px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             color: var(--text-primary);
             background: white;
         }
@@ -118,7 +118,7 @@
         .form-group input[type="time"]:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
         }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
@@ -127,12 +127,12 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 13.5px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             background: white;
             color: var(--text-secondary);
             cursor: pointer;
         }
-        .btn-cancel:hover { border-color: #94a3b8; }
+        .btn-cancel:hover { border-color: var(--text-muted); }
         .btn-save {
             padding: 10px 24px;
             background: var(--primary);
@@ -141,18 +141,18 @@
             border-radius: 10px;
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .btn-save:hover { background: var(--primary-dark); }
         .error-banner {
             margin-bottom: 16px;
             padding: 12px 16px;
-            background: #fef2f2;
+            background: var(--danger-tint);
             border: 1px solid #fecaca;
             border-radius: 10px;
-            color: #dc2626;
+            color: var(--danger-dark);
             font-size: 13px;
         }
         .hint-box {
@@ -168,7 +168,7 @@
 
     {{-- Page header --}}
     <div style="margin-bottom: 24px;">
-        <div style="font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
+        <div style="font-family: var(--font-display); font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
             {{ __("Schedule Builder") }}
         </div>
         <div style="font-size:13px; color:var(--text-secondary);">

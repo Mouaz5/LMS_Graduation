@@ -1,4 +1,4 @@
-@props(['title', 'subtitle' => null, 'iconBg' => '#f1f5f9'])
+@props(['title', 'subtitle' => null, 'iconBg' => 'var(--border-soft)'])
 
 <div class="dash-card">
     <div class="dash-card-hdr">

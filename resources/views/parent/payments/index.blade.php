@@ -1,14 +1,14 @@
 <x-layouts.app :pageTitle="__('Payments')">
     <style>
         .page-header { margin-bottom: 24px; }
-        .page-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .page-header p { font-size: 13px; color: #64748b; }
+        .page-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .page-header p { font-size: 13px; color: var(--text-secondary); }
 
         .info-banner {
             display: flex; align-items: center; gap: 10px;
-            background: #eef2ff; border: 1px solid #c7d2fe;
+            background: var(--primary-tint); border: 1px solid var(--primary-light);
             padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
-            font-size: 13px; color: #4338ca;
+            font-size: 13px; color: var(--primary-dark);
         }
         .info-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
 
@@ -16,68 +16,68 @@
 
         .fee-card {
             background: white; border-radius: 14px; padding: 24px;
-            border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: all 0.2s;
         }
-        .fee-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 14px rgba(79,70,229,0.08); }
+        .fee-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent); }
 
-        .fee-year { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .fee-dates { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
+        .fee-year { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .fee-dates { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
 
         .fee-amount-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 20px; }
-        .fee-amount { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #4F46E5; }
-        .fee-currency { font-size: 14px; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
+        .fee-amount { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--primary); }
+        .fee-currency { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
 
         .child-select-group { margin-bottom: 16px; }
-        .child-select-label { font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
+        .child-select-label { font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
         .child-select {
-            width: 100%; padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-            font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-            background: #fafafa; outline: none; transition: border 0.2s; box-sizing: border-box;
+            width: 100%; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+            font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+            background: var(--surface-3); outline: none; transition: border 0.2s; box-sizing: border-box;
             cursor: pointer;
         }
-        .child-select:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .child-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
 
         .fee-status {
             display: flex; align-items: center; gap: 8px;
             padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 500;
             margin-bottom: 16px;
         }
-        .fee-status-paid { background: #d1fae5; color: #059669; }
-        .fee-status-pending { background: #fef9c3; color: #92400e; }
-        .fee-status-available { background: #f8fafc; color: #64748b; }
+        .fee-status-paid { background: var(--success-border); color: var(--success-dark); }
+        .fee-status-pending { background: var(--warning-tint); color: var(--warning-text); }
+        .fee-status-available { background: var(--surface-2); color: var(--text-secondary); }
 
         .btn-pay {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 12px; background: #4F46E5; color: white; border: none;
+            width: 100%; padding: 12px; background: var(--primary); color: white; border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             text-decoration: none;
         }
-        .btn-pay:hover { background: #4338ca; }
-        .btn-pay:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+        .btn-pay:hover { background: var(--primary-dark); }
+        .btn-pay:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
         .btn-pay svg { width: 18px; height: 18px; }
 
         .btn-history {
             display: flex; align-items: center; justify-content: center; gap: 6px;
-            padding: 8px 16px; background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe;
+            padding: 8px 16px; background: var(--primary-tint); color: var(--primary-dark); border: 1px solid var(--primary-light);
             border-radius: 8px; font-size: 12.5px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; text-decoration: none; transition: all 0.2s;
+            font-family: var(--font-body); text-decoration: none; transition: all 0.2s;
         }
-        .btn-history:hover { background: #4338ca; color: white; }
+        .btn-history:hover { background: var(--primary-dark); color: white; }
 
-        .empty-state { text-align: center; padding: 80px 20px; color: #cbd5e1; background: white; border-radius: 14px; border: 1px solid #f1f5f9; }
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-faint); background: white; border-radius: 14px; border: 1px solid var(--border-soft); }
         .empty-state svg { margin-bottom: 16px; }
-        .empty-state h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: #94a3b8; margin-bottom: 8px; }
-        .empty-state p { font-size: 13px; color: #cbd5e1; }
+        .empty-state h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
+        .empty-state p { font-size: 13px; color: var(--text-faint); }
 
         .history-link { text-align: center; margin-top: 24px; }
 
         .test-banner {
             display: flex; align-items: center; gap: 10px;
-            background: #fef3c7; border: 1px solid #fde68a;
+            background: var(--warning-tint); border: 1px solid #fde68a;
             padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
-            font-size: 13px; color: #92400e;
+            font-size: 13px; color: var(--warning-text);
         }
         .test-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
 
@@ -91,43 +91,43 @@
             background: white; border-radius: 16px; padding: 32px;
             max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
-        .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .modal-subtitle { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+        .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
         .modal-summary {
-            background: #f8fafc; border-radius: 10px; padding: 16px;
+            background: var(--surface-2); border-radius: 10px; padding: 16px;
             margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
         }
-        .modal-summary-label { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .modal-summary-value { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #4F46E5; }
-        .modal-summary-currency { font-size: 13px; color: #94a3b8; font-weight: 600; }
+        .modal-summary-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal-summary-value { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--primary); }
+        .modal-summary-currency { font-size: 13px; color: var(--text-muted); font-weight: 600; }
 
         .form-group { margin-bottom: 14px; }
-        .form-label { font-size: 11.5px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
+        .form-label { font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; display: block; }
         .form-input {
-            width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-            font-size: 14px; font-family: 'DM Sans', sans-serif; color: #374151;
-            background: #fafafa; outline: none; transition: border 0.2s; box-sizing: border-box;
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+            font-size: 14px; font-family: var(--font-body); color: var(--text-strong);
+            background: var(--surface-3); outline: none; transition: border 0.2s; box-sizing: border-box;
         }
-        .form-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .form-row { display: flex; gap: 12px; }
         .form-row .form-group { flex: 1; }
         .test-card-hint {
-            font-size: 11.5px; color: #94a3b8; margin-top: 4px; padding: 8px 12px;
+            font-size: 11.5px; color: var(--text-muted); margin-top: 4px; padding: 8px 12px;
             background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; color: #15803d;
         }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
         .btn-submit {
-            flex: 1; padding: 12px; background: #4F46E5; color: white; border: none;
+            flex: 1; padding: 12px; background: var(--primary); color: white; border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
-        .btn-submit:hover { background: #4338ca; }
+        .btn-submit:hover { background: var(--primary-dark); }
         .btn-cancel {
-            padding: 12px 20px; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;
+            padding: 12px 20px; background: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border);
             border-radius: 10px; font-size: 14px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
-        .btn-cancel:hover { background: #f1f5f9; }
+        .btn-cancel:hover { background: var(--border-soft); }
     </style>
 
     <div
@@ -152,7 +152,7 @@
 
     @if($academicYears->isEmpty())
         <div class="empty-state">
-            <svg width="56" height="56" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+            <svg width="56" height="56" fill="none" stroke="var(--border)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             <h3>{{ __("No Tuition Fees Available") }}</h3>
             <p>{{ __("There are no academic years with tuition fees configured yet. Please check back later.") }}</p>
         </div>

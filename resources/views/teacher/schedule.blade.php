@@ -4,7 +4,7 @@
             margin-bottom: 24px;
         }
         .page-header h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
             color: var(--text-primary);
@@ -45,7 +45,7 @@
             background: var(--primary);
             border-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .day-tab .day-name {
             font-size: 13px;
@@ -59,7 +59,7 @@
             font-size: 11px;
             padding: 2px 8px;
             border-radius: 20px;
-            background: #f1f5f9;
+            background: var(--border-soft);
             color: var(--text-muted);
             font-weight: 600;
         }
@@ -81,13 +81,13 @@
             background: white;
             border-radius: 14px;
             padding: 20px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             transition: all 0.2s;
         }
         .slot-card:hover {
-            border-color: #c7d2fe;
-            box-shadow: 0 4px 14px rgba(79,70,229,0.08);
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent);
         }
 
         .period-badge {
@@ -102,7 +102,7 @@
             font-size: 14px;
             font-weight: 700;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
         }
 
         .slot-info {
@@ -112,12 +112,12 @@
         .slot-subject {
             font-size: 15px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
         .slot-meta {
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -138,7 +138,7 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #cbd5e1;
+            color: var(--text-faint);
         }
         .empty-state svg {
             margin-bottom: 12px;
@@ -161,7 +161,7 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
         }
         .refresh-btn:hover {
             border-color: var(--primary);
@@ -217,7 +217,7 @@
         </div>
     @else
         <div class="empty-state">
-            <svg width="48" height="48" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24">
+            <svg width="48" height="48" fill="none" stroke="var(--border)" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
             <p>{{ __("No classes on :day", ['day' => ucfirst($selectedDay)]) }}</p>

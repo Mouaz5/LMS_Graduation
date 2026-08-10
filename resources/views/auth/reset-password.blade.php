@@ -11,41 +11,41 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'DM Sans', 'Cairo', sans-serif;
+            font-family: var(--font-body);
             min-height: 100vh;
             display: flex; align-items: center; justify-content: center;
-            background: #f8fafc; -webkit-font-smoothing: antialiased;
+            background: var(--surface-2); -webkit-font-smoothing: antialiased;
         }
         .card {
             background: white; border-radius: 20px; padding: 40px;
             width: 100%; max-width: 420px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.07); border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07); border: 1px solid var(--border);
         }
-        h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+        h1 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
         [dir="rtl"] body, [dir="rtl"] h1 { font-family: 'Cairo', sans-serif; }
-        .sub { font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 28px; }
+        .sub { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
         .form-group { margin-bottom: 18px; }
-        label { display: block; font-size: 12.5px; font-weight: 600; color: #374151; margin-bottom: 7px; }
+        label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-strong); margin-bottom: 7px; }
         input[type="email"], input[type="password"], input[type="text"] {
             width: 100%; padding: 11px 14px;
-            border: 1.5px solid #e2e8f0; border-radius: 10px;
-            font-size: 14px; font-family: 'DM Sans', 'Cairo', sans-serif; color: #0f172a;
-            background: #fafafa; outline: none; transition: all 0.2s;
+            border: 1.5px solid var(--border); border-radius: 10px;
+            font-size: 14px; font-family: var(--font-body); color: var(--text-primary);
+            background: var(--surface-3); outline: none; transition: all 0.2s;
         }
-        input:focus { border-color: #4F46E5; background: white; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-        .error { font-size: 12px; color: #ef4444; margin-top: 5px; }
+        input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
+        .error { font-size: 12px; color: var(--danger); margin-top: 5px; }
         .btn {
             width: 100%; padding: 13px;
-            background: linear-gradient(135deg, #6366f1, #3730a3);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
             color: white; border: none; border-radius: 10px;
-            font-size: 14.5px; font-weight: 600; font-family: 'DM Sans', 'Cairo', sans-serif;
+            font-size: 14.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
         }
-        .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,70,229,0.45); }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 45%, transparent); }
         .back-link {
             display: flex; align-items: center; gap: 6px;
-            font-size: 13px; color: #4F46E5; text-decoration: none;
+            font-size: 13px; color: var(--primary); text-decoration: none;
             font-weight: 500; margin-top: 20px; justify-content: center;
         }
         .back-link:hover { text-decoration: underline; }

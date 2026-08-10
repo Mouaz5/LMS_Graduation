@@ -11,25 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        :root {
-            --sidebar-width: 260px;
-            --topbar-height: 64px;
-            --primary: #4F46E5;
-            --primary-dark: #3730a3;
-            --primary-light: #818cf8;
-            --accent: #10b981;
-            --surface: #ffffff;
-            --surface-2: #f8fafc;
-            --border: #e2e8f0;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --sidebar-bg: #1e1b4b;
-            --sidebar-text: #c7d2fe;
-            --sidebar-active: #4F46E5;
-            --sidebar-hover: rgba(99,102,241,0.15);
-        }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -40,12 +21,12 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3 { font-family: 'Playfair Display', 'Cairo', serif; }
+        h1, h2, h3 { font-family: var(--font-display); }
 
         /* Arabic glyphs fall through to Cairo per-glyph via the font stacks above;
-           force Cairo for headings in RTL so Playfair's Latin-only serif never shows. */
+           force Cairo for headings in RTL so the Latin-only display serif never shows. */
         [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
-            font-family: 'Cairo', sans-serif;
+            font-family: var(--font-display-rtl);
         }
 
         /* === LAYOUT === */
@@ -74,14 +55,14 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.2) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 80%, rgba(79,70,229,0.15) 0%, transparent 60%);
+                radial-gradient(ellipse at 20% 20%, color-mix(in srgb, var(--primary-light) 20%, transparent) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, color-mix(in srgb, var(--primary) 15%, transparent) 0%, transparent 60%);
             pointer-events: none;
         }
 
         .sidebar-logo {
             padding: 24px 20px 20px;
-            border-bottom: 1px solid rgba(99,102,241,0.2);
+            border-bottom: 1px solid color-mix(in srgb, var(--primary-light) 20%, transparent);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -98,13 +79,13 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 40%, transparent);
         }
 
         .logo-mark svg { width: 20px; height: 20px; color: white; }
 
         .logo-text {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 18px;
             font-weight: 700;
             color: white;
@@ -160,7 +141,7 @@
         .nav-item.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 40%, transparent);
         }
 
         .nav-item.active::before {
@@ -190,7 +171,7 @@
 
         .sidebar-footer {
             padding: 16px 12px 20px;
-            border-top: 1px solid rgba(99,102,241,0.2);
+            border-top: 1px solid color-mix(in srgb, var(--primary-light) 20%, transparent);
             position: relative;
             z-index: 1;
         }
@@ -261,7 +242,7 @@
         .topbar-right { display: flex; align-items: center; gap: 12px; }
 
         .page-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
@@ -320,13 +301,13 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
-            font-family: 'DM Sans', 'Cairo', sans-serif;
+            font-family: var(--font-body);
         }
 
         .logout-btn:hover {
-            background: #fef2f2;
-            border-color: #fca5a5;
-            color: #dc2626;
+            background: var(--danger-tint);
+            border-color: var(--danger-border);
+            color: var(--danger-dark);
         }
 
         .logout-btn svg { width: 15px; height: 15px; }
@@ -351,15 +332,15 @@
         }
 
         .flash-success {
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
+            background: var(--success-tint);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
         }
 
         .flash-error {
-            background: #fef2f2;
-            border: 1px solid #fca5a5;
-            color: #991b1b;
+            background: var(--danger-tint);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-text);
         }
 
         @keyframes slideDown {
@@ -549,11 +530,11 @@
         <!-- Content -->
         <main class="content-area">
             @if($impersonating)
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#fffbeb; border:1px solid #fcd34d; color:#92400e; padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:13px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--warning-tint); border:1px solid var(--warning-border); color:var(--warning-text); padding:12px 16px; border-radius:10px; margin-bottom:16px; font-size:13px;">
                     <span>{{ __('Read-only impersonation: :role. Expires at :time.', ['role' => __(ucfirst($currentRole)), 'time' => $impersonationExpiresAt?->format('H:i')]) }}</span>
                     <form action="{{ route('admin.impersonate.stop') }}" method="POST" style="margin:0;">
                         @csrf
-                        <button type="submit" style="padding:6px 12px; border:1px solid #d97706; border-radius:7px; background:#fff; color:#92400e; font-size:12px; font-weight:600; cursor:pointer;">{{ __('Stop impersonation') }}</button>
+                        <button type="submit" style="padding:6px 12px; border:1px solid var(--warning-dark); border-radius:7px; background:var(--surface); color:var(--warning-text); font-size:12px; font-weight:600; cursor:pointer;">{{ __('Stop impersonation') }}</button>
                     </form>
                 </div>
             @endif

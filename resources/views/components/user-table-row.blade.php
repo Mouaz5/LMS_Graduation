@@ -2,24 +2,24 @@
 
 @php
 $roleBadge = [
-    'admin'   => ['label' => __('Admin'),   'bg' => '#eef2ff', 'color' => '#4338ca', 'dot' => '#4F46E5'],
+    'admin'   => ['label' => __('Admin'),   'bg' => 'var(--primary-tint)', 'color' => 'var(--primary-dark)', 'dot' => 'var(--primary)'],
     'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
-    'student' => ['label' => __('Student'), 'bg' => '#ecfdf5', 'color' => '#065f46', 'dot' => '#10b981'],
+    'student' => ['label' => __('Student'), 'bg' => 'var(--success-tint)', 'color' => 'var(--success-text)', 'dot' => 'var(--success)'],
     'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
 ];
 $rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
 $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
 
 $avatarColors = [
-    'admin'   => ['from' => '#818cf8', 'to' => '#4F46E5'],
+    'admin'   => ['from' => 'var(--primary-light)', 'to' => 'var(--primary)'],
     'teacher' => ['from' => '#60a5fa', 'to' => '#2563eb'],
-    'student' => ['from' => '#34d399', 'to' => '#059669'],
+    'student' => ['from' => '#34d399', 'to' => 'var(--success-dark)'],
     'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
 ];
 $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
 @endphp
 
-<tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s; cursor: pointer;"
+<tr style="border-bottom: 1px solid var(--border-soft); transition: background 0.15s; cursor: pointer;"
     data-row-href="{{ route('admin.users.show', $user) }}">
 
     {{-- User Info --}}
@@ -40,8 +40,8 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
                 box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             ">{{ $initials }}</div>
             <div>
-                <div style="font-size: 14px; font-weight: 600; color: #0f172a;">{{ $user->name }}</div>
-                <div style="font-size: 12px; color: #94a3b8; margin-top: 1px;">{{ $user->email }}</div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">{{ $user->name }}</div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 1px;">{{ $user->email }}</div>
             </div>
         </div>
     </td>
@@ -65,7 +65,7 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
     </td>
 
     {{-- Phone --}}
-    <td style="padding: 14px 16px; font-size: 13px; color: #64748b;">
+    <td style="padding: 14px 16px; font-size: 13px; color: var(--text-secondary);">
         {{ $user->phone ?? '—' }}
     </td>
 
@@ -80,10 +80,10 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
                 border-radius: 20px;
                 font-size: 11.5px;
                 font-weight: 600;
-                background: #ecfdf5;
-                color: #065f46;
+                background: var(--success-tint);
+                color: var(--success-text);
             ">
-                <span style="width: 5px; height: 5px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                <span style="width: 5px; height: 5px; border-radius: 50%; background: var(--success); display: inline-block;"></span>
                 {{ __('Active') }}
             </span>
         @else
@@ -95,17 +95,17 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
                 border-radius: 20px;
                 font-size: 11.5px;
                 font-weight: 600;
-                background: #f8fafc;
-                color: #94a3b8;
+                background: var(--surface-2);
+                color: var(--text-muted);
             ">
-                <span style="width: 5px; height: 5px; border-radius: 50%; background: #cbd5e1; display: inline-block;"></span>
+                <span style="width: 5px; height: 5px; border-radius: 50%; background: var(--text-faint); display: inline-block;"></span>
                 {{ __('Inactive') }}
             </span>
         @endif
     </td>
 
     {{-- Joined --}}
-    <td style="padding: 14px 16px; font-size: 12px; color: #94a3b8;">
+    <td style="padding: 14px 16px; font-size: 12px; color: var(--text-muted);">
         {{ $user->created_at->format('M d, Y') }}
     </td>
 
@@ -119,13 +119,13 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
                 border-radius: 8px;
                 font-size: 12px;
                 font-weight: 600;
-                font-family: 'DM Sans', sans-serif;
+                font-family: var(--font-body);
                 cursor: pointer;
                 transition: all 0.2s;
                 border: 1px solid;
                 {{ $user->is_active
-                    ? 'background: #fff1f2; border-color: #fca5a5; color: #dc2626;'
-                    : 'background: #ecfdf5; border-color: #a7f3d0; color: #059669;' }}
+                    ? 'background: var(--danger-tint); border-color: var(--danger-border); color: var(--danger-dark);'
+                    : 'background: var(--success-tint); border-color: var(--success-border); color: var(--success-dark);' }}
             ">
                 {{ $user->is_active ? __('Deactivate') : __('Activate') }}
             </button>

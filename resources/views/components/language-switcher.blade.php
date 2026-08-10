@@ -20,20 +20,20 @@
             gap: 6px;
             padding: 5px 12px;
             border-radius: 50px;
-            background: var(--surface-2, #f8fafc);
-            border: 1px solid var(--border, #e2e8f0);
+            background: var(--surface-2, var(--surface-2));
+            border: 1px solid var(--border, var(--border));
             font-size: 13px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
         }
         .lang-switcher .lang-option {
-            color: var(--text-muted, #94a3b8);
+            color: var(--text-muted, var(--text-muted));
             text-decoration: none;
             transition: color 0.2s;
             line-height: 1;
         }
-        .lang-switcher .lang-option:hover { color: var(--primary, #4F46E5); }
-        .lang-switcher .lang-option.active { color: var(--primary, #4F46E5); }
-        .lang-switcher .lang-sep { color: var(--border, #cbd5e1); }
+        .lang-switcher .lang-option:hover { color: var(--primary, var(--primary)); }
+        .lang-switcher .lang-option.active { color: var(--primary, var(--primary)); }
+        .lang-switcher .lang-sep { color: var(--border, var(--text-faint)); }
     </style>
 @endonce

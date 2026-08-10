@@ -12,30 +12,23 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        :root {
-            --primary: #4F46E5;
-            --primary-dark: #3730a3;
-            --primary-light: #818cf8;
-            --accent: #10b981;
-        }
-
         body {
-            font-family: 'DM Sans', 'Cairo', sans-serif;
+            font-family: var(--font-body);
             min-height: 100vh;
             display: flex;
             -webkit-font-smoothing: antialiased;
-            background: #0f0e1a;
+            background: var(--sidebar-bg);
         }
 
         [dir="rtl"] body,
         [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
-            font-family: 'Cairo', sans-serif;
+            font-family: var(--font-display-rtl);
         }
 
         /* Left panel — brand */
         .brand-panel {
             width: 44%;
-            background: #1e1b4b;
+            background: var(--sidebar-bg);
             position: relative;
             overflow: hidden;
             display: flex;
@@ -50,28 +43,28 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at 30% 30%, rgba(99,102,241,0.35) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 70%, rgba(79,70,229,0.25) 0%, transparent 60%);
+                radial-gradient(ellipse at 30% 30%, color-mix(in srgb, var(--primary-light) 35%, transparent) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 70%, color-mix(in srgb, var(--primary) 25%, transparent) 0%, transparent 60%);
         }
 
         /* Geometric decorations */
         .geo-ring {
             position: absolute;
             border-radius: 50%;
-            border: 1px solid rgba(99,102,241,0.2);
+            border: 1px solid color-mix(in srgb, var(--primary-light) 20%, transparent);
         }
 
         .geo-ring-1 { width: 300px; height: 300px; top: -80px; right: -80px; }
-        .geo-ring-2 { width: 200px; height: 200px; top: -40px; right: -40px; border-color: rgba(99,102,241,0.3); }
+        .geo-ring-2 { width: 200px; height: 200px; top: -40px; right: -40px; border-color: color-mix(in srgb, var(--primary-light) 30%, transparent); }
         .geo-ring-3 { width: 400px; height: 400px; bottom: -120px; left: -120px; }
-        .geo-ring-4 { width: 250px; height: 250px; bottom: -80px; left: -80px; border-color: rgba(99,102,241,0.3); }
+        .geo-ring-4 { width: 250px; height: 250px; bottom: -80px; left: -80px; border-color: color-mix(in srgb, var(--primary-light) 30%, transparent); }
 
         .grid-overlay {
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(99,102,241,0.06) 1px, transparent 1px);
+                linear-gradient(color-mix(in srgb, var(--primary-light) 6%, transparent) 1px, transparent 1px),
+                linear-gradient(90deg, color-mix(in srgb, var(--primary-light) 6%, transparent) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
@@ -90,18 +83,18 @@
         .brand-logo-mark {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, #818cf8, #4F46E5);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 24px rgba(79,70,229,0.5);
+            box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 50%, transparent);
         }
 
         .brand-logo-mark svg { width: 26px; height: 26px; color: white; }
 
         .brand-name {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
             color: white;
@@ -109,13 +102,13 @@
 
         .brand-tagline {
             font-size: 11px;
-            color: #a5b4fc;
+            color: var(--sidebar-text-dim);
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         .brand-headline {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 36px;
             font-weight: 700;
             color: white;
@@ -125,12 +118,12 @@
 
         .brand-headline em {
             font-style: italic;
-            color: #818cf8;
+            color: var(--primary-light);
         }
 
         .brand-desc {
             font-size: 14px;
-            color: #c7d2fe;
+            color: var(--sidebar-text);
             line-height: 1.7;
             max-width: 340px;
             margin-bottom: 48px;
@@ -147,7 +140,7 @@
             align-items: center;
             gap: 10px;
             font-size: 13px;
-            color: #a5b4fc;
+            color: var(--sidebar-text-dim);
         }
 
         .brand-feature-dot {
@@ -164,7 +157,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #ffffff;
+            background: var(--surface);
             padding: 40px 48px;
             position: relative;
         }
@@ -185,16 +178,16 @@
         }
 
         .form-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 28px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
 
         .form-subtitle {
             font-size: 14px;
-            color: #64748b;
+            color: var(--text-secondary);
         }
 
         .form-group {
@@ -205,7 +198,7 @@
             display: block;
             font-size: 12.5px;
             font-weight: 600;
-            color: #374151;
+            color: var(--text-strong);
             margin-bottom: 7px;
             letter-spacing: 0.3px;
         }
@@ -213,25 +206,25 @@
         .form-input {
             width: 100%;
             padding: 11px 14px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
-            font-family: 'DM Sans', 'Cairo', sans-serif;
-            color: #0f172a;
-            background: #fafafa;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            background: var(--surface-3);
             transition: all 0.2s;
             outline: none;
         }
 
         .form-input:focus {
             border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
         }
 
         .form-input.error {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 10%, transparent);
         }
 
         .input-wrapper {
@@ -245,7 +238,7 @@
             transform: translateY(-50%);
             width: 16px;
             height: 16px;
-            color: #94a3b8;
+            color: var(--text-muted);
             pointer-events: none;
         }
 
@@ -267,7 +260,7 @@
             width: 28px;
             height: 28px;
             padding: 0;
-            color: #94a3b8;
+            color: var(--text-muted);
             background: transparent;
             border: 0;
             border-radius: 7px;
@@ -279,7 +272,7 @@
         .password-toggle:hover,
         .password-toggle:focus-visible {
             color: var(--primary);
-            background: #eef2ff;
+            background: var(--primary-tint);
             outline: none;
         }
 
@@ -290,7 +283,7 @@
 
         .error-msg {
             font-size: 12px;
-            color: #ef4444;
+            color: var(--danger);
             margin-top: 5px;
             display: flex;
             align-items: center;
@@ -309,7 +302,7 @@
             align-items: center;
             gap: 8px;
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             cursor: pointer;
         }
 
@@ -332,22 +325,22 @@
         .submit-btn {
             width: 100%;
             padding: 13px;
-            background: linear-gradient(135deg, #6366f1, var(--primary-dark));
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 14.5px;
             font-weight: 600;
-            font-family: 'DM Sans', 'Cairo', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
             letter-spacing: 0.2px;
-            box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
         }
 
         .submit-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(79,70,229,0.45);
+            box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 45%, transparent);
         }
 
         .submit-btn:active { transform: translateY(0); }
@@ -357,7 +350,7 @@
             align-items: center;
             gap: 12px;
             margin: 24px 0;
-            color: #cbd5e1;
+            color: var(--text-faint);
             font-size: 12px;
         }
 
@@ -365,21 +358,21 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: #e2e8f0;
+            background: var(--border);
         }
 
         .demo-credentials {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
             border-radius: 10px;
             padding: 14px;
             font-size: 12px;
-            color: #64748b;
+            color: var(--text-secondary);
         }
 
         .demo-credentials strong {
             display: block;
-            color: #374151;
+            color: var(--text-strong);
             font-weight: 600;
             margin-bottom: 6px;
             font-size: 11px;

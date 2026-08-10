@@ -1,22 +1,22 @@
 <x-layouts.app :pageTitle="__('Diagnostic Test')">
 <style>
     /* Progress bar */
-    .progress-wrap { background: #f1f5f9; border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 20px; }
-    .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #818cf8); transition: width 0.4s ease; }
-    .progress-label { font-size: 12px; color: #64748b; margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .progress-wrap { background: var(--border-soft); border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 20px; }
+    .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--primary-light)); transition: width 0.4s ease; }
+    .progress-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; }
 
     /* Question card */
-    .question-card { margin-bottom: 24px; padding: 20px; background: #fafafa; border-radius: 12px; border: 1px solid #e2e8f0; }
-    .question-number { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
-    .question-text { font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 14px; line-height: 1.5; }
+    .question-card { margin-bottom: 24px; padding: 20px; background: var(--surface-3); border-radius: 12px; border: 1px solid var(--border); }
+    .question-number { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 8px; }
+    .question-text { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; line-height: 1.5; }
     .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-label {
         display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-        border-radius: 8px; border: 1.5px solid #e2e8f0; cursor: pointer;
-        transition: border-color 0.15s, background 0.15s; font-size: 13px; color: #374151;
+        border-radius: 8px; border: 1.5px solid var(--border); cursor: pointer;
+        transition: border-color 0.15s, background 0.15s; font-size: 13px; color: var(--text-strong);
     }
-    .option-label:has(input:checked) { border-color: #4F46E5; background: #ede9fe; color: #3730a3; font-weight: 600; }
-    .option-label input[type=radio] { accent-color: #4F46E5; width: 16px; height: 16px; }
+    .option-label:has(input:checked) { border-color: var(--primary); background: var(--primary-tint); color: var(--primary-dark); font-weight: 600; }
+    .option-label input[type=radio] { accent-color: var(--primary); width: 16px; height: 16px; }
 
 </style>
 

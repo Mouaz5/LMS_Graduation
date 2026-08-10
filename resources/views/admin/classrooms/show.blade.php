@@ -2,17 +2,17 @@
     <style>
         .back-link {
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
             margin-bottom: 20px;
         }
-        .back-link:hover { color: #334155; }
+        .back-link:hover { color: var(--text-primary); }
         .detail-header {
             padding: 28px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
             display: flex;
             align-items: center;
             gap: 16px;
@@ -28,14 +28,14 @@
             flex-shrink: 0;
         }
         .detail-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .detail-subtitle {
             font-size: 13px;
-            color: #94a3b8;
+            color: var(--text-muted);
             margin-top: 2px;
         }
         .detail-row {
@@ -43,17 +43,17 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 28px;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid var(--surface-2);
         }
         .detail-label {
             font-size: 13px;
             font-weight: 500;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
         .detail-value {
             font-size: 14px;
             font-weight: 600;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .badge {
             display: inline-flex;
@@ -69,24 +69,24 @@
             max-width: 640px;
         }
         .related-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 16px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
         .related-card {
             background: white;
             border-radius: 14px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
         }
         .related-item {
             padding: 14px 20px;
             font-size: 13.5px;
-            color: #334155;
-            border-bottom: 1px solid #f8fafc;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--surface-2);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -104,7 +104,7 @@
         .empty-msg {
             padding: 24px;
             text-align: center;
-            color: #cbd5e1;
+            color: var(--text-faint);
             font-size: 13px;
         }
     </style>
@@ -130,7 +130,7 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">{{ __("Students") }}</span>
-                <span class="badge" style="background: #ecfdf5; color: #065f46;">
+                <span class="badge" style="background: var(--success-tint); color: var(--success-text);">
                     {{ $classroom->studentProfiles->count() }} / {{ $classroom->capacity }}
                 </span>
             </div>
@@ -147,14 +147,14 @@
         <div class="related-card">
             @forelse($classroom->studentProfiles as $profile)
                 <div class="related-item">
-                    <div class="related-item-icon" style="background: #ecfdf5;">
-                        <svg width="16" height="16" fill="none" stroke="#059669" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422c-.523.28-1.12.422-1.735.422H7.575c-.615 0-1.212-.142-1.735-.422L12 14z"/></svg>
+                    <div class="related-item-icon" style="background: var(--success-tint);">
+                        <svg width="16" height="16" fill="none" stroke="var(--success-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422c-.523.28-1.12.422-1.735.422H7.575c-.615 0-1.212-.142-1.735-.422L12 14z"/></svg>
                     </div>
                     <div style="flex: 1;">
                         <div style="font-weight: 600;">{{ $profile->student->name }}</div>
-                        <div style="font-size: 12px; color: #94a3b8;">{{ $profile->student->email }}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">{{ $profile->student->email }}</div>
                     </div>
-                    <span style="font-size: 11px; color: #94a3b8;">{{ __("Enrolled :date", ['date' => $profile->enrollment_date->format('M d, Y')]) }}</span>
+                    <span style="font-size: 11px; color: var(--text-muted);">{{ __("Enrolled :date", ['date' => $profile->enrollment_date->format('M d, Y')]) }}</span>
                 </div>
             @empty
                 <div class="empty-msg">{{ __("No students enrolled yet.") }}</div>
@@ -170,14 +170,14 @@
                 @foreach($classroom->teacherAssignments->groupBy('subject.name') as $subjectName => $assignments)
                     @foreach($assignments as $assignment)
                         <div class="related-item">
-                            <div class="related-item-icon" style="background: #eef2ff;">
-                                <svg width="16" height="16" fill="none" stroke="#4F46E5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            <div class="related-item-icon" style="background: var(--primary-tint);">
+                                <svg width="16" height="16" fill="none" stroke="var(--primary)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                             </div>
                             <div style="flex: 1;">
                                 <div style="font-weight: 600;">{{ $assignment->subject->name }}</div>
-                                <div style="font-size: 12px; color: #94a3b8;">{{ $assignment->teacher->name }}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">{{ $assignment->teacher->name }}</div>
                             </div>
-                            <span class="badge" style="background: #eef2ff; color: #4338ca; font-size: 10px;">{{ $assignment->academicYear->name }}</span>
+                            <span class="badge" style="background: var(--primary-tint); color: var(--primary-dark); font-size: 10px;">{{ $assignment->academicYear->name }}</span>
                         </div>
                     @endforeach
                 @endforeach

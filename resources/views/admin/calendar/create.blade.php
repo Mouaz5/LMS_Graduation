@@ -3,7 +3,7 @@
         .form-card {
             background: white;
             border-radius: 14px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 28px;
             max-width: 560px;
@@ -15,24 +15,24 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #334155;
+            color: var(--text-primary);
             margin-bottom: 6px;
         }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 10px 14px;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
-            color: #0f172a;
-            background: #fafafa;
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            background: var(--surface-3);
             transition: all 0.2s;
             outline: none;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
             background: white;
         }
         .form-group textarea { resize: vertical; min-height: 80px; }
@@ -41,45 +41,45 @@
             align-items: center;
             gap: 6px;
             padding: 10px 24px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .btn-primary:hover {
-            background: #4338ca;
+            background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
         }
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             padding: 10px 24px;
             background: white;
-            color: #64748b;
-            border: 1px solid #e2e8f0;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
         }
         .btn-secondary:hover {
-            border-color: #cbd5e1;
-            color: #334155;
+            border-color: var(--text-faint);
+            color: var(--text-primary);
         }
     </style>
 
     <div style="margin-bottom: 20px;">
-        <a href="{{ route('admin.calendar.index') }}" style="font-size: 13px; color: #64748b; text-decoration: none;">
+        <a href="{{ route('admin.calendar.index') }}" style="font-size: 13px; color: var(--text-secondary); text-decoration: none;">
             &larr; {{ __("Back to Calendar") }}
         </a>
     </div>
@@ -92,7 +92,7 @@
                 <label for="date">{{ __("Date") }}</label>
                 <input type="date" id="date" name="date" value="{{ old('date') }}" required>
                 @error('date')
-                    <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                    <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -105,7 +105,7 @@
                     <option value="exam" {{ old('type') === 'exam' ? 'selected' : '' }}>{{ __("Exam") }}</option>
                 </select>
                 @error('type')
-                    <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                    <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -113,7 +113,7 @@
                 <label for="description">{{ __("Description") }}</label>
                 <textarea id="description" name="description" placeholder="{{ __('e.g. Spring Break, Midterm Exams') }}" required>{{ old('description') }}</textarea>
                 @error('description')
-                    <div style="color: #dc2626; font-size: 12px; margin-top: 4px;">{{ $message }}</div>
+                    <div style="color: var(--danger-dark); font-size: 12px; margin-top: 4px;">{{ $message }}</div>
                 @enderror
             </div>
 

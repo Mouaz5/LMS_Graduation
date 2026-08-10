@@ -1,67 +1,67 @@
 <x-layouts.app :pageTitle="__('Wallet')">
     <style>
         .page-header { margin-bottom: 24px; }
-        .page-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
-        .page-header p { font-size: 13px; color: #64748b; }
+        .page-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .page-header p { font-size: 13px; color: var(--text-secondary); }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .stat-card {
             background: white; border-radius: 14px; padding: 20px;
-            border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        .stat-label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-        .stat-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: #0f172a; }
-        .stat-card.success .stat-value { color: #059669; }
-        .stat-card.pending .stat-value { color: #d97706; }
-        .stat-card.failed .stat-value { color: #dc2626; }
+        .stat-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+        .stat-value { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--text-primary); }
+        .stat-card.success .stat-value { color: var(--success-dark); }
+        .stat-card.pending .stat-value { color: var(--warning-dark); }
+        .stat-card.failed .stat-value { color: var(--danger-dark); }
 
         .filter-bar {
             background: white; border-radius: 14px;
-            border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             padding: 16px 20px; margin-bottom: 20px;
             display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
         }
         .filter-group { display: flex; flex-direction: column; gap: 4px; }
-        .filter-label { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .filter-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
         .filter-select, .filter-input {
-            padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-            font-size: 13px; font-family: 'DM Sans', sans-serif; color: #374151;
-            background: #fafafa; outline: none; transition: border 0.2s; min-width: 160px;
+            padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+            font-size: 13px; font-family: var(--font-body); color: var(--text-strong);
+            background: var(--surface-3); outline: none; transition: border 0.2s; min-width: 160px;
         }
-        .filter-select:focus, .filter-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .filter-select:focus, .filter-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .btn-filter {
-            padding: 8px 18px; background: #4F46E5; color: white; border: none;
+            padding: 8px 18px; background: var(--primary); color: white; border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
-        .btn-filter:hover { background: #4338ca; }
+        .btn-filter:hover { background: var(--primary-dark); }
         .btn-clear {
-            padding: 8px 14px; font-size: 12.5px; color: #64748b; text-decoration: none; font-weight: 500;
+            padding: 8px 14px; font-size: 12.5px; color: var(--text-secondary); text-decoration: none; font-weight: 500;
         }
 
         .table-card {
             background: white; border-radius: 14px;
-            border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
         }
-        .table-header { padding: 20px; border-bottom: 1px solid #f1f5f9; }
-        .table-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #0f172a; }
-        .table-meta { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .table-header { padding: 20px; border-bottom: 1px solid var(--border-soft); }
+        .table-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-primary); }
+        .table-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 12px 16px; text-align: start;
-            font-size: 11px; font-weight: 700; color: #94a3b8;
+            font-size: 11px; font-weight: 700; color: var(--text-muted);
             letter-spacing: 0.8px; text-transform: uppercase;
         }
         th:first-child { padding-inline-start: 20px; }
         td {
-            padding: 14px 16px; border-bottom: 1px solid #f8fafc;
-            font-size: 13.5px; color: #374151; vertical-align: middle;
+            padding: 14px 16px; border-bottom: 1px solid var(--surface-2);
+            font-size: 13.5px; color: var(--text-strong); vertical-align: middle;
         }
         td:first-child { padding-inline-start: 20px; }
-        tbody tr:hover { background: #fafbff; }
+        tbody tr:hover { background: var(--surface-2); }
         tbody tr:last-child td { border-bottom: none; }
 
         .badge {
@@ -70,27 +70,27 @@
             font-size: 11.5px; font-weight: 600;
         }
         .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-        .badge-succeeded { background: #d1fae5; color: #059669; }
-        .badge-pending   { background: #fef9c3; color: #92400e; }
-        .badge-failed    { background: #fee2e2; color: #dc2626; }
-        .badge-refunded  { background: #eef2ff; color: #4F46E5; }
+        .badge-succeeded { background: var(--success-border); color: var(--success-dark); }
+        .badge-pending   { background: var(--warning-tint); color: var(--warning-text); }
+        .badge-failed    { background: var(--danger-tint); color: var(--danger-dark); }
+        .badge-refunded  { background: var(--primary-tint); color: var(--primary); }
 
         .empty-state { text-align: center; padding: 56px 20px; }
         .empty-icon {
-            width: 56px; height: 56px; background: #f1f5f9; border-radius: 50%;
+            width: 56px; height: 56px; background: var(--border-soft); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
         }
 
         .pagination-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; border-top: 1px solid #f1f5f9;
-            font-size: 12px; color: #64748b;
+            padding: 16px 20px; border-top: 1px solid var(--border-soft);
+            font-size: 12px; color: var(--text-secondary);
         }
 
-        .wallet-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: white; border-radius: 12px; padding: 6px; border: 1px solid #f1f5f9; width: fit-content; }
-        .wallet-tab { padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 600; font-family: 'DM Sans', sans-serif; color: #64748b; text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-        .wallet-tab:hover { background: #f8fafc; color: #0f172a; }
-        .wallet-tab.active { background: #4F46E5; color: white; }
+        .wallet-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: white; border-radius: 12px; padding: 6px; border: 1px solid var(--border-soft); width: fit-content; }
+        .wallet-tab { padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 600; font-family: var(--font-body); color: var(--text-secondary); text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .wallet-tab:hover { background: var(--surface-2); color: var(--text-primary); }
+        .wallet-tab.active { background: var(--primary); color: white; }
         .wallet-tab svg { width: 16px; height: 16px; }
     </style>
 
@@ -172,10 +172,10 @@
         @if($payments->isEmpty())
             <div class="empty-state">
                 <div class="empty-icon">
-                    <svg width="24" height="24" fill="none" stroke="#94a3b8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                    <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
-                <div style="font-family: 'Playfair Display', serif; font-size: 16px; color: #94a3b8; margin-bottom: 6px;">{{ __("No Payments Found") }}</div>
-                <div style="font-size: 13px; color: #cbd5e1;">{{ __("No payments have been made yet.") }}</div>
+                <div style="font-family: var(--font-display); font-size: 16px; color: var(--text-muted); margin-bottom: 6px;">{{ __("No Payments Found") }}</div>
+                <div style="font-size: 13px; color: var(--text-faint);">{{ __("No payments have been made yet.") }}</div>
             </div>
         @else
             <div style="overflow-x: auto;">
@@ -194,15 +194,15 @@
                         @foreach($payments as $payment)
                             <tr>
                                 <td>
-                                    <div style="font-weight: 600; color: #0f172a;">{{ $payment->parent?->name ?? '—' }}</div>
-                                    <div style="font-size: 11.5px; color: #94a3b8;">{{ $payment->parent?->email ?? '' }}</div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{ $payment->parent?->name ?? '—' }}</div>
+                                    <div style="font-size: 11.5px; color: var(--text-muted);">{{ $payment->parent?->email ?? '' }}</div>
                                 </td>
                                 <td>{{ $payment->student?->name ?? '—' }}</td>
                                 <td>{{ $payment->academicYear?->name ?? '—' }}</td>
                                 <td style="font-weight: 600;">{{ strtoupper($payment->currency) }} {{ number_format((float) $payment->amount, 2) }}</td>
                                 <td>
-                                    <div style="font-weight: 600; color: #0f172a;">{{ $payment->created_at?->format('M j, Y') }}</div>
-                                    <div style="font-size: 11.5px; color: #94a3b8;">{{ $payment->created_at?->format('H:i') }}</div>
+                                    <div style="font-weight: 600; color: var(--text-primary);">{{ $payment->created_at?->format('M j, Y') }}</div>
+                                    <div style="font-size: 11.5px; color: var(--text-muted);">{{ $payment->created_at?->format('H:i') }}</div>
                                 </td>
                                 <td><span class="badge badge-{{ $payment->status->value }}">{{ ucfirst($payment->status->value) }}</span></td>
                             </tr>
@@ -216,14 +216,14 @@
                     <div>{{ __("Page :current of :last", ['current' => $payments->currentPage(), 'last' => $payments->lastPage()]) }}</div>
                     <div style="display: flex; gap: 6px;">
                         @if($payments->onFirstPage())
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</span>
                         @else
-                            <a href="{{ $payments->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0; color: #374151; text-decoration: none; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</a>
+                            <a href="{{ $payments->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</a>
                         @endif
                         @if($payments->hasMorePages())
-                            <a href="{{ $payments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: #4F46E5; color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
+                            <a href="{{ $payments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
                         @else
-                            <span style="padding: 6px 12px; border-radius: 6px; background: #f8fafc; color: #cbd5e1; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
+                            <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
                         @endif
                     </div>
                 </div>

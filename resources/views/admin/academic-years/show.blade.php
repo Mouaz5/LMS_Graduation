@@ -2,27 +2,27 @@
     <style>
         .back-link {
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
             margin-bottom: 20px;
         }
-        .back-link:hover { color: #334155; }
+        .back-link:hover { color: var(--text-primary); }
         .detail-header {
             padding: 28px;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--border-soft);
         }
         .detail-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .detail-subtitle {
             font-size: 13px;
-            color: #94a3b8;
+            color: var(--text-muted);
             margin-top: 4px;
         }
         .detail-row {
@@ -30,17 +30,17 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 28px;
-            border-bottom: 1px solid #f8fafc;
+            border-bottom: 1px solid var(--surface-2);
         }
         .detail-label {
             font-size: 13px;
             font-weight: 500;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
         .detail-value {
             font-size: 14px;
             font-weight: 600;
-            color: #0f172a;
+            color: var(--text-primary);
         }
         .badge {
             display: inline-flex;
@@ -62,24 +62,24 @@
             max-width: 640px;
         }
         .related-title {
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-display);
             font-size: 16px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
         .related-card {
             background: white;
             border-radius: 14px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04);
             overflow: hidden;
         }
         .related-item {
             padding: 14px 20px;
             font-size: 13.5px;
-            color: #334155;
-            border-bottom: 1px solid #f8fafc;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--surface-2);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -121,13 +121,13 @@
             <div class="detail-row">
                 <span class="detail-label">{{ __("Status") }}</span>
                 @if($year->is_active)
-                    <span class="badge" style="background: #ecfdf5; color: #065f46;">
-                        <span class="badge-dot" style="background: #10b981;"></span>
+                    <span class="badge" style="background: var(--success-tint); color: var(--success-text);">
+                        <span class="badge-dot" style="background: var(--success);"></span>
                         {{ __("Active") }}
                     </span>
                 @else
-                    <span class="badge" style="background: #f8fafc; color: #94a3b8;">
-                        <span class="badge-dot" style="background: #cbd5e1;"></span>
+                    <span class="badge" style="background: var(--surface-2); color: var(--text-muted);">
+                        <span class="badge-dot" style="background: var(--text-faint);"></span>
                         {{ __("Inactive") }}
                     </span>
                 @endif
@@ -142,15 +142,15 @@
             <div class="related-card">
                 @foreach($year->semesters as $semester)
                     <div class="related-item">
-                        <div class="related-item-icon" style="background: {{ $semester->is_active ? '#ecfdf5' : '#f8fafc' }};">
-                            <svg width="16" height="16" fill="none" stroke="{{ $semester->is_active ? '#059669' : '#94a3b8' }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <div class="related-item-icon" style="background: {{ $semester->is_active ? 'var(--success-tint)' : 'var(--surface-2)' }};">
+                            <svg width="16" height="16" fill="none" stroke="{{ $semester->is_active ? 'var(--success-dark)' : 'var(--text-muted)' }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600;">{{ $semester->name }}</div>
-                            <div style="font-size: 12px; color: #94a3b8;">{{ $semester->start_date->format('M d') }} — {{ $semester->end_date->format('M d, Y') }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">{{ $semester->start_date->format('M d') }} — {{ $semester->end_date->format('M d, Y') }}</div>
                         </div>
                         @if($semester->is_active)
-                            <span class="badge" style="background: #ecfdf5; color: #065f46; font-size: 10px;">{{ __("Active") }}</span>
+                            <span class="badge" style="background: var(--success-tint); color: var(--success-text); font-size: 10px;">{{ __("Active") }}</span>
                         @endif
                     </div>
                 @endforeach

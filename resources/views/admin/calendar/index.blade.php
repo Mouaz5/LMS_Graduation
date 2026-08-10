@@ -5,29 +5,29 @@
             align-items: center;
             gap: 6px;
             padding: 9px 20px;
-            background: #4F46E5;
+            background: var(--primary);
             color: white;
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;
             font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .btn-primary:hover {
-            background: #4338ca;
+            background: var(--primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(79,70,229,0.4);
+            box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
         }
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: #f8fafc; }
+        thead tr { background: var(--surface-2); }
         th {
             padding: 12px 16px;
             text-align: start;
             font-size: 11px;
             font-weight: 700;
-            color: #94a3b8;
+            color: var(--text-muted);
             letter-spacing: 0.8px;
             text-transform: uppercase;
         }
@@ -35,8 +35,8 @@
         td {
             padding: 14px 16px;
             font-size: 13.5px;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-soft);
         }
         td:first-child { padding-inline-start: 20px; font-weight: 600; }
         .badge {
@@ -46,20 +46,20 @@
             font-size: 11px;
             font-weight: 600;
         }
-        .badge-holiday { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+        .badge-holiday { background: var(--warning-tint); color: var(--warning-text); border: 1px solid var(--warning-border); }
         .badge-event { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
         .badge-exam { background: #fce7f3; color: #9d174d; border: 1px solid #f9a8d4; }
         .empty-state {
             text-align: center;
             padding: 48px;
-            color: #cbd5e1;
+            color: var(--text-faint);
             font-size: 14px;
         }
     </style>
 
     <div class="page-actions">
         <div>
-            <div style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a;">{{ __("School Calendar") }}</div>
+            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("School Calendar") }}</div>
             <div class="page-desc">{{ __("Manage holidays, events, and exam schedules") }}</div>
         </div>
         <a href="{{ route('admin.calendar.create') }}" class="btn-primary">

@@ -2,12 +2,12 @@
 
 @php
 $colorMap = [
-    'indigo' => ['bg' => '#eef2ff', 'icon' => '#4F46E5', 'text' => '#4338ca'],
+    'indigo' => ['bg' => 'var(--primary-tint)', 'icon' => 'var(--primary)', 'text' => 'var(--primary-dark)'],
     'blue'   => ['bg' => '#eff6ff', 'icon' => '#3b82f6', 'text' => '#2563eb'],
-    'green'  => ['bg' => '#ecfdf5', 'icon' => '#10b981', 'text' => '#059669'],
+    'green'  => ['bg' => 'var(--success-tint)', 'icon' => 'var(--success)', 'text' => 'var(--success-dark)'],
     'purple' => ['bg' => '#faf5ff', 'icon' => '#9333ea', 'text' => '#7c3aed'],
-    'amber'  => ['bg' => '#fffbeb', 'icon' => '#f59e0b', 'text' => '#d97706'],
-    'rose'   => ['bg' => '#fff1f2', 'icon' => '#f43f5e', 'text' => '#e11d48'],
+    'amber'  => ['bg' => 'var(--warning-tint)', 'icon' => 'var(--warning)', 'text' => 'var(--warning-dark)'],
+    'rose'   => ['bg' => 'var(--danger-tint)', 'icon' => '#f43f5e', 'text' => '#e11d48'],
 ];
 $c = $colorMap[$color] ?? $colorMap['indigo'];
 
@@ -24,11 +24,11 @@ $path = $iconPaths[$icon] ?? $iconPaths['users'];
 @endphp
 
 <div style="
-    background: white;
-    border-radius: 14px;
+    background: var(--surface);
+    border-radius: var(--radius-card);
     padding: 22px;
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-card), 0 4px 16px rgba(0,0,0,0.03);
     display: flex;
     align-items: flex-start;
     gap: 16px;
@@ -56,14 +56,14 @@ $path = $iconPaths[$icon] ?? $iconPaths['users'];
         <div style="
             font-size: 28px;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text-primary);
             line-height: 1.1;
-            font-family: 'DM Sans', sans-serif;
+            font-family: var(--font-body);
             letter-spacing: -0.5px;
         ">{{ number_format($value) }}</div>
         <div style="
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             margin-top: 3px;
             font-weight: 500;
         ">{{ $label }}</div>
@@ -76,8 +76,8 @@ $path = $iconPaths[$icon] ?? $iconPaths['users'];
                 margin-top: 6px;
                 font-size: 11.5px;
                 font-weight: 600;
-                color: {{ $trend >= 0 ? '#059669' : '#dc2626' }};
-                background: {{ $trend >= 0 ? '#ecfdf5' : '#fef2f2' }};
+                color: {{ $trend >= 0 ? 'var(--success-dark)' : 'var(--danger-dark)' }};
+                background: {{ $trend >= 0 ? 'var(--success-tint)' : 'var(--danger-tint)' }};
                 padding: 2px 7px;
                 border-radius: 20px;
             ">

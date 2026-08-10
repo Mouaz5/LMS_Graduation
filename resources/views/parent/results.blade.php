@@ -1,57 +1,57 @@
 <x-layouts.app :pageTitle="__('Children Results')">
 <style>
     .page-header { margin-bottom: 20px; }
-    .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
+    .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
-        padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-        font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-        background: #fafafa; outline: none; min-width: 200px;
+        padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+        font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+        background: var(--surface-3); outline: none; min-width: 200px;
     }
 
     .btn-download {
         display: inline-flex; align-items: center; gap: 7px;
-        padding: 9px 20px; background: #4F46E5; color: white; border-radius: 8px;
+        padding: 9px 20px; background: var(--primary); color: white; border-radius: 8px;
         font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s;
         white-space: nowrap;
     }
-    .btn-download:hover { background: #3730a3; }
+    .btn-download:hover { background: var(--primary-dark); }
 
     .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-    .subject-card { background: white; border-radius: 14px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
-    .subject-card-header { padding: 16px 18px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
-    .subject-name { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .subject-card { background: white; border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
+    .subject-card-header { padding: 16px 18px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: space-between; }
+    .subject-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
     .grade-badge { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; }
-    .grade-a { background: #dcfce7; color: #166534; }
+    .grade-a { background: var(--success-tint); color: var(--success-text); }
     .grade-b { background: #dbeafe; color: #1e40af; }
-    .grade-c { background: #fef9c3; color: #854d0e; }
+    .grade-c { background: var(--warning-tint); color: #854d0e; }
     .grade-d { background: #fed7aa; color: #9a3412; }
-    .grade-f { background: #fee2e2; color: #991b1b; }
+    .grade-f { background: var(--danger-tint); color: var(--danger-text); }
     .subject-card-body { padding: 14px 18px; }
-    .exam-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #f8fafc; font-size: 13px; }
+    .exam-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--surface-2); font-size: 13px; }
     .exam-row:last-child { border-bottom: none; }
-    .exam-name { color: #64748b; font-weight: 500; }
-    .exam-score { font-weight: 700; color: #0f172a; }
-    .subject-card-footer { padding: 12px 18px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-    .avg-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-    .avg-value { font-size: 16px; font-weight: 800; color: #4F46E5; }
-    .progress-bar-wrap { height: 6px; background: #f1f5f9; border-radius: 99px; margin-top: 8px; overflow: hidden; }
-    .progress-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #818cf8); transition: width 0.6s ease; }
-    .empty-state { padding: 64px 20px; text-align: center; color: #94a3b8; }
+    .exam-name { color: var(--text-secondary); font-weight: 500; }
+    .exam-score { font-weight: 700; color: var(--text-primary); }
+    .subject-card-footer { padding: 12px 18px; background: var(--surface-2); border-top: 1px solid var(--border-soft); display: flex; justify-content: space-between; align-items: center; }
+    .avg-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .avg-value { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .progress-bar-wrap { height: 6px; background: var(--border-soft); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--primary-light)); transition: width 0.6s ease; }
+    .empty-state { padding: 64px 20px; text-align: center; color: var(--text-muted); }
     .empty-icon { font-size: 48px; margin-bottom: 12px; }
 
     .child-info-bar {
-        background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 16px 20px; margin-bottom: 20px;
         display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
-    .child-name { font-size: 15px; font-weight: 700; color: #0f172a; }
-    .child-meta { font-size: 12px; color: #64748b; }
+    .child-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .child-meta { font-size: 12px; color: var(--text-secondary); }
 </style>
 
 <div class="page-header">
@@ -132,9 +132,9 @@
                                 <span class="exam-score">
                                     @if($g)
                                         {{ $g->score }} / {{ $g->max_score }}
-                                        <span style="font-size:11px; color:#94a3b8; font-weight:500;">({{ round($g->score/$g->max_score*100, 1) }}%)</span>
+                                        <span style="font-size:11px; color:var(--text-muted); font-weight:500;">({{ round($g->score/$g->max_score*100, 1) }}%)</span>
                                     @else
-                                        <span style="color:#cbd5e1;">—</span>
+                                        <span style="color:var(--text-faint);">—</span>
                                     @endif
                                 </span>
                             </div>
@@ -153,10 +153,10 @@
             @endforeach
         </div>
     @else
-        <div style="background:white; border-radius:14px; border:1px solid #f1f5f9; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+        <div style="background:white; border-radius:14px; border:1px solid var(--border-soft); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
             <div class="empty-state">
                 <div class="empty-icon">📊</div>
-                <div style="font-size:14px; font-weight:600; color:#374151; margin-bottom:6px;">{{ __('No results yet') }}</div>
+                <div style="font-size:14px; font-weight:600; color:var(--text-strong); margin-bottom:6px;">{{ __('No results yet') }}</div>
                 <div>{{ __('No grades have been entered for this semester.') }}</div>
             </div>
         </div>

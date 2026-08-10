@@ -1,54 +1,54 @@
 <x-layouts.app :pageTitle="__('Test Builder')">
 <style>
-    .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+    .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select, .form-input, .form-textarea {
-        padding: 9px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-        font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: #374151;
-        background: #fafafa; outline: none;
+        padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+        font-size: 13.5px; font-family: var(--font-body); color: var(--text-strong);
+        background: var(--surface-3); outline: none;
     }
     .filter-select { min-width: 220px; }
     .form-input { width: 100%; }
     .form-textarea { width: 100%; min-height: 80px; resize: vertical; }
     .filter-select:focus, .form-input:focus, .form-textarea:focus {
-        border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
     }
 
     .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-    .card { background: white; border-radius: 14px; border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-    .card-header { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weight: 700; color: #0f172a; }
+    .card { background: white; border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border-soft); font-size: 14px; font-weight: 700; color: var(--text-primary); }
     .card-body { padding: 20px; }
 
-    .form-label { font-size: 12px; font-weight: 600; color: #374151; margin-bottom: 5px; display: block; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text-strong); margin-bottom: 5px; display: block; }
     .form-group { margin-bottom: 14px; }
     .btn { padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; }
-    .btn-primary { background: #4F46E5; color: white; }
-    .btn-primary:hover { background: #3730a3; }
-    .btn-danger { background: #fee2e2; color: #991b1b; }
-    .btn-danger:hover { background: #fca5a5; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-danger { background: var(--danger-tint); color: var(--danger-text); }
+    .btn-danger:hover { background: var(--danger-border); }
     .btn-sm { padding: 5px 12px; font-size: 12px; }
 
     table { width: 100%; border-collapse: collapse; }
-    thead tr { background: #4F46E5; color: white; }
+    thead tr { background: var(--primary); color: white; }
     th { padding: 10px 12px; text-align: start; font-size: 11px; font-weight: 700; }
-    td { padding: 9px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }
-    tbody tr:nth-child(even) { background: #f8fafc; }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
+    tbody tr:nth-child(even) { background: var(--surface-2); }
 
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; background: #ede9fe; color: #5b21b6; }
-    .empty-state { padding: 40px; text-align: center; color: #94a3b8; font-size: 13px; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; background: var(--primary-tint); color: #5b21b6; }
+    .empty-state { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
 
-    .alert-success { background: #dcfce7; color: #166534; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
-    .alert-error { background: #fee2e2; color: #991b1b; padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+    .alert-success { background: var(--success-tint); color: var(--success-text); padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+    .alert-error { background: var(--danger-tint); color: var(--danger-text); padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
 
     .options-list { display: flex; flex-direction: column; gap: 8px; }
     .option-row { display: flex; gap: 8px; align-items: center; }
     .option-row input[type=text] { flex: 1; }
-    .option-row input[type=radio] { width: 16px; height: 16px; accent-color: #4F46E5; }
+    .option-row input[type=radio] { width: 16px; height: 16px; accent-color: var(--primary); }
 </style>
 
 <div class="page-title">{{ __('Test Builder') }}</div>
@@ -141,7 +141,7 @@
                     </select>
                 </div>
                 <div id="optionsSection" class="form-group">
-                    <label class="form-label">{{ __('Options') }} <span style="font-size:11px; color:#94a3b8;">({{ __('select the correct one') }})</span></label>
+                    <label class="form-label">{{ __('Options') }} <span style="font-size:11px; color:var(--text-muted);">({{ __('select the correct one') }})</span></label>
                     <div class="options-list" id="optionsList">
                         <div class="option-row">
                             <input type="radio" name="correct_option" value="0" checked>
@@ -197,7 +197,7 @@
                         <td>{{ strtoupper($q->type->value) }}</td>
                         <td>
                             @foreach($q->options as $opt)
-                                <div style="font-size:11px; {{ $opt->is_correct ? 'color:#166534; font-weight:700;' : 'color:#64748b;' }}">
+                                <div style="font-size:11px; {{ $opt->is_correct ? 'color:var(--success-text); font-weight:700;' : 'color:var(--text-secondary);' }}">
                                     {{ $opt->is_correct ? '✓ ' : '' }}{{ $opt->option_text }}
                                 </div>
                             @endforeach

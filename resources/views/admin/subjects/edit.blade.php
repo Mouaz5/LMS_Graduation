@@ -1,39 +1,39 @@
 <x-layouts.app :pageTitle="__('Edit Subject')">
     <style>
         .form-card {
-            background: white; border-radius: 14px; border: 1px solid #f1f5f9;
+            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
             box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 28px; max-width: 560px;
         }
         .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block; font-size: 13px; font-weight: 600;
-            color: #334155; margin-bottom: 6px;
+            color: var(--text-primary); margin-bottom: 6px;
         }
-        .field-hint { font-size: 11.5px; color: #94a3b8; margin-top: 4px; }
+        .field-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 10px 24px; background: #4F46E5; color: white; border: none;
+            padding: 10px 24px; background: var(--primary); color: white; border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
         }
-        .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-secondary {
             display: inline-flex; align-items: center; padding: 10px 24px;
-            background: white; color: #64748b; border: 1px solid #e2e8f0;
+            background: white; color: var(--text-secondary); border: 1px solid var(--border);
             border-radius: 10px; font-size: 14px; font-weight: 600;
-            font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none; transition: all 0.2s;
+            font-family: var(--font-body); cursor: pointer; text-decoration: none; transition: all 0.2s;
         }
-        .btn-secondary:hover { border-color: #cbd5e1; color: #334155; }
-        .error { color: #dc2626; font-size: 12px; margin-top: 4px; }
+        .btn-secondary:hover { border-color: var(--text-faint); color: var(--text-primary); }
+        .error { color: var(--danger-dark); font-size: 12px; margin-top: 4px; }
         .school-label {
-            display: inline-block; padding: 8px 14px; background: #f8fafc;
-            border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; color: #64748b;
+            display: inline-block; padding: 8px 14px; background: var(--surface-2);
+            border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text-secondary);
         }
     </style>
 
     <div style="margin-bottom: 20px;">
-        <a href="{{ route('admin.subjects.index') }}" style="font-size: 13px; color: #64748b; text-decoration: none;">
+        <a href="{{ route('admin.subjects.index') }}" style="font-size: 13px; color: var(--text-secondary); text-decoration: none;">
             &larr; Back to Subjects
         </a>
     </div>
