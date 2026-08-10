@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Data\BulkAttendanceData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\TeacherAttendanceStoreRequest;
 use App\Models\AbsenceJustification;
@@ -53,11 +54,13 @@ class TeacherAttendanceController extends Controller
         }
 
         $this->service->recordBulk(
-            teacher: Auth::user(),
-            classroomId: (int) $request->classroom_id,
-            date: $request->date,
-            entries: $entries,
-            scheduleSlotId: $request->schedule_slot_id ? (int) $request->schedule_slot_id : null,
+            Auth::user(),
+            BulkAttendanceData::fromArray([
+                'classroom_id' => $request->classroom_id,
+                'date' => $request->date,
+                'schedule_slot_id' => $request->schedule_slot_id,
+                'entries' => $entries,
+            ]),
         );
 
         return redirect()

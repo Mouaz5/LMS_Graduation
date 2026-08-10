@@ -2,6 +2,7 @@
 
 namespace App\Services\Diagnostic;
 
+use App\Data\DiagnosticSubmissionData;
 use App\Models\DiagnosticAnswer;
 use App\Models\DiagnosticAttempt;
 use App\Models\DiagnosticQuestion;
@@ -74,7 +75,7 @@ class DiagnosticAttemptService
             ->get();
     }
 
-    public function submitAnswers(DiagnosticAttempt $attempt, array $answers): array
+    public function submitAnswers(DiagnosticAttempt $attempt, DiagnosticSubmissionData $data): array
     {
         if ($attempt->completed_at) {
             throw ValidationException::withMessages([
@@ -82,7 +83,7 @@ class DiagnosticAttemptService
             ]);
         }
 
-        $questionIds = collect($answers)->pluck('question_id');
+        $questionIds = collect($data->answers)->pluck('questionId');
         if ($questionIds->count() !== $questionIds->unique()->count()) {
             throw ValidationException::withMessages([
                 'answers' => 'Each question may only be submitted once.',
@@ -113,10 +114,10 @@ class DiagnosticAttemptService
 
         $masteryByObjective = [];
 
-        DB::transaction(function () use ($attempt, $answers, $questions, &$masteryByObjective): void {
-            foreach ($answers as $answer) {
-                $question = $questions->get($answer['question_id']);
-                $selectedOptionId = $answer['selected_option_id'] ?? null;
+        DB::transaction(function () use ($attempt, $data, $questions, &$masteryByObjective): void {
+            foreach ($data->answers as $answer) {
+                $question = $questions->get($answer->questionId);
+                $selectedOptionId = $answer->selectedOptionId;
 
                 if ($selectedOptionId !== null && ! $question->options->contains('id', $selectedOptionId)) {
                     throw ValidationException::withMessages([

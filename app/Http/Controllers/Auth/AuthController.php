@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use App\Services\PasswordResetOtpService;
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
         return ApiResponse::success(data: [
             'token' => $token,
-            'user' => $this->userResponse($user),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -52,7 +53,7 @@ class AuthController extends Controller
 
     public function me(Request $request): JsonResponse
     {
-        return ApiResponse::success(data: $this->userResponse($request->user()));
+        return ApiResponse::success(data: new UserResource($request->user()));
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -66,7 +67,7 @@ class AuthController extends Controller
             'is_active' => true,
         ]);
 
-        return ApiResponse::success(data: ['user' => $this->userResponse($user)], status: 201);
+        return ApiResponse::success(data: ['user' => new UserResource($user)], status: 201);
     }
 
     public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
@@ -97,18 +98,5 @@ class AuthController extends Controller
         event(new PasswordReset($user));
 
         return ApiResponse::success(message: __('Your password has been reset.'));
-    }
-
-    private function userResponse(User $user): array
-    {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-            'phone' => $user->phone,
-            'is_active' => $user->is_active,
-            'created_at' => $user->created_at,
-        ];
     }
 }

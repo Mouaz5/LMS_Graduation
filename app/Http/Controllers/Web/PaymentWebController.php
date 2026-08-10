@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Data\PaymentCheckoutData;
 use App\Enums\PaymentCheckoutStatus;
 use App\Http\Controllers\Controller;
 use App\Models\TuitionFee;
@@ -34,9 +35,11 @@ class PaymentWebController extends Controller
             $result = $this->checkout->start(
                 Auth::user(),
                 $tuitionFee,
-                $request->query('student'),
-                route('parent.payments.success').'?session_id={CHECKOUT_SESSION_ID}',
-                route('parent.payments.index'),
+                new PaymentCheckoutData(
+                    studentId: $request->query('student'),
+                    successUrl: route('parent.payments.success').'?session_id={CHECKOUT_SESSION_ID}',
+                    cancelUrl: route('parent.payments.index'),
+                ),
             );
         } catch (PaymentGatewayException) {
             return redirect()->route('parent.payments.index')

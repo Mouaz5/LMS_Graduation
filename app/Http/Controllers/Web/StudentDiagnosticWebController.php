@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Data\DiagnosticSubmissionData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Diagnostic\StartAttemptRequest;
 use App\Http\Requests\Web\StudentSubmitAttemptRequest;
@@ -53,7 +54,10 @@ class StudentDiagnosticWebController extends Controller
             ->values()
             ->all();
 
-        $this->attempts->submitAnswers($attempt, $answers);
+        $this->attempts->submitAnswers(
+            $attempt,
+            DiagnosticSubmissionData::fromArray(['answers' => $answers]),
+        );
 
         return redirect()->route('student.diagnostic.knowledge-map', [
             'subject_id' => $attempt->subject_id,

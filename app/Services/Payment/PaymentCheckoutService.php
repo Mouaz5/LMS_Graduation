@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Data\PaymentCheckoutData;
 use App\Domain\PaymentCheckoutResult;
 use App\Enums\PaymentCheckoutStatus;
 use App\Enums\PaymentStatus;
@@ -22,15 +23,13 @@ class PaymentCheckoutService
     public function start(
         User $parent,
         TuitionFee $tuitionFee,
-        mixed $studentId,
-        string $successUrl,
-        string $cancelUrl,
+        PaymentCheckoutData $data,
     ): PaymentCheckoutResult {
         if (! $tuitionFee->is_active) {
             return new PaymentCheckoutResult(PaymentCheckoutStatus::INACTIVE_FEE);
         }
 
-        $child = $this->access->findChild($parent, $studentId);
+        $child = $this->access->findChild($parent, $data->studentId);
         if (! $child) {
             return new PaymentCheckoutResult(PaymentCheckoutStatus::INVALID_CHILD);
         }
@@ -88,8 +87,8 @@ class PaymentCheckoutService
                     'year' => $academicYear->name,
                     'student' => $child->name,
                 ]),
-                'success_url' => $successUrl,
-                'cancel_url' => $cancelUrl,
+                'success_url' => $data->successUrl,
+                'cancel_url' => $data->cancelUrl,
                 'metadata' => [
                     'parent_user_id' => $parent->id,
                     'student_user_id' => $child->id,

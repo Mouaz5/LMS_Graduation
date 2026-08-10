@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreAbsenceJustificationRequest;
 use App\Http\Requests\Academic\UpdateAbsenceJustificationRequest;
+use App\Http\Resources\AbsenceJustificationResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
@@ -31,7 +32,7 @@ class AbsenceJustificationController extends Controller
             $request->file('document'),
         );
 
-        return ApiResponse::success(data: $justification->load('attendance'), status: 201);
+        return ApiResponse::success(data: new AbsenceJustificationResource($justification->load('attendance')), status: 201);
     }
 
     /**
@@ -52,6 +53,6 @@ class AbsenceJustificationController extends Controller
             $this->service->reject($request->user(), $justification);
         }
 
-        return ApiResponse::success(data: $justification->fresh(['attendance']));
+        return ApiResponse::success(data: new AbsenceJustificationResource($justification->fresh(['attendance'])));
     }
 }

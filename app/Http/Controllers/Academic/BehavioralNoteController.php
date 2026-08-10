@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\IndexBehavioralNoteRequest;
 use App\Http\Requests\Academic\StoreBehavioralNoteRequest;
+use App\Http\Resources\BehavioralNoteResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\BehavioralNote;
 use App\Models\User;
@@ -28,7 +29,7 @@ class BehavioralNoteController extends Controller
             'teacher_user_id' => $request->user()->id,
         ]);
 
-        return ApiResponse::success(data: $note->load(['student', 'teacher']), status: 201);
+        return ApiResponse::success(data: new BehavioralNoteResource($note->load(['student', 'teacher'])), status: 201);
     }
 
     /**
@@ -48,7 +49,7 @@ class BehavioralNoteController extends Controller
             ->paginate(20);
 
         return ApiResponse::success(
-            data: $notes->items(),
+            data: BehavioralNoteResource::collection($notes->items()),
             meta: [
                 'current_page' => $notes->currentPage(),
                 'per_page' => $notes->perPage(),

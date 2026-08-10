@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academic;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ClassroomResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Classroom;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,6 @@ class ClassroomController extends Controller
             $classrooms = Classroom::with(['grade', 'studentProfiles.student'])->get();
         }
 
-        return ApiResponse::success(data: $classrooms);
+        return ApiResponse::success(data: ClassroomResource::collection($classrooms));
     }
 }

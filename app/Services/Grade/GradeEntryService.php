@@ -2,6 +2,8 @@
 
 namespace App\Services\Grade;
 
+use App\Data\BulkGradeData;
+use App\Data\GradeEntryData;
 use App\Models\ExamType;
 use App\Models\StudentGrade;
 use App\Models\User;
@@ -16,10 +18,10 @@ class GradeEntryService
         private GradeService $grades,
     ) {}
 
-    public function storeBulk(User $actor, array $rows): int
+    public function storeBulk(User $actor, BulkGradeData $data): int
     {
-        foreach ($rows as $index => $row) {
-            if ((float) $row['score'] > (float) $row['max_score']) {
+        foreach ($data->entries as $index => $row) {
+            if ($row->score > $row->maxScore) {
                 throw ValidationException::withMessages([
                     "grades.$index.score" => 'Score cannot exceed max_score.',
                 ]);
@@ -27,34 +29,34 @@ class GradeEntryService
 
             $this->assertCanEnterGrade(
                 $actor,
-                (int) $row['subject_id'],
-                (int) $row['student_id'],
+                $row->subjectId,
+                $row->studentId,
             );
         }
 
-        DB::transaction(function () use ($actor, $rows): void {
+        DB::transaction(function () use ($actor, $data): void {
             $tuples = [];
 
-            foreach ($rows as $row) {
-                $examType = ExamType::findOrFail($row['exam_type_id']);
+            foreach ($data->entries as $row) {
+                $examType = ExamType::findOrFail($row->examTypeId);
 
                 StudentGrade::updateOrCreate(
                     [
-                        'student_user_id' => $row['student_id'],
-                        'subject_id' => $row['subject_id'],
-                        'exam_type_id' => $row['exam_type_id'],
+                        'student_user_id' => $row->studentId,
+                        'subject_id' => $row->subjectId,
+                        'exam_type_id' => $row->examTypeId,
                     ],
                     [
                         'semester_id' => $examType->semester_id,
                         'teacher_user_id' => $actor->id,
-                        'score' => $row['score'],
-                        'max_score' => $row['max_score'],
+                        'score' => $row->score,
+                        'max_score' => $row->maxScore,
                     ],
                 );
 
                 $tuples[] = [
-                    'student_user_id' => $row['student_id'],
-                    'subject_id' => $row['subject_id'],
+                    'student_user_id' => $row->studentId,
+                    'subject_id' => $row->subjectId,
                     'semester_id' => $examType->semester_id,
                 ];
             }
@@ -62,7 +64,7 @@ class GradeEntryService
             $this->grades->refreshSummaries($tuples);
         });
 
-        return count($rows);
+        return count($data->entries);
     }
 
     public function storeWeb(
@@ -88,7 +90,13 @@ class GradeEntryService
             ];
         }
 
-        return $this->storeBulk($teacher, $rows);
+        return $this->storeBulk(
+            $teacher,
+            new BulkGradeData(array_map(
+                fn (array $row): GradeEntryData => GradeEntryData::fromArray($row),
+                $rows,
+            )),
+        );
     }
 
     private function assertCanEnterGrade(User $actor, int $subjectId, int $studentId): void

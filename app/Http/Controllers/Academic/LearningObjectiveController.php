@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreDiagnosticQuestionRequest;
 use App\Http\Requests\Academic\StoreLearningObjectiveRequest;
+use App\Http\Resources\DiagnosticQuestionResource;
+use App\Http\Resources\LearningObjectiveResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\DiagnosticQuestion;
 use App\Models\LearningObjective;
@@ -19,7 +21,7 @@ class LearningObjectiveController extends Controller
     {
         $objective = LearningObjective::create($request->validated());
 
-        return ApiResponse::success(data: $objective->load('subject'), status: 201);
+        return ApiResponse::success(data: new LearningObjectiveResource($objective->load('subject')), status: 201);
     }
 
     // POST /diagnostic-questions  (admin only)
@@ -46,6 +48,6 @@ class LearningObjectiveController extends Controller
             return $question->load('options', 'learningObjective');
         });
 
-        return ApiResponse::success(data: $question, status: 201);
+        return ApiResponse::success(data: new DiagnosticQuestionResource($question), status: 201);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Subject\StoreSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
+use App\Http\Resources\SubjectResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Subject;
 use Illuminate\Http\JsonResponse;
@@ -12,19 +13,23 @@ class SubjectController extends Controller
 {
     public function index(): JsonResponse
     {
-        return ApiResponse::success(data: Subject::with('school')->orderBy('name')->get());
+        return ApiResponse::success(data: SubjectResource::collection(
+            Subject::with('school')->orderBy('name')->get()
+        ));
     }
 
     public function store(StoreSubjectRequest $request): JsonResponse
     {
         $subject = Subject::create($request->validated());
 
-        return ApiResponse::success(data: $subject->load('school'), status: 201);
+        return ApiResponse::success(data: new SubjectResource($subject->load('school')), status: 201);
     }
 
     public function show(int $id): JsonResponse
     {
-        return ApiResponse::success(data: Subject::with('school')->findOrFail($id));
+        return ApiResponse::success(data: new SubjectResource(
+            Subject::with('school')->findOrFail($id)
+        ));
     }
 
     public function update(UpdateSubjectRequest $request, int $id): JsonResponse
@@ -33,7 +38,7 @@ class SubjectController extends Controller
 
         $subject->update($request->validated());
 
-        return ApiResponse::success(data: $subject->load('school'));
+        return ApiResponse::success(data: new SubjectResource($subject->load('school')));
     }
 
     public function destroy(int $id): JsonResponse

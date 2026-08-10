@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Data\DiagnosticSubmissionData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Diagnostic\KnowledgeMapRequest;
 use App\Http\Requests\Diagnostic\StartAttemptRequest;
 use App\Http\Requests\Diagnostic\SubmitAttemptRequest;
+use App\Http\Resources\DiagnosticQuestionResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Subject;
 use App\Models\User;
@@ -39,15 +41,9 @@ class DiagnosticController extends Controller
     public function getQuestions(Request $request, int $id): JsonResponse
     {
         $attempt = $this->attempts->forStudent($request->user(), $id);
-        $questions = $this->attempts->questionsFor($attempt)->map(fn ($question): array => [
-            'id' => $question->id,
-            'question_text' => $question->question_text,
-            'type' => $question->type,
-            'options' => $question->options->map(fn ($option): array => [
-                'id' => $option->id,
-                'option_text' => $option->option_text,
-            ]),
-        ]);
+        $questions = DiagnosticQuestionResource::collection(
+            $this->attempts->questionsFor($attempt)
+        );
 
         return ApiResponse::success(data: ['questions' => $questions]);
     }
@@ -56,7 +52,10 @@ class DiagnosticController extends Controller
     public function submitAttempt(SubmitAttemptRequest $request, int $id): JsonResponse
     {
         $attempt = $this->attempts->forStudent($request->user(), $id, open: true);
-        $this->attempts->submitAnswers($attempt, $request->validated('answers'));
+        $this->attempts->submitAnswers(
+            $attempt,
+            DiagnosticSubmissionData::fromArray($request->validated()),
+        );
 
         return ApiResponse::success(message: 'Attempt submitted successfully.');
     }

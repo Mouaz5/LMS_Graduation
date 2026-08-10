@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreSemesterRequest;
 use App\Http\Requests\Academic\UpdateSemesterRequest;
+use App\Http\Resources\SemesterResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Semester;
 use Illuminate\Http\JsonResponse;
@@ -15,21 +16,21 @@ class SemesterController extends Controller
     {
         $semesters = Semester::with('academicYear')->orderBy('start_date', 'desc')->get();
 
-        return ApiResponse::success(data: $semesters);
+        return ApiResponse::success(data: SemesterResource::collection($semesters));
     }
 
     public function show(int $id): JsonResponse
     {
         $semester = Semester::with('academicYear')->findOrFail($id);
 
-        return ApiResponse::success(data: $semester);
+        return ApiResponse::success(data: new SemesterResource($semester));
     }
 
     public function store(StoreSemesterRequest $request): JsonResponse
     {
         $semester = Semester::create($request->validated());
 
-        return ApiResponse::success(data: $semester, status: 201);
+        return ApiResponse::success(data: new SemesterResource($semester), status: 201);
     }
 
     public function update(UpdateSemesterRequest $request, int $id): JsonResponse
@@ -38,7 +39,7 @@ class SemesterController extends Controller
 
         $semester->update($request->validated());
 
-        return ApiResponse::success(data: $semester);
+        return ApiResponse::success(data: new SemesterResource($semester));
     }
 
     public function destroy(int $id): JsonResponse

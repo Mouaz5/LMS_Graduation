@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Data\BulkGradeData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Grade\BulkStoreGradeRequest;
 use App\Http\Requests\Grade\ClassAverageRequest;
+use App\Http\Resources\GradeSummaryResource;
+use App\Http\Resources\StudentGradeResource;
+use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\StudentGrade;
 use App\Models\User;
@@ -26,7 +30,7 @@ class GradeController extends Controller
     {
         $count = $this->entries->storeBulk(
             $request->user(),
-            $request->validated('grades'),
+            BulkGradeData::fromArray($request->validated()),
         );
 
         return ApiResponse::success(
@@ -56,7 +60,7 @@ class GradeController extends Controller
             $query->where('semester_id', $semesterId);
         }
 
-        return ApiResponse::success(data: $query->get());
+        return ApiResponse::success(data: StudentGradeResource::collection($query->get()));
     }
 
     /** GET /api/v1/grades/class-average?subject_id=X&exam_type_id=Y */
@@ -77,9 +81,11 @@ class GradeController extends Controller
         $data = $this->reports->assembleById($id, $request->integer('semester_id') ?: null);
 
         return ApiResponse::success(data: [
-            'student' => $data->student,
-            'summaries' => $data->summaries,
-            'grades' => $data->grades->groupBy(fn ($grade) => "{$grade->subject_id}-{$grade->semester_id}"),
+            'student' => new UserResource($data->student),
+            'summaries' => GradeSummaryResource::collection($data->summaries),
+            'grades' => $data->grades
+                ->groupBy(fn ($grade) => "{$grade->subject_id}-{$grade->semester_id}")
+                ->map(fn ($grades) => StudentGradeResource::collection($grades)),
         ]);
     }
 

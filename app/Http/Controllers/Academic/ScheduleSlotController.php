@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\IndexScheduleRequest;
 use App\Http\Requests\Schedule\StoreScheduleSlotRequest;
 use App\Http\Requests\Schedule\UpdateScheduleSlotRequest;
+use App\Http\Resources\ScheduleSlotResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
@@ -25,7 +26,7 @@ class ScheduleSlotController extends Controller
             ->orderBy('period_number')
             ->get();
 
-        return ApiResponse::success(data: $slots);
+        return ApiResponse::success(data: ScheduleSlotResource::collection($slots));
     }
 
     public function mySchedule(Request $request): JsonResponse
@@ -43,7 +44,7 @@ class ScheduleSlotController extends Controller
                     ->get()
                 : collect();
 
-            return ApiResponse::success(data: $slots);
+            return ApiResponse::success(data: ScheduleSlotResource::collection($slots));
         }
 
         $slots = ScheduleSlot::with(['subject', 'classroom.grade', 'semester'])
@@ -52,7 +53,7 @@ class ScheduleSlotController extends Controller
             ->orderBy('period_number')
             ->get();
 
-        return ApiResponse::success(data: $slots);
+        return ApiResponse::success(data: ScheduleSlotResource::collection($slots));
     }
 
     public function store(StoreScheduleSlotRequest $request): JsonResponse
@@ -76,7 +77,7 @@ class ScheduleSlotController extends Controller
         $slot = ScheduleSlot::create($validated);
 
         return ApiResponse::success(
-            data: $slot->load(['subject', 'teacher', 'classroom.grade', 'semester']),
+            data: new ScheduleSlotResource($slot->load(['subject', 'teacher', 'classroom.grade', 'semester'])),
             status: 201,
         );
     }
@@ -106,7 +107,7 @@ class ScheduleSlotController extends Controller
 
         $slot->update($validated);
 
-        return ApiResponse::success(data: $slot->load(['subject', 'teacher', 'classroom.grade', 'semester']));
+        return ApiResponse::success(data: new ScheduleSlotResource($slot->load(['subject', 'teacher', 'classroom.grade', 'semester'])));
     }
 
     public function destroy(int $id): JsonResponse

@@ -2,6 +2,7 @@
 
 namespace App\Services\Attendance;
 
+use App\Data\BulkAttendanceData;
 use App\Enums\AbsenceJustificationStatus;
 use App\Enums\AttendanceStatus;
 use App\Models\AbsenceJustification;
@@ -48,17 +49,12 @@ class AttendanceService
      *
      * @param  array  $entries  [['student_id' => int, 'status' => string], ...]
      */
-    public function recordBulk(
-        User $teacher,
-        int $classroomId,
-        string $date,
-        array $entries,
-        ?int $scheduleSlotId
-    ): Collection {
-        $this->assertTeacherCanRecord($teacher, $classroomId, $scheduleSlotId);
+    public function recordBulk(User $teacher, BulkAttendanceData $data): Collection
+    {
+        $this->assertTeacherCanRecord($teacher, $data->classroomId, $data->scheduleSlotId);
 
-        $studentIds = collect($entries)->pluck('student_id')->unique();
-        $enrolledStudentIds = StudentProfile::where('classroom_id', $classroomId)
+        $studentIds = collect($data->entries)->pluck('studentId')->unique();
+        $enrolledStudentIds = StudentProfile::where('classroom_id', $data->classroomId)
             ->whereIn('user_id', $studentIds)
             ->pluck('user_id');
 
@@ -67,16 +63,16 @@ class AttendanceService
         }
 
         $records = collect();
-        foreach ($entries as $entry) {
+        foreach ($data->entries as $entry) {
             $records->push(Attendance::updateOrCreate(
                 [
-                    'student_user_id' => $entry['student_id'],
-                    'classroom_id' => $classroomId,
-                    'date' => $date,
+                    'student_user_id' => $entry->studentId,
+                    'classroom_id' => $data->classroomId,
+                    'date' => $data->date,
                 ],
                 [
-                    'status' => AttendanceStatus::from($entry['status']),
-                    'schedule_slot_id' => $scheduleSlotId,
+                    'status' => $entry->status,
+                    'schedule_slot_id' => $data->scheduleSlotId,
                     'recorded_by' => $teacher->id,
                 ]
             ));

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Academic;
 
+use App\Data\BulkAttendanceData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\BulkAttendanceRequest;
 use App\Http\Requests\Academic\IndexAttendanceRequest;
+use App\Http\Resources\AttendanceResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Attendance;
 use App\Models\User;
@@ -22,17 +24,11 @@ class AttendanceController extends Controller
      */
     public function bulkStore(BulkAttendanceRequest $request): JsonResponse
     {
-        $validated = $request->validated();
+        $data = BulkAttendanceData::fromArray($request->validated());
 
-        $records = $this->service->recordBulk(
-            teacher: $request->user(),
-            classroomId: $validated['classroom_id'],
-            date: $validated['date'],
-            entries: $validated['entries'],
-            scheduleSlotId: $validated['schedule_slot_id'] ?? null,
-        );
+        $records = $this->service->recordBulk($request->user(), $data);
 
-        return ApiResponse::success(data: $records, status: 201);
+        return ApiResponse::success(data: AttendanceResource::collection($records), status: 201);
     }
 
     /**
@@ -60,7 +56,7 @@ class AttendanceController extends Controller
         $paginator = $query->paginate(30);
 
         return ApiResponse::success(
-            data: $paginator->items(),
+            data: AttendanceResource::collection($paginator->items()),
             meta: [
                 'current_page' => $paginator->currentPage(),
                 'per_page' => $paginator->perPage(),
