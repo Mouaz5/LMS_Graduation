@@ -2,11 +2,11 @@
 
 @php
 $colorMap = [
-    'indigo' => ['bg' => 'var(--primary-tint)', 'icon' => 'var(--primary)', 'text' => 'var(--primary-dark)'],
+    'indigo' => ['bg' => 'var(--accent-tint)', 'icon' => 'var(--accent)', 'text' => 'var(--accent-dark)'],
     'blue'   => ['bg' => '#eff6ff', 'icon' => '#3b82f6', 'text' => '#2563eb'],
     'green'  => ['bg' => 'var(--success-tint)', 'icon' => 'var(--success)', 'text' => 'var(--success-dark)'],
     'purple' => ['bg' => '#faf5ff', 'icon' => '#9333ea', 'text' => '#7c3aed'],
-    'amber'  => ['bg' => 'var(--warning-tint)', 'icon' => 'var(--warning)', 'text' => 'var(--warning-dark)'],
+    'amber'  => ['bg' => 'var(--primary-tint)', 'icon' => 'var(--primary)', 'text' => 'var(--primary-dark)'],
     'rose'   => ['bg' => 'var(--danger-tint)', 'icon' => '#f43f5e', 'text' => '#e11d48'],
 ];
 $c = $colorMap[$color] ?? $colorMap['indigo'];

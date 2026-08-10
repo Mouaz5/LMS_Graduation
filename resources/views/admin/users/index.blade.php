@@ -62,7 +62,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("All Users") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("All Users") }}</div>
             <div class="page-desc">{{ __(':count users registered in the system', ['count' => $users->total()]) }}</div>
         </div>
         <a href="{{ route('admin.users.create') }}" class="btn-primary">

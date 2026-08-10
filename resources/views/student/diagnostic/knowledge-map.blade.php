@@ -27,25 +27,54 @@
     .stat-value { font-size: 24px; font-weight: 800; color: var(--primary); }
     .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
 
-    /* Tree */
-    .tree { font-size: 13px; }
-    .tree ul { list-style: none; padding-inline-start: 24px; margin: 0; }
+    /* Tree — mastery ledger: each node is a small progress dial
+       (conic-gradient arc) rather than a flat colored dot, so depth of
+       mastery reads at a glance and not just its category. */
+    .tree { font-size: 13px; position: relative; }
+    .tree ul { list-style: none; padding-inline-start: 34px; margin: 0; position: relative; }
     .tree > ul { padding-inline-start: 0; }
-    .tree-node { margin: 6px 0; }
+    .tree ul ul::before {
+        content: '';
+        position: absolute;
+        inset-inline-start: 23px;
+        top: 0;
+        bottom: 24px;
+        width: 1px;
+        background: var(--border);
+    }
+    .tree-node { margin: 2px 0; position: relative; }
+    .tree ul ul > .tree-node::before {
+        content: '';
+        position: absolute;
+        inset-inline-start: -11px;
+        top: 28px;
+        width: 11px;
+        height: 1px;
+        background: var(--border);
+    }
     .node-row {
-        display: flex; align-items: center; gap: 10px; cursor: pointer;
+        display: flex; align-items: center; gap: 12px; cursor: pointer;
         padding: 10px 14px; border-radius: 10px; transition: background 0.15s;
         border: 1px solid transparent;
     }
     .node-row:hover { background: var(--surface-2); border-color: var(--border); }
-    .node-circle {
-        width: 48px; height: 48px; border-radius: 50%; display: flex; flex-direction: column;
-        align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0;
+    .node-gauge {
+        --arc: 0deg;
+        width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: conic-gradient(var(--gauge-fill, var(--text-faint)) var(--arc), var(--border-soft) 0);
+        padding: 3px;
     }
-    .mastery-green  { background: var(--success-tint); color: var(--success-text); }
-    .mastery-yellow { background: var(--warning-tint); color: #854d0e; }
-    .mastery-red    { background: var(--danger-tint); color: var(--danger-text); }
-    .mastery-grey   { background: var(--border-soft); color: var(--text-muted); }
+    .node-gauge-label {
+        width: 100%; height: 100%; border-radius: 50%; background: var(--surface);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11.5px; font-weight: 700; font-family: var(--font-body);
+        color: var(--gauge-ink, var(--text-muted));
+    }
+    .mastery-green  { --gauge-fill: var(--success); --gauge-ink: var(--success-text); }
+    .mastery-yellow { --gauge-fill: var(--warning); --gauge-ink: var(--warning-text); }
+    .mastery-red    { --gauge-fill: var(--danger); --gauge-ink: var(--danger-text); }
+    .mastery-grey   { --gauge-fill: var(--text-faint); --gauge-ink: var(--text-secondary); }
     .node-name { font-weight: 600; color: var(--text-primary); flex: 1; }
     .node-desc { font-size: 11px; color: var(--text-muted); }
     .node-toggle { color: var(--text-muted); font-size: 11px; transition: transform 0.2s; }
@@ -111,7 +140,7 @@
                 <div class="stat-label">{{ __("Mastered") }}</div>
             </div>
             <div class="summary-stat">
-                <div class="stat-value" style="color:#854d0e;">{{ $developing }}</div>
+                <div class="stat-value" style="color:var(--warning-text);">{{ $developing }}</div>
                 <div class="stat-label">{{ __("Developing") }}</div>
             </div>
             <div class="summary-stat">
@@ -126,8 +155,8 @@
     @endif
 
     <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--success-tint); border:1px solid #bbf7d0;"></div> {{ __("Mastered (≥70%)") }}</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--warning-tint); border:1px solid #fde68a;"></div> {{ __("Developing (40–69%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--success-tint); border:1px solid var(--success-border);"></div> {{ __("Mastered (≥70%)") }}</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--warning-tint); border:1px solid var(--warning-border);"></div> {{ __("Developing (40–69%)") }}</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--danger-tint); border:1px solid var(--danger-border);"></div> {{ __("Needs Work (<40%)") }}</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--border-soft); border:1px solid var(--border);"></div> {{ __("Not Assessed") }}</div>
     </div>

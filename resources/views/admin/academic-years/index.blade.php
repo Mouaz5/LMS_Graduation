@@ -66,7 +66,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Academic Years") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Academic Years") }}</div>
             <div class="page-desc">{{ __("Manage academic years and semesters") }}</div>
         </div>
         <a href="{{ route('admin.academic-years.create') }}" class="btn-primary">

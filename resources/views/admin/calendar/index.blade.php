@@ -59,7 +59,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("School Calendar") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("School Calendar") }}</div>
             <div class="page-desc">{{ __("Manage holidays, events, and exam schedules") }}</div>
         </div>
         <a href="{{ route('admin.calendar.create') }}" class="btn-primary">

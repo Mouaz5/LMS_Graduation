@@ -168,7 +168,7 @@
 
     {{-- Page header --}}
     <div style="margin-bottom: 24px;">
-        <div style="font-family: var(--font-display); font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
+        <div class="rtl-display" style="font-family: var(--font-display); font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
             {{ __("Schedule Builder") }}
         </div>
         <div style="font-size:13px; color:var(--text-secondary);">

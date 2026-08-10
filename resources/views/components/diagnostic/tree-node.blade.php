@@ -3,6 +3,8 @@
     $circleClass = $level->color();
     $label       = $level->label($node['mastery_percent']);
     $hasChildren = count($node['children']) > 0;
+    $pct         = $node['mastery_percent'] !== null ? max(0, min(100, (float) $node['mastery_percent'])) : null;
+    $arcDeg      = $pct !== null ? round($pct * 3.6) : 0;
 @endphp
 <li class="tree-node">
     <div class="node-row" @if($hasChildren) data-node-id="{{ $node['id'] }}" @endif>
@@ -11,7 +13,9 @@
         @else
             <span style="width:16px;"></span>
         @endif
-        <div class="node-circle {{ $circleClass }}">{{ $label }}</div>
+        <div class="node-gauge {{ $circleClass }}" @if($pct !== null) style="--arc: {{ $arcDeg }}deg" @endif>
+            <span class="node-gauge-label">{{ $label }}</span>
+        </div>
         <div>
             <div class="node-name">{{ $node['name'] }}</div>
             @if($node['description'])

@@ -51,7 +51,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Subjects") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Subjects") }}</div>
             <div class="page-desc">{{ __("Manage school subjects") }}</div>
         </div>
         <a href="{{ route('admin.subjects.create') }}" class="btn-primary">

@@ -49,7 +49,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Classrooms") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Classrooms") }}</div>
             <div class="page-desc">{{ __("View all classrooms and their students") }}</div>
         </div>
     </div>

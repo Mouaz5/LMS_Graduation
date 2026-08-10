@@ -53,7 +53,7 @@
             <div style="font-size: 13px; color: #ddd6fe; font-weight: 500; margin-bottom: 4px;">
                 {{ now()->format('l, F j, Y') }}
             </div>
-            <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 6px;">
+            <h2 class="rtl-display" style="font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 6px;">
                 {{ __("Welcome, :name!", ['name' => explode(' ', $user->name)[0]]) }}
             </h2>
             <p style="font-size: 14px; color: var(--primary-tint);">{{ __("Track your children's academic progress in one place.") }}</p>

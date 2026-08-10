@@ -80,7 +80,7 @@
 
     <div class="page-actions">
         <div>
-            <div style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Teacher Assignments") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Teacher Assignments") }}</div>
             <div class="page-desc">{{ __("Manage teacher-subject-classroom assignments") }}</div>
         </div>
         <a href="{{ route('admin.assignments.create') }}" class="btn-primary">

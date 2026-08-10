@@ -59,7 +59,7 @@
                 <div class="empty-icon">
                     <svg width="24" height="24" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
-                <div style="font-family: var(--font-display); font-size: 16px; color: var(--text-muted); margin-bottom: 6px;">{{ __("No Transfers Yet") }}</div>
+                <div class="rtl-display" style="font-family: var(--font-display); font-size: 16px; color: var(--text-muted); margin-bottom: 6px;">{{ __("No Transfers Yet") }}</div>
                 <div style="font-size: 13px; color: var(--text-faint);">{{ __("No salary transfers have been sent to you yet.") }}</div>
             </div>
         @else
