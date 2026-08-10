@@ -68,9 +68,35 @@
             background-size: 40px 40px;
         }
 
+        .brand-illustration {
+            position: absolute;
+            z-index: 0;
+            left: 50%;
+            bottom: -22%;
+            width: min(760px, 116%);
+            max-width: none;
+            height: auto;
+            pointer-events: none;
+            opacity: 0.34;
+            transform: translateX(-50%);
+            filter: contrast(0.82) saturate(0.62) drop-shadow(0 28px 22px rgba(0, 0, 0, 0.24));
+            mix-blend-mode: screen;
+            -webkit-mask-image: radial-gradient(ellipse 62% 57% at 50% 47%, #000 32%, rgba(0, 0, 0, 0.78) 56%, transparent 78%);
+            mask-image: radial-gradient(ellipse 62% 57% at 50% 47%, #000 32%, rgba(0, 0, 0, 0.78) 56%, transparent 78%);
+        }
+
+        .brand-panel::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(18, 42, 29, 0.2) 0%, rgba(18, 42, 29, 0.34) 58%, rgba(18, 42, 29, 0.52) 100%);
+        }
+
         .brand-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .brand-logo {
@@ -397,6 +423,11 @@
             .brand-panel { width: 100%; padding: 32px 24px 24px; min-height: auto; }
             .brand-headline { font-size: 26px; }
             .brand-features { display: none; }
+            .brand-illustration {
+                bottom: -30%;
+                width: 620px;
+                opacity: 0.28;
+            }
             .form-panel { padding: 32px 24px; }
         }
     </style>
@@ -409,6 +440,7 @@
         <div class="geo-ring geo-ring-3"></div>
         <div class="geo-ring geo-ring-4"></div>
         <div class="grid-overlay"></div>
+        <img class="brand-illustration" src="{{ asset('images/login-education.png') }}" alt="" aria-hidden="true">
 
         <div class="brand-content">
             <div class="brand-logo">
