@@ -183,7 +183,7 @@
 
     {{-- Classroom + Semester selectors — submits as GET to reload page with data --}}
     <form method="GET" action="{{ route('admin.schedule.index') }}" class="controls-bar">
-        <select name="classroom_id" onchange="this.form.submit()">
+        <select name="classroom_id" data-auto-submit>
             <option value="">{{ __("— Select Classroom —") }}</option>
             @foreach($classrooms as $cr)
                 <option value="{{ $cr->id }}" @selected($classroomId == $cr->id)>
@@ -191,7 +191,7 @@
                 </option>
             @endforeach
         </select>
-        <select name="semester_id" onchange="this.form.submit()">
+        <select name="semester_id" data-auto-submit>
             <option value="">{{ __("— Select Semester —") }}</option>
             @foreach($semesters as $sem)
                 <option value="{{ $sem->id }}" @selected($semesterId == $sem->id)>
@@ -224,7 +224,7 @@
                             @foreach(['sunday','monday','tuesday','wednesday','thursday'] as $day)
                                 @php $slot = $slots[$day . '_' . $period] ?? null; @endphp
                                 <td class="grid-cell {{ $slot ? 'filled' : 'empty' }}"
-                                    @if(!$slot) onclick="openModal('{{ $day }}', {{ $period }})" @endif>
+                                    @if(!$slot) data-slot-day="{{ $day }}" data-slot-period="{{ $period }}" @endif>
                                     @if($slot)
                                         <div class="cell-content">
                                             <span class="cell-subject">{{ $slot->subject->name }}</span>
@@ -290,34 +290,14 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">{{ __("Cancel") }}</button>
+                    <button type="button" class="btn-cancel" data-close-slot-modal>{{ __("Cancel") }}</button>
                     <button type="submit" class="btn-save">{{ __("Save Slot") }}</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script>
-        function openModal(day, period) {
-            const label = day.charAt(0).toUpperCase() + day.slice(1);
-            document.getElementById('modalTitle').textContent   = `Assign — ${label}, Period ${period}`;
-            document.getElementById('modalSubtitle').textContent = 'Choose a teacher and subject for this period.';
-            document.getElementById('modalDay').value    = day;
-            document.getElementById('modalPeriod').value = period;
-            document.getElementById('slotModal').classList.add('open');
-        }
-
-        function closeModal() {
-            document.getElementById('slotModal').classList.remove('open');
-        }
-
-        document.getElementById('slotModal').addEventListener('click', function (e) {
-            if (e.target === this) closeModal();
-        });
-
-        // Re-open modal if there were validation errors (form was rejected)
-        @if($errors->any() && old('day_of_week'))
-            openModal('{{ old('day_of_week') }}', {{ old('period_number') }});
-        @endif
-    </script>
+    @if($errors->any() && old('day_of_week'))
+        <div data-reopen-slot data-day="{{ old('day_of_week') }}" data-period="{{ old('period_number') }}" hidden></div>
+    @endif
 </x-layouts.app>

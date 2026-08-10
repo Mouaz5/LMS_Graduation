@@ -130,6 +130,16 @@
         .btn-cancel:hover { background: #f1f5f9; }
     </style>
 
+    <div
+        data-payment-page
+        data-checkout-template="{{ route('parent.payments.checkout', '__FEE__') }}"
+        data-test-process-template="{{ route('parent.payments.test-process', '__FEE__') }}"
+        data-paid-label="{{ __('Paid successfully') }}"
+        data-pending-label="{{ __('Payment in progress...') }}"
+        data-complete-label="{{ __('Complete Payment') }}"
+        data-awaiting-label="{{ __('Awaiting payment') }}"
+        data-pay-label="{{ __('Pay Now') }}"
+    >
     <div class="page-header">
         <h2>{{ __("Tuition Payments") }}</h2>
         <p>{{ __("Pay tuition fees securely via Stripe") }}</p>
@@ -255,87 +265,6 @@
         </div>
     </div>
 
-    <script>
-    var currentFeeId = null;
-    var currentStudentSelect = null;
-
-    function updatePayButton(selectEl, feeId) {
-        currentStudentSelect = selectEl;
-        var selected = selectEl.options[selectEl.selectedIndex];
-        var status = selected.dataset.status;
-        var studentId = selected.value;
-        var studentName = selected.dataset.name;
-
-        var statusBox = document.getElementById('status-box-' + feeId);
-        var statusText = document.getElementById('status-text-' + feeId);
-        var payBtn = document.getElementById('pay-btn-' + feeId);
-        var payLabel = document.getElementById('pay-label-' + feeId);
-
-        if (status === 'succeeded') {
-            statusBox.className = 'fee-status fee-status-paid';
-            statusText.textContent = '{{ __("Paid successfully") }}';
-            payBtn.style.display = 'none';
-        } else if (status === 'pending') {
-            statusBox.className = 'fee-status fee-status-pending';
-            statusText.textContent = '{{ __("Payment in progress...") }}';
-            payBtn.style.display = 'flex';
-            payLabel.textContent = '{{ __("Complete Payment") }}';
-        } else {
-            statusBox.className = 'fee-status fee-status-available';
-            statusText.textContent = '{{ __("Awaiting payment") }}';
-            payBtn.style.display = 'flex';
-            payLabel.textContent = '{{ __("Pay Now") }}';
-        }
-
-        payBtn.dataset.studentId = studentId;
-        payBtn.dataset.studentName = studentName;
-    }
-
-    function openPaymentModal(button) {
-        currentFeeId = button.id.replace('pay-btn-', '');
-        document.getElementById('modal-subtitle').textContent = button.dataset.year + ' — ' + (button.dataset.studentName || '');
-        document.getElementById('modal-amount').textContent = parseFloat(button.dataset.amount).toLocaleString('en-US', {minimumFractionDigits: 2});
-        document.getElementById('modal-currency').textContent = button.dataset.currency;
-        document.getElementById('modal-student-id').value = button.dataset.studentId;
-        document.getElementById('test-payment-form').action = '{{ route("parent.payments.test-process", "__FEE__") }}'.replace('__FEE__', currentFeeId);
-        document.getElementById('payment-modal').classList.add('active');
-    }
-
-    function closePaymentModal() {
-        document.getElementById('payment-modal').classList.remove('active');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.child-select').forEach(function(select) {
-            var feeId = select.dataset.feeId;
-            select.addEventListener('change', function() {
-                updatePayButton(select, feeId);
-            });
-            updatePayButton(select, feeId);
-        });
-
-        document.querySelectorAll('.btn-pay').forEach(function(button) {
-            button.addEventListener('click', function() {
-                openPaymentModal(button);
-            });
-        });
-
-        document.getElementById('cancel-payment-modal').addEventListener('click', closePaymentModal);
-        document.getElementById('payment-modal').addEventListener('click', function(e) {
-            if (e.target === this) closePaymentModal();
-        });
-    });
-    </script>
-@else
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-pay').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const checkoutUrl = '{{ route("parent.payments.checkout", "__FEE__") }}'.replace('__FEE__', button.id.replace('pay-btn-', ''));
-                window.location.href = checkoutUrl + '?student=' + encodeURIComponent(button.dataset.studentId);
-            });
-        });
-    });
-    </script>
 @endif
+</div>
 </x-layouts.app>

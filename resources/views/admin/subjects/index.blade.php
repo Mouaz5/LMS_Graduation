@@ -77,13 +77,11 @@
             <tbody>
                 @forelse($subjects as $subject)
                     <tr style="cursor: pointer; transition: background 0.15s;"
-                        onclick="window.location='{{ route('admin.subjects.show', $subject) }}'"
-                        onmouseover="this.style.background='#fafbff'"
-                        onmouseout="this.style.background='transparent'">
+                        data-row-href="{{ route('admin.subjects.show', $subject) }}">
                         <td>{{ $subject->name }}</td>
                         <td><span class="code-badge">{{ $subject->code }}</span></td>
                         <td style="font-weight: 400;">{{ $subject->school?->name ?? '—' }}</td>
-                        <td onclick="event.stopPropagation()">
+                        <td data-row-ignore>
                             <div class="actions">
                                 <a href="{{ route('admin.subjects.edit', $subject) }}" class="btn-edit">
                                     <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>

@@ -1,34 +1,5 @@
 <x-layouts.app :pageTitle="__('Take Attendance')">
     <style>
-        .page-header { margin-bottom: 20px; }
-        .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-
-        .filter-card {
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
-        .filter-select, .filter-input {
-            padding: 9px 14px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 13.5px;
-            font-family: 'DM Sans', sans-serif;
-            color: #374151;
-            background: #fafafa;
-            outline: none;
-            transition: border 0.2s;
-            min-width: 180px;
-        }
-        .filter-select:focus, .filter-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: #f8fafc; }
         th {
@@ -128,10 +99,10 @@
         .btn-quick:hover { border-color: #4F46E5; color: #4F46E5; }
     </style>
 
-    <div class="page-header">
-        <div class="page-title">{{ __("Take Attendance") }}</div>
-        <div class="page-desc">{{ __("Select a classroom and date to record student attendance") }}</div>
-    </div>
+    <x-page-header
+        :title="__('Take Attendance')"
+        :description="__('Select a classroom and date to record student attendance')"
+    />
 
     @if(session('success'))
         <div style="background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
@@ -144,7 +115,7 @@
         <div class="filter-card">
             <div class="filter-group">
                 <label class="filter-label">{{ __("Classroom") }}</label>
-                <select name="classroom_id" class="filter-select" onchange="this.form.submit()">
+                <select name="classroom_id" class="filter-select" data-auto-submit>
                     <option value="">{{ __("— Select Classroom —") }}</option>
                     @foreach($classrooms as $classroom)
                         <option value="{{ $classroom->id }}" @selected($selectedClassroomId == $classroom->id)>
@@ -155,7 +126,7 @@
             </div>
             <div class="filter-group">
                 <label class="filter-label">{{ __("Date") }}</label>
-                <input type="date" name="date" class="filter-input" value="{{ $selectedDate }}" onchange="this.form.submit()">
+                <input type="date" name="date" class="filter-input" value="{{ $selectedDate }}" data-auto-submit>
             </div>
         </div>
     </form>
@@ -191,9 +162,9 @@
                     </div>
                     <div class="bulk-select-bar">
                         <span style="font-size: 12px; color: #94a3b8; margin-inline-end: 4px;">{{ __("Mark all:") }}</span>
-                        <button type="button" class="btn-quick" onclick="markAll('present')">{{ __("Present") }}</button>
-                        <button type="button" class="btn-quick" onclick="markAll('absent')">{{ __("Absent") }}</button>
-                        <button type="button" class="btn-quick" onclick="markAll('late')">{{ __("Late") }}</button>
+                        <button type="button" class="btn-quick" data-mark-all="present">{{ __("Present") }}</button>
+                        <button type="button" class="btn-quick" data-mark-all="absent">{{ __("Absent") }}</button>
+                        <button type="button" class="btn-quick" data-mark-all="late">{{ __("Late") }}</button>
                     </div>
                 </div>
 
@@ -260,12 +231,4 @@
         </div>
     @endif
 
-    <script>
-    function markAll(status) {
-        document.querySelectorAll('.radio-group').forEach(group => {
-            const radio = group.querySelector(`input[value="${status}"]`);
-            if (radio) radio.checked = true;
-        });
-    }
-    </script>
 </x-layouts.app>

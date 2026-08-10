@@ -53,7 +53,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __('Subject') }}</label>
-            <select class="filter-select" name="subject_id" onchange="this.form.submit()">
+            <select class="filter-select" name="subject_id" data-auto-submit>
                 <option value="">-- {{ __('Select Subject') }} --</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
@@ -62,7 +62,7 @@
         </div>
         <div class="filter-group">
             <label class="filter-label">{{ __('Student') }}</label>
-            <select class="filter-select" name="student_id" onchange="this.form.submit()">
+            <select class="filter-select" name="student_id" data-auto-submit>
                 <option value="">-- {{ __('Select Student') }} --</option>
                 @foreach($students as $st)
                     <option value="{{ $st->id }}" {{ $student?->id == $st->id ? 'selected' : '' }}>{{ $st->name }}</option>
@@ -90,17 +90,17 @@
                 </ul>
             </div>
         @else
-            <div class="empty-state">
-                {{ __('No learning objectives defined for :name.', ['name' => $subject->name]) }}
-                @if(auth()->user()->role->value === 'admin')
-                    <br><a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">{{ __('Go to Test Builder') }} →</a>
-                @endif
-            </div>
+            <x-empty-state
+                :description="__('No learning objectives defined for :name.', ['name' => $subject->name])"
+            />
+            @if(auth()->user()->role->value === 'admin')
+                <a href="{{ route('admin.diagnostic.test-builder', ['subject_id' => $subject->id]) }}" style="color:#4F46E5; font-weight:600;">{{ __('Go to Test Builder') }} →</a>
+            @endif
         @endif
     </div>
 @elseif($subject || $student)
     <div class="card">
-        <div class="empty-state">{{ __('Select both a subject and a student to view the knowledge map.') }}</div>
+        <x-empty-state :description="__('Select both a subject and a student to view the knowledge map.')" />
     </div>
 @endif
 

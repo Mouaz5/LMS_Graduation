@@ -89,9 +89,7 @@
             <tbody>
                 @forelse($years as $year)
                     <tr style="cursor: pointer; transition: background 0.15s;"
-                        onclick="window.location='{{ route('admin.academic-years.show', $year) }}'"
-                        onmouseover="this.style.background='#fafbff'"
-                        onmouseout="this.style.background='transparent'">
+                        data-row-href="{{ route('admin.academic-years.show', $year) }}">
                         <td>{{ $year->name }}</td>
                         <td>{{ $year->start_date->format('M d, Y') }}</td>
                         <td>{{ $year->end_date->format('M d, Y') }}</td>

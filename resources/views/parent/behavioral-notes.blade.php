@@ -76,7 +76,7 @@
             <div class="child-selector">
                 <div class="filter-group">
                     <label class="filter-label">{{ __("Child") }}</label>
-                    <select name="child_id" class="filter-select" onchange="this.form.submit()">
+                    <select name="child_id" class="filter-select" data-auto-submit>
                         @foreach($children as $child)
                             <option value="{{ $child->id }}" @selected($selectedChild?->id == $child->id)>
                                 {{ $child->name }}

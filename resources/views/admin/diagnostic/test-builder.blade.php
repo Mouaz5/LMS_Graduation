@@ -66,7 +66,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __('Subject') }}</label>
-            <select class="filter-select" name="subject_id" onchange="this.form.submit()">
+            <select class="filter-select" name="subject_id" data-auto-submit>
                 <option value="">-- {{ __('Select Subject') }} --</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>
@@ -135,7 +135,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">{{ __('Question Type') }}</label>
-                    <select name="type" class="filter-select" style="min-width: unset; width: 100%;" onchange="toggleOptions(this.value)">
+                    <select name="type" class="filter-select" style="min-width: unset; width: 100%;" data-question-type>
                         <option value="mcq">{{ __('Multiple Choice (MCQ)') }}</option>
                         <option value="true_false">{{ __('True / False') }}</option>
                     </select>
@@ -216,39 +216,4 @@
 </div>
 @endif
 
-<script>
-function toggleOptions(type) {
-    const section = document.getElementById('optionsSection');
-    const list = document.getElementById('optionsList');
-    if (type === 'true_false') {
-        list.innerHTML = `
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="0" checked>
-                <input type="text" name="options[0][option_text]" class="form-input" value="True" required>
-            </div>
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="1">
-                <input type="text" name="options[1][option_text]" class="form-input" value="False" required>
-            </div>`;
-    } else {
-        list.innerHTML = `
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="0" checked>
-                <input type="text" name="options[0][option_text]" class="form-input" placeholder="Option A" required>
-            </div>
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="1">
-                <input type="text" name="options[1][option_text]" class="form-input" placeholder="Option B" required>
-            </div>
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="2">
-                <input type="text" name="options[2][option_text]" class="form-input" placeholder="Option C (optional)">
-            </div>
-            <div class="option-row">
-                <input type="radio" name="correct_option" value="3">
-                <input type="text" name="options[3][option_text]" class="form-input" placeholder="Option D (optional)">
-            </div>`;
-    }
-}
-</script>
 </x-layouts.app>

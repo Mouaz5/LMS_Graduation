@@ -78,10 +78,10 @@
         }
     </style>
 
-    <div class="page-header">
-        <div class="page-title">{{ __("Absence Justifications") }}</div>
-        <div class="page-desc">{{ __("Review and approve or reject pending parent justifications") }}</div>
-    </div>
+    <x-page-header
+        :title="__('Absence Justifications')"
+        :description="__('Review and approve or reject pending parent justifications')"
+    />
 
     @if(session('success'))
         <div style="background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">

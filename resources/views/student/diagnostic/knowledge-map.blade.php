@@ -70,7 +70,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __("Subject") }}</label>
-            <select class="filter-select" name="subject_id" onchange="this.form.submit()">
+            <select class="filter-select" name="subject_id" data-auto-submit>
                 <option value="">{{ __("-- Select Subject --") }}</option>
                 @foreach($subjects as $s)
                     <option value="{{ $s->id }}" {{ $subject?->id == $s->id ? 'selected' : '' }}>{{ $s->name }}</option>

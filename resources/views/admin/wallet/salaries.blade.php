@@ -113,7 +113,7 @@
                 <div class="filter-bar">
                     <div class="filter-group">
                         <label class="filter-label">{{ __("Teacher") }}</label>
-                        <select name="teacher_id" class="filter-select" onchange="this.form.submit()">
+                        <select name="teacher_id" class="filter-select" data-auto-submit>
                             <option value="">{{ __("All Teachers") }}</option>
                             @foreach($teachers as $teacher)
                                 <option value="{{ $teacher->id }}" @selected(request('teacher_id') == $teacher->id)>{{ $teacher->name }}</option>
@@ -122,7 +122,7 @@
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">{{ __("Status") }}</label>
-                        <select name="status" class="filter-select" onchange="this.form.submit()">
+                        <select name="status" class="filter-select" data-auto-submit>
                             <option value="">{{ __("All") }}</option>
                             <option value="paid" @selected(request('status') === 'paid')>{{ __("Paid") }}</option>
                             <option value="pending" @selected(request('status') === 'pending')>{{ __("Pending") }}</option>

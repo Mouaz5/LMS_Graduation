@@ -517,6 +517,9 @@
                             required
                         >
                         <button type="button" class="password-toggle" id="password-toggle"
+                                data-password-toggle="password"
+                                data-show-label="{{ __('Show password') }}"
+                                data-hide-label="{{ __('Hide password') }}"
                                 aria-label="{{ __('Show password') }}" aria-pressed="false">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -548,17 +551,5 @@
         </div>
     </div>
 
-    <script>
-        const passwordInput = document.getElementById('password');
-        const passwordToggle = document.getElementById('password-toggle');
-
-        passwordToggle.addEventListener('click', () => {
-            const isVisible = passwordInput.type === 'text';
-
-            passwordInput.type = isVisible ? 'password' : 'text';
-            passwordToggle.setAttribute('aria-pressed', String(!isVisible));
-            passwordToggle.setAttribute('aria-label', isVisible ? @json(__('Show password')) : @json(__('Hide password')));
-        });
-    </script>
 </body>
 </html>

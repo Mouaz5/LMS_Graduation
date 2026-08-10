@@ -64,7 +64,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __('Child') }}</label>
-            <select class="filter-select" name="child_id" onchange="this.form.submit()">
+            <select class="filter-select" name="child_id" data-auto-submit>
                 @foreach($children as $child)
                     <option value="{{ $child->id }}" {{ $selectedChild?->id == $child->id ? 'selected' : '' }}>
                         {{ $child->name }}
@@ -74,7 +74,7 @@
         </div>
         <div class="filter-group">
             <label class="filter-label">{{ __('Semester') }}</label>
-            <select class="filter-select" name="semester_id" onchange="this.form.submit()">
+            <select class="filter-select" name="semester_id" data-auto-submit>
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
                         {{ $sem->academicYear->name ?? '' }} — {{ $sem->name }}

@@ -471,7 +471,7 @@
 
 <div class="app-wrapper">
     <!-- Sidebar Overlay (mobile) -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" data-sidebar-close></div>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -519,7 +519,7 @@
         <!-- Topbar -->
         <header class="topbar">
             <div class="topbar-left">
-                <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+                <button class="mobile-toggle" data-sidebar-toggle aria-label="Toggle sidebar">
                     <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -559,17 +559,17 @@
             @endif
 
             @if(session('success'))
-                <div class="flash-success">
+                <x-alert type="success">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     {{ session('success') }}
-                </div>
+                </x-alert>
             @endif
 
             @if(session('error') || $errors->any())
-                <div class="flash-error">
+                <x-alert type="error">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     {{ session('error') ?? $errors->first() }}
-                </div>
+                </x-alert>
             @endif
 
             {{ $slot }}
@@ -577,15 +577,5 @@
     </div>
 </div>
 
-<script>
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('open');
-}
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('open');
-}
-</script>
 </body>
 </html>

@@ -62,7 +62,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __("Semester") }}</label>
-            <select class="filter-select" name="semester_id" onchange="this.form.submit()">
+            <select class="filter-select" name="semester_id" data-auto-submit>
                 <option value="">{{ __("Select semester…") }}</option>
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
@@ -73,7 +73,7 @@
         </div>
         <div class="filter-group">
             <label class="filter-label">{{ __("Subject") }}</label>
-            <select class="filter-select" name="subject_id" onchange="this.form.submit()">
+            <select class="filter-select" name="subject_id" data-auto-submit>
                 <option value="">{{ __("Select subject…") }}</option>
                 @foreach($assignments->unique('subject_id') as $a)
                     <option value="{{ $a->subject_id }}" {{ $selectedSubjectId == $a->subject_id ? 'selected' : '' }}>
@@ -84,7 +84,7 @@
         </div>
         <div class="filter-group">
             <label class="filter-label">{{ __("Classroom") }}</label>
-            <select class="filter-select" name="classroom_id" onchange="this.form.submit()">
+            <select class="filter-select" name="classroom_id" data-auto-submit>
                 <option value="">{{ __("Select classroom…") }}</option>
                 @foreach($assignments as $a)
                     <option value="{{ $a->classroom_id }}" {{ $selectedClassroomId == $a->classroom_id ? 'selected' : '' }}>
@@ -95,7 +95,7 @@
         </div>
         <div class="filter-group">
             <label class="filter-label">{{ __("Exam Type") }}</label>
-            <select class="filter-select" name="exam_type_id" onchange="this.form.submit()">
+            <select class="filter-select" name="exam_type_id" data-auto-submit>
                 <option value="">{{ __("Select exam type…") }}</option>
                 @foreach($examTypes as $et)
                     <option value="{{ $et->id }}" {{ $selectedExamTypeId == $et->id ? 'selected' : '' }}>
@@ -109,7 +109,7 @@
 
 {{-- Grade Table --}}
 @if($selectedSubjectId && $selectedClassroomId && $selectedExamTypeId)
-    <form method="POST" action="{{ route('teacher.grades.store') }}" id="gradeForm">
+    <form method="POST" action="{{ route('teacher.grades.store') }}" id="gradeForm" data-invalid-message="{{ __('Some scores exceed the max score. Please correct before saving.') }}">
         @csrf
         <input type="hidden" name="subject_id" value="{{ $selectedSubjectId }}">
         <input type="hidden" name="exam_type_id" value="{{ $selectedExamTypeId }}">
@@ -185,39 +185,4 @@
     </div>
 @endif
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const maxScoreInput = document.getElementById('maxScore');
-    const scoreInputs   = document.querySelectorAll('.score-input');
-
-    function validateScores() {
-        const max = parseFloat(maxScoreInput?.value) || 0;
-        scoreInputs.forEach(input => {
-            const val = parseFloat(input.value);
-            if (input.value !== '' && val > max) {
-                input.classList.add('invalid');
-            } else {
-                input.classList.remove('invalid');
-            }
-        });
-    }
-
-    maxScoreInput?.addEventListener('input', validateScores);
-    scoreInputs.forEach(i => i.addEventListener('input', validateScores));
-
-    document.getElementById('gradeForm')?.addEventListener('submit', function(e) {
-        const max = parseFloat(maxScoreInput?.value) || 0;
-        let invalid = false;
-        scoreInputs.forEach(input => {
-            if (input.value !== '' && parseFloat(input.value) > max) {
-                invalid = true;
-            }
-        });
-        if (invalid) {
-            e.preventDefault();
-            alert(@json(__('Some scores exceed the max score. Please correct before saving.')));
-        }
-    });
-});
-</script>
 </x-layouts.app>

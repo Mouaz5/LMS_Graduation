@@ -20,9 +20,7 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
 @endphp
 
 <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s; cursor: pointer;"
-    onclick="window.location='{{ route('admin.users.show', $user) }}'"
-    onmouseover="this.style.background='#fafbff'"
-    onmouseout="this.style.background='transparent'">
+    data-row-href="{{ route('admin.users.show', $user) }}">
 
     {{-- User Info --}}
     <td style="padding: 14px 20px;">

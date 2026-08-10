@@ -73,7 +73,7 @@
 
     <div class="table-card">
         <div class="table-toolbar">
-            <input type="text" class="search-input" placeholder="{{ __('Search users...') }}" oninput="filterTable(this.value)">
+            <input type="text" class="search-input" placeholder="{{ __('Search users...') }}" data-table-filter="#usersTable">
             <div class="table-meta">{{ __('Showing :from–:to of :total', ['from' => $users->firstItem(), 'to' => $users->lastItem(), 'total' => $users->total()]) }}</div>
         </div>
 
@@ -123,13 +123,4 @@
         @endif
     </div>
 
-    <script>
-    function filterTable(query) {
-        const rows = document.querySelectorAll('#usersTable tbody tr');
-        const q = query.toLowerCase();
-        rows.forEach(row => {
-            row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-        });
-    }
-    </script>
 </x-layouts.app>

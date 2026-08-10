@@ -189,7 +189,7 @@
                                 data-id="{{ $et->id }}"
                                 data-name="{{ $et->name }}"
                                 data-weight="{{ $et->weight_percent }}">{{ __("Edit") }}</button>
-                        <form method="POST" action="{{ route('admin.exam-types.destroy', $et) }}" class="delete-exam-type">
+                        <form method="POST" action="{{ route('admin.exam-types.destroy', $et) }}" class="delete-exam-type" data-confirm="{{ __('Delete this exam type?') }}">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn-danger">{{ __("Delete") }}</button>
                         </form>
@@ -229,34 +229,4 @@
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var editModal = document.getElementById('editModal');
-    var editForm = document.getElementById('editForm');
-
-    function closeEdit() {
-        editModal.classList.remove('open');
-    }
-
-    document.querySelectorAll('.edit-exam-type').forEach(function(button) {
-        button.addEventListener('click', function() {
-            document.getElementById('editName').value = button.dataset.name;
-            document.getElementById('editWeight').value = button.dataset.weight;
-            editForm.action = `/admin/exam-types/${button.dataset.id}`;
-            editModal.classList.add('open');
-        });
-    });
-
-    document.getElementById('close-edit').addEventListener('click', closeEdit);
-    editModal.addEventListener('click', function(e) {
-        if (e.target === editModal) closeEdit();
-    });
-
-    document.querySelectorAll('.delete-exam-type').forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            if (!window.confirm('{{ __('Delete this exam type?') }}')) e.preventDefault();
-        });
-    });
-});
-</script>
 </x-layouts.app>

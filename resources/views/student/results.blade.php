@@ -86,7 +86,7 @@
     <div class="filter-card">
         <div class="filter-group">
             <label class="filter-label">{{ __("Semester") }}</label>
-            <select class="filter-select" name="semester_id" onchange="this.form.submit()">
+            <select class="filter-select" name="semester_id" data-auto-submit>
                 @foreach($semesters as $sem)
                     <option value="{{ $sem->id }}" {{ $selectedSemesterId == $sem->id ? 'selected' : '' }}>
                         {{ $sem->academicYear->name ?? '' }} — {{ $sem->name }}

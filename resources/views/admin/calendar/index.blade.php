@@ -80,9 +80,7 @@
             <tbody>
                 @forelse($events as $event)
                     <tr style="cursor: pointer; transition: background 0.15s;"
-                        onclick="window.location='{{ route('admin.calendar.show', $event) }}'"
-                        onmouseover="this.style.background='#fafbff'"
-                        onmouseout="this.style.background='transparent'">
+                        data-row-href="{{ route('admin.calendar.show', $event) }}">
                         <td>{{ $event->date->format('M d, Y') }}</td>
                         <td>
                             <span class="badge badge-{{ $event->type->value }}">

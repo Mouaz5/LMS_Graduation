@@ -320,13 +320,4 @@
         </div>
     @endif
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.unlink-relation-form').forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            if (!window.confirm(form.dataset.confirm)) e.preventDefault();
-        });
-    });
-});
-</script>
 </x-layouts.app>

@@ -35,8 +35,7 @@ $path = $iconPaths[$icon] ?? $iconPaths['users'];
     transition: transform 0.2s, box-shadow 0.2s;
     position: relative;
     overflow: hidden;
-" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06)';"
-   onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)';">
+">
 
     <div style="
         width: 48px;

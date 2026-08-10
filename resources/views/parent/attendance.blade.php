@@ -1,22 +1,5 @@
 <x-layouts.app :pageTitle="__('Children\'s Attendance')">
     <style>
-        .page-header { margin-bottom: 20px; }
-        .page-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #0f172a; }
-
-        .child-selector {
-            background: white; border-radius: 14px;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
-        }
-        .filter-select, .filter-input {
-            padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px;
-            font-size: 13px; font-family: 'DM Sans', sans-serif; color: #374151;
-            background: #fafafa; outline: none; transition: border 0.2s; min-width: 180px;
-        }
-        .filter-select:focus, .filter-input:focus { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
         .btn-filter {
             padding: 8px 18px; background: #4F46E5; color: white; border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
@@ -64,13 +47,7 @@
         }
         .btn-justify:hover { background: #4338ca; }
 
-        /* Modal overlay */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.4); z-index: 100;
-            align-items: center; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
+        /* Modal content */
         .modal-box {
             background: white; border-radius: 16px;
             width: 100%; max-width: 460px;
@@ -105,17 +82,12 @@
         }
         .btn-cancel:hover { background: #f1f5f9; }
 
-        .empty-state { text-align: center; padding: 56px 20px; }
-        .empty-icon {
-            width: 56px; height: 56px; background: #f1f5f9; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
-        }
     </style>
 
-    <div class="page-header">
-        <div class="page-title">{{ __("Children's Attendance") }}</div>
-        <div class="page-desc">{{ __("View your child's absence history and submit justifications") }}</div>
-    </div>
+    <x-page-header
+        :title="__('Children\'s Attendance')"
+        :description="__('View your child\'s absence history and submit justifications')"
+    />
 
     @if(session('success'))
         <div style="background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
@@ -130,7 +102,7 @@
             @if($children->count() > 1)
                 <div class="filter-group">
                     <label class="filter-label">{{ __("Child") }}</label>
-                    <select name="child_id" class="filter-select" onchange="this.form.submit()">
+                    <select name="child_id" class="filter-select" data-auto-submit>
                         @foreach($children as $child)
                             <option value="{{ $child->id }}" @selected($selectedChild?->id == $child->id)>
                                 {{ $child->name }}
@@ -266,23 +238,4 @@
         </div>
     </div>
 
-    <script>
-    function openJustifyModal(button) {
-        document.getElementById('justifyModal').classList.add('open');
-        document.getElementById('modalSubtitle').textContent = 'Absence on ' + button.dataset.date;
-        document.getElementById('justifyForm').action = '/parent/attendance/' + button.dataset.attendanceId + '/justify';
-    }
-    function closeJustifyModal() {
-        document.getElementById('justifyModal').classList.remove('open');
-    }
-    document.querySelectorAll('.justify-button').forEach(function(button) {
-        button.addEventListener('click', function() {
-            openJustifyModal(button);
-        });
-    });
-    document.getElementById('cancel-justify-modal').addEventListener('click', closeJustifyModal);
-    document.getElementById('justifyModal').addEventListener('click', function(e) {
-        if (e.target === this) closeJustifyModal();
-    });
-    </script>
 </x-layouts.app>

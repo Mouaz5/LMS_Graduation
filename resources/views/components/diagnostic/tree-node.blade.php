@@ -29,21 +29,3 @@
         </div>
     @endif
 </li>
-
-@once
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.tree').forEach(function (tree) {
-        tree.addEventListener('click', function (e) {
-            const row = e.target.closest('[data-node-id]');
-            if (!row) return;
-            const id = row.dataset.nodeId;
-            const children = document.getElementById('children-' + id);
-            const toggle   = document.getElementById('toggle-'   + id);
-            if (children) children.classList.toggle('open');
-            if (toggle)   toggle.classList.toggle('open');
-        });
-    });
-});
-</script>
-@endonce

@@ -187,33 +187,4 @@
         </div>
     </form>
 
-    <script>
-        const teacherSelect = document.getElementById('teacher_user_id');
-        const subjectSelect = document.getElementById('subject_id');
-
-        function filterTeachersBySubject() {
-            const subjectId = subjectSelect.value;
-
-            Array.from(teacherSelect.options).forEach((option) => {
-                if (!option.value) {
-                    return;
-                }
-
-                const assignedSubjects = option.dataset.subjectIds
-                    .split(',')
-                    .filter(Boolean);
-                const isAvailable = !subjectId || assignedSubjects.length === 0 || assignedSubjects.includes(subjectId);
-
-                option.hidden = !isAvailable;
-                option.disabled = !isAvailable;
-            });
-
-            if (teacherSelect.selectedOptions[0]?.disabled) {
-                teacherSelect.value = '';
-            }
-        }
-
-        subjectSelect.addEventListener('change', filterTeachersBySubject);
-        filterTeachersBySubject();
-    </script>
 </x-layouts.app>

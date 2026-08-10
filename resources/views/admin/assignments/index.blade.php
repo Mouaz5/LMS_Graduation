@@ -91,7 +91,7 @@
 
     <div class="table-card">
         <div class="table-toolbar">
-            <input type="text" class="search-input" placeholder="{{ __('Search assignments...') }}" oninput="filterTable(this.value)">
+            <input type="text" class="search-input" placeholder="{{ __('Search assignments...') }}" data-table-filter="#assignmentsTable">
             <div class="table-meta">{{ __(":count assignments total", ['count' => $assignments->total()]) }}</div>
         </div>
 
@@ -162,13 +162,4 @@
         @endif
     </div>
 
-    <script>
-    function filterTable(query) {
-        const rows = document.querySelectorAll('#assignmentsTable tbody tr');
-        const q = query.toLowerCase();
-        rows.forEach(row => {
-            row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-        });
-    }
-    </script>
 </x-layouts.app>

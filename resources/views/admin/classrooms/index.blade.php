@@ -68,9 +68,7 @@
             <tbody>
                 @forelse($classrooms as $classroom)
                     <tr style="cursor: pointer; transition: background 0.15s;"
-                        onclick="window.location='{{ route('classrooms.show', $classroom) }}'"
-                        onmouseover="this.style.background='#fafbff'"
-                        onmouseout="this.style.background='transparent'">
+                        data-row-href="{{ route('classrooms.show', $classroom) }}">
                         <td>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div class="classroom-icon">
