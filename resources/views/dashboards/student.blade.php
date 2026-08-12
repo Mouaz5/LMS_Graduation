@@ -1,7 +1,10 @@
 <x-layouts.app :pageTitle="__('Student Dashboard')">
     <style>
+        /* Fixed-dark hero: white text on a deep gradient in BOTH themes.
+           Deliberately literal hex — tokens that lighten in dark mode would
+           put light text on a light fill here. */
         .welcome-banner {
-            background: linear-gradient(135deg, #064e3b 0%, var(--success-text) 50%, #047857 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #14532d 50%, #166534 100%);
             border-radius: 16px;
             padding: 28px 32px;
             color: white;
@@ -59,7 +62,7 @@
 
     <div class="welcome-banner">
         <div style="position: relative; z-index: 1;">
-            <div style="font-size: 13px; color: #6ee7b7; font-weight: 500; margin-bottom: 4px;">
+            <div style="font-size: 13px; color: var(--success-border); font-weight: 500; margin-bottom: 4px;">
                 {{ now()->format('l, F j, Y') }}
             </div>
             <h2 class="rtl-display" style="font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 6px;">
@@ -108,9 +111,9 @@
         </x-dashboard.card>
 
         {{-- Announcements --}}
-        <x-dashboard.card :title="__('Announcements')" :subtitle="__('School notices')" iconBg="#faf5ff">
+        <x-dashboard.card :title="__('Announcements')" :subtitle="__('School notices')" iconBg="var(--violet-tint)">
             <x-slot:icon>
-                <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+                <svg width="20" height="20" fill="none" stroke="var(--violet)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="var(--border)" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>

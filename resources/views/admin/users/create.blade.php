@@ -4,11 +4,11 @@
             max-width: 600px;
         }
         .form-card {
-            background: white;
+            background: var(--surface);
             border-radius: 16px;
             padding: 32px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
         }
         .form-header {
             margin-bottom: 28px;
@@ -52,7 +52,7 @@
         }
         .form-input:focus, .form-select:focus {
             border-color: var(--primary);
-            background: white;
+            background: var(--surface);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
         }
         .form-input.is-error { border-color: var(--danger); }
@@ -125,7 +125,7 @@
             background: var(--primary-tint);
             color: var(--primary-dark);
         }
-        .role-option label:hover { border-color: var(--primary-light); background: #f5f7ff; }
+        .role-option label:hover { border-color: var(--primary-light); background: var(--primary-tint); }
         .role-icon { font-size: 20px; }
         .form-actions {
             display: flex;
@@ -138,7 +138,7 @@
         .btn-submit {
             padding: 11px 28px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border: none;
             border-radius: 10px;
             font-size: 14px;

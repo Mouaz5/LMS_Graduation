@@ -3,18 +3,18 @@
 @php
 $roleBadge = [
     'admin'   => ['label' => __('Admin'),   'bg' => 'var(--primary-tint)', 'color' => 'var(--primary-dark)', 'dot' => 'var(--primary)'],
-    'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
+    'teacher' => ['label' => __('Teacher'), 'bg' => 'var(--info-tint)', 'color' => 'var(--info-strong)', 'dot' => 'var(--info)'],
     'student' => ['label' => __('Student'), 'bg' => 'var(--success-tint)', 'color' => 'var(--success-text)', 'dot' => 'var(--success)'],
-    'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
+    'parent'  => ['label' => __('Parent'),  'bg' => 'var(--violet-tint)', 'color' => 'var(--violet-strong)', 'dot' => 'var(--violet)'],
 ];
 $rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
 $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
 
 $avatarColors = [
     'admin'   => ['from' => 'var(--primary-light)', 'to' => 'var(--primary)'],
-    'teacher' => ['from' => '#60a5fa', 'to' => '#2563eb'],
-    'student' => ['from' => '#34d399', 'to' => 'var(--success-dark)'],
-    'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
+    'teacher' => ['from' => '#60a5fa', 'to' => 'var(--info-dark)'],
+    'student' => ['from' => 'var(--success)', 'to' => 'var(--success-dark)'],
+    'parent'  => ['from' => '#c084fc', 'to' => 'var(--violet-dark)'],
 ];
 $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
 @endphp

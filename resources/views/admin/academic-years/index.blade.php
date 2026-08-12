@@ -6,7 +6,7 @@
             gap: 6px;
             padding: 9px 20px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;

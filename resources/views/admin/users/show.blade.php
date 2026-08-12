@@ -36,8 +36,8 @@
         }
         .related-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-primary); }
         .related-card {
-            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
+            background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-card); overflow: hidden;
         }
         .related-item {
             padding: 14px 20px; font-size: 13.5px; color: var(--text-primary);
@@ -53,7 +53,7 @@
 
         /* Link form inside card */
         .link-form-card {
-            background: white; border-radius: 14px; border: 1px dashed var(--primary-light);
+            background: var(--surface); border-radius: 14px; border: 1px dashed var(--primary-light);
             padding: 20px; margin-top: 12px; max-width: 640px;
         }
         .link-form-title { font-size: 13.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; }
@@ -63,9 +63,9 @@
             font-size: 13.5px; font-family: var(--font-body); color: var(--text-primary);
             background: var(--surface-3); outline: none; transition: all 0.2s; min-width: 180px;
         }
-        .link-form-row select:focus { border-color: var(--primary); background: white; }
+        .link-form-row select:focus { border-color: var(--primary); background: var(--surface); }
         .btn-link {
-            padding: 9px 18px; background: var(--primary); color: white; border: none;
+            padding: 9px 18px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 10px; font-size: 13px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             white-space: nowrap;
@@ -73,16 +73,16 @@
         .btn-link:hover { background: var(--primary-dark); }
         .btn-unlink {
             margin-inline-start: auto; padding: 4px 10px;
-            background: var(--danger-tint); color: #e11d48;
-            border: 1px solid #fecdd3; border-radius: 7px;
+            background: var(--danger-tint); color: var(--rose-dark);
+            border: 1px solid var(--danger-border); border-radius: 7px;
             font-size: 12px; font-weight: 600; cursor: pointer;
             font-family: var(--font-body); transition: all 0.15s;
         }
-        .btn-unlink:hover { background: #ffe4e6; }
+        .btn-unlink:hover { background: var(--danger-tint); }
         .relation-chip {
             font-size: 11.5px; font-weight: 600; padding: 2px 8px;
-            border-radius: 5px; background: #f3f4f6; color: #6b7280;
-            border: 1px solid #e5e7eb;
+            border-radius: 5px; background: var(--surface-2); color: var(--text-secondary);
+            border: 1px solid var(--border);
         }
         .alert-success {
             background: var(--success-tint); border: 1px solid var(--success-border); border-radius: 10px;
@@ -101,17 +101,17 @@
     @php
         $roleBadge = [
             'admin'   => ['label' => __('Admin'),   'bg' => 'var(--primary-tint)', 'color' => 'var(--primary-dark)', 'dot' => 'var(--primary)'],
-            'teacher' => ['label' => __('Teacher'), 'bg' => '#eff6ff', 'color' => '#1d4ed8', 'dot' => '#3b82f6'],
+            'teacher' => ['label' => __('Teacher'), 'bg' => 'var(--info-tint)', 'color' => 'var(--info-strong)', 'dot' => 'var(--info)'],
             'student' => ['label' => __('Student'), 'bg' => 'var(--success-tint)', 'color' => 'var(--success-text)', 'dot' => 'var(--success)'],
-            'parent'  => ['label' => __('Parent'),  'bg' => '#faf5ff', 'color' => '#6b21a8', 'dot' => '#9333ea'],
+            'parent'  => ['label' => __('Parent'),  'bg' => 'var(--violet-tint)', 'color' => 'var(--violet-strong)', 'dot' => 'var(--violet)'],
         ];
         $rb = $roleBadge[$user->role->value] ?? $roleBadge['student'];
         $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
         $avatarColors = [
             'admin'   => ['from' => 'var(--primary-light)', 'to' => 'var(--primary)'],
-            'teacher' => ['from' => '#60a5fa', 'to' => '#2563eb'],
-            'student' => ['from' => '#34d399', 'to' => 'var(--success-dark)'],
-            'parent'  => ['from' => '#c084fc', 'to' => '#7c3aed'],
+            'teacher' => ['from' => '#60a5fa', 'to' => 'var(--info-dark)'],
+            'student' => ['from' => 'var(--success)', 'to' => 'var(--success-dark)'],
+            'parent'  => ['from' => '#c084fc', 'to' => 'var(--violet-dark)'],
         ];
         $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
     @endphp
@@ -168,8 +168,8 @@
                 <div class="related-title" style="margin-bottom: 12px;">{{ __('Classroom') }}</div>
                 <div class="related-card">
                     <div class="related-item">
-                        <div class="related-item-icon" style="background: #eff6ff;">
-                            <svg width="16" height="16" fill="none" stroke="#2563eb" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        <div class="related-item-icon" style="background: var(--info-tint);">
+                            <svg width="16" height="16" fill="none" stroke="var(--info-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                         </div>
                         <div>
                             <div style="font-weight: 600;">{{ $user->studentProfile->classroom->name }}</div>
@@ -191,8 +191,8 @@
             <div class="related-card">
                 @forelse($user->parents as $parent)
                     <div class="related-item">
-                        <div class="related-item-icon" style="background: #faf5ff;">
-                            <svg width="16" height="16" fill="none" stroke="#7c3aed" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="related-item-icon" style="background: var(--violet-tint);">
+                            <svg width="16" height="16" fill="none" stroke="var(--violet-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
                         <div style="flex: 1;">
                             <div style="font-weight: 600;">{{ $parent->name }}</div>
@@ -307,8 +307,8 @@
             <div class="related-card">
                 @foreach($user->teacherAssignments as $assignment)
                     <div class="related-item">
-                        <div class="related-item-icon" style="background: #eff6ff;">
-                            <svg width="16" height="16" fill="none" stroke="#2563eb" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <div class="related-item-icon" style="background: var(--info-tint);">
+                            <svg width="16" height="16" fill="none" stroke="var(--info-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
                         <div>
                             <div style="font-weight: 600;">{{ $assignment->subject->name }} — {{ $assignment->classroom->name }}</div>

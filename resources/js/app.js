@@ -1,4 +1,5 @@
 import './bootstrap';
+import './theme';
 import './ui';
 import './forms';
 import './pages/assignments';

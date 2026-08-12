@@ -5,14 +5,14 @@
         .page-header p { font-size: 13px; color: var(--text-secondary); }
 
         .stat-card {
-            background: white; border-radius: 14px; padding: 20px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 20px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             margin-bottom: 24px; max-width: 280px;
         }
         .stat-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
         .stat-value { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--success-dark); }
 
-        .table-card { background: white; border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden; }
+        .table-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-card); overflow: hidden; }
         .table-header { padding: 20px; border-bottom: 1px solid var(--border-soft); }
         .table-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-primary); }
         .table-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
@@ -98,7 +98,7 @@
                             <a href="{{ $transfers->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</a>
                         @endif
                         @if($transfers->hasMorePages())
-                            <a href="{{ $transfers->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
+                            <a href="{{ $transfers->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
                         @else
                             <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
                         @endif

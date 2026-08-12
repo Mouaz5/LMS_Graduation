@@ -6,7 +6,7 @@
             gap: 6px;
             padding: 9px 20px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;
@@ -47,8 +47,8 @@
             font-weight: 600;
         }
         .badge-holiday { background: var(--warning-tint); color: var(--warning-text); border: 1px solid var(--warning-border); }
-        .badge-event { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
-        .badge-exam { background: #fce7f3; color: #9d174d; border: 1px solid #f9a8d4; }
+        .badge-event { background: var(--info-tint-2); color: var(--info-strong); border: 1px solid var(--info-border); }
+        .badge-exam { background: var(--pink-tint); color: var(--pink-text); border: 1px solid var(--pink-border); }
         .empty-state {
             text-align: center;
             padding: 48px;

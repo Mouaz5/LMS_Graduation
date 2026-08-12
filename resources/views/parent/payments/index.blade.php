@@ -15,8 +15,8 @@
         .fees-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
 
         .fee-card {
-            background: white; border-radius: 14px; padding: 24px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 24px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             transition: all 0.2s;
         }
         .fee-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent); }
@@ -49,7 +49,7 @@
 
         .btn-pay {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 12px; background: var(--primary); color: white; border: none;
+            width: 100%; padding: 12px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             text-decoration: none;
@@ -64,9 +64,9 @@
             border-radius: 8px; font-size: 12.5px; font-weight: 600;
             font-family: var(--font-body); text-decoration: none; transition: all 0.2s;
         }
-        .btn-history:hover { background: var(--primary-dark); color: white; }
+        .btn-history:hover { background: var(--primary-dark); color: var(--on-primary); }
 
-        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-faint); background: white; border-radius: 14px; border: 1px solid var(--border-soft); }
+        .empty-state { text-align: center; padding: 80px 20px; color: var(--text-faint); background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft); }
         .empty-state svg { margin-bottom: 16px; }
         .empty-state h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
         .empty-state p { font-size: 13px; color: var(--text-faint); }
@@ -75,7 +75,7 @@
 
         .test-banner {
             display: flex; align-items: center; gap: 10px;
-            background: var(--warning-tint); border: 1px solid #fde68a;
+            background: var(--warning-tint); border: 1px solid var(--warning-border);
             padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
             font-size: 13px; color: var(--warning-text);
         }
@@ -83,13 +83,13 @@
 
         .modal-overlay {
             display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 1000;
+            background: var(--overlay); z-index: 1000;
             align-items: center; justify-content: center; padding: 20px;
         }
         .modal-overlay.active { display: flex; }
         .modal {
-            background: white; border-radius: 16px; padding: 32px;
-            max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            background: var(--surface); border-radius: 16px; padding: 32px;
+            max-width: 440px; width: 100%; box-shadow: var(--shadow-modal);
         }
         .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
         .modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
@@ -113,11 +113,11 @@
         .form-row .form-group { flex: 1; }
         .test-card-hint {
             font-size: 11.5px; color: var(--text-muted); margin-top: 4px; padding: 8px 12px;
-            background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; color: #15803d;
+            background: var(--success-tint); border: 1px solid var(--success-border); border-radius: 6px; color: var(--success-dark);
         }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
         .btn-submit {
-            flex: 1; padding: 12px; background: var(--primary); color: white; border: none;
+            flex: 1; padding: 12px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }

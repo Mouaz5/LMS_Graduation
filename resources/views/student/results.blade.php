@@ -4,8 +4,8 @@
     .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
+        background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-card); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
@@ -16,7 +16,7 @@
 
     .btn-download {
         display: inline-flex; align-items: center; gap: 7px;
-        padding: 9px 20px; background: var(--primary); color: white; border-radius: 8px;
+        padding: 9px 20px; background: var(--primary); color: var(--on-primary); border-radius: 8px;
         font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.2s;
     }
     .btn-download:hover { background: var(--primary-dark); }
@@ -24,8 +24,8 @@
     .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
 
     .subject-card {
-        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
+        background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-card); overflow: hidden;
     }
     .subject-card-header {
         padding: 16px 18px; border-bottom: 1px solid var(--border-soft);
@@ -38,9 +38,9 @@
         font-size: 16px; font-weight: 800;
     }
     .grade-a { background: var(--success-tint); color: var(--success-text); }
-    .grade-b { background: #dbeafe; color: #1e40af; }
-    .grade-c { background: var(--warning-tint); color: #854d0e; }
-    .grade-d { background: #fed7aa; color: #9a3412; }
+    .grade-b { background: var(--info-tint-2); color: var(--info-strong); }
+    .grade-c { background: var(--warning-tint); color: var(--warning-text); }
+    .grade-d { background: var(--warning-border); color: var(--ember-text); }
     .grade-f { background: var(--danger-tint); color: var(--danger-text); }
 
     .subject-card-body { padding: 14px 18px; }
@@ -142,7 +142,7 @@
         @endforeach
     </div>
 @else
-    <div style="background:white; border-radius:14px; border:1px solid var(--border-soft); box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+    <div style="background:var(--surface); border-radius:14px; border:1px solid var(--border-soft); box-shadow: var(--shadow-card);">
         <div class="empty-state">
             <div class="empty-icon">📊</div>
             <div style="font-size:14px; font-weight:600; color:var(--text-strong); margin-bottom:6px;">{{ __("No results yet") }}</div>

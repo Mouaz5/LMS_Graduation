@@ -3,8 +3,8 @@
     .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 18px 20px; margin-bottom: 20px;
+        background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-card); padding: 18px 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
@@ -13,7 +13,7 @@
         background: var(--surface-3); outline: none; min-width: 200px;
     }
 
-    .card { background: white; border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 24px; }
+    .card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-card); padding: 24px; }
 
     /* Tree styles — mastery ledger: each node is a small progress dial
        (conic-gradient arc) rather than a flat colored dot, so depth of

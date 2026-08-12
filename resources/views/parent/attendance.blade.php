@@ -1,7 +1,7 @@
 <x-layouts.app :pageTitle="__('Children\'s Attendance')">
     <style>
         .btn-filter {
-            padding: 8px 18px; background: var(--primary); color: white; border: none;
+            padding: 8px 18px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
@@ -41,7 +41,7 @@
 
         .btn-justify {
             padding: 5px 12px;
-            background: var(--primary); color: white; border: none; border-radius: 8px;
+            background: var(--primary); color: var(--on-primary); border: none; border-radius: 8px;
             font-size: 11.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.15s; white-space: nowrap;
         }
@@ -49,10 +49,10 @@
 
         /* Modal content */
         .modal-box {
-            background: white; border-radius: 16px;
+            background: var(--surface); border-radius: 16px;
             width: 100%; max-width: 460px;
             padding: 28px; margin: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-modal);
         }
         .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
         .modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
@@ -69,7 +69,7 @@
         .modal-actions { display: flex; gap: 10px; margin-top: 4px; }
         .btn-submit {
             flex: 1; padding: 10px;
-            background: var(--primary); color: white; border: none; border-radius: 10px;
+            background: var(--primary); color: var(--on-primary); border: none; border-radius: 10px;
             font-size: 13.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.2s;
         }
@@ -90,7 +90,7 @@
     />
 
     @if(session('success'))
-        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid var(--success-border); color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -174,7 +174,7 @@
                                         <div style="font-weight: 600; color: var(--text-primary);">{{ $record->date?->format('M j, Y') }}</div>
                                         <div style="font-size: 11.5px; color: var(--text-muted);">{{ $record->date?->format('l') }}</div>
                                     </td>
-                                    <td style="color: #475569;">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
+                                    <td style="color: var(--text-secondary);">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
                                     <td><span class="badge badge-{{ $record->status->value }}">{{ __(ucfirst($record->status->value)) }}</span></td>
                                     <td>
                                         @if($record->justification)
@@ -205,7 +205,7 @@
                                 <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
                             @endif
                             @if($records->hasMorePages())
-                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
+                                <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
                             @else
                                 <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
                             @endif

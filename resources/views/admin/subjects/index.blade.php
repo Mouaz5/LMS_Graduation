@@ -2,7 +2,7 @@
     <style>
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 9px 20px; background: var(--primary); color: white;
+            padding: 9px 20px; background: var(--primary); color: var(--on-primary);
             border-radius: 10px; text-decoration: none; font-size: 13.5px;
             font-weight: 600; font-family: var(--font-body);
             transition: all 0.2s; box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -24,7 +24,7 @@
         .code-badge {
             display: inline-block; padding: 3px 10px; border-radius: 6px;
             font-size: 11.5px; font-weight: 600; font-family: monospace;
-            background: var(--border-soft); color: #475569; border: 1px solid var(--border);
+            background: var(--border-soft); color: var(--text-secondary); border: 1px solid var(--border);
         }
         .actions { display: flex; gap: 8px; }
         .btn-edit {
@@ -33,12 +33,12 @@
             border-radius: 8px; text-decoration: none; transition: all 0.15s;
             color: var(--primary); background: var(--primary-tint); border: 1px solid var(--primary-light);
         }
-        .btn-edit:hover { background: #e0e7ff; }
+        .btn-edit:hover { background: var(--indigo-wash); }
         .btn-delete {
             display: inline-flex; align-items: center; gap: 4px;
             padding: 5px 12px; font-size: 12.5px; font-weight: 600;
             border-radius: 8px; border: none; cursor: pointer; transition: all 0.15s;
-            color: var(--danger-dark); background: var(--danger-tint); border: 1px solid #fecaca;
+            color: var(--danger-dark); background: var(--danger-tint); border: 1px solid var(--danger-border);
             font-family: var(--font-body);
         }
         .btn-delete:hover { background: var(--danger-tint); }

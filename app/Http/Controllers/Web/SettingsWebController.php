@@ -9,6 +9,6 @@ class SettingsWebController extends Controller
 {
     public function index(): View
     {
-        return view('admin.settings.index');
+        return view('settings.index');
     }
 }

@@ -24,9 +24,9 @@
         .student-cell { display: flex; align-items: center; gap: 10px; }
         .student-avatar {
             width: 32px; height: 32px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--violet-dark));
             display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;
+            color: var(--on-primary); font-size: 11px; font-weight: 700; flex-shrink: 0;
         }
         .student-name { font-weight: 600; color: var(--text-primary); font-size: 13px; }
         .student-class { font-size: 11.5px; color: var(--text-muted); }
@@ -37,12 +37,12 @@
             font-size: 11.5px; font-weight: 600;
         }
         .badge-absent  { background: var(--danger-tint); color: var(--danger-text); }
-        .badge-pending { background: var(--warning-tint); color: #78350f; }
+        .badge-pending { background: var(--warning-tint); color: var(--warning-text); }
 
         .reason-text {
             max-width: 240px;
             font-size: 12.5px;
-            color: #475569;
+            color: var(--text-secondary);
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -63,7 +63,7 @@
         .btn-approve { background: var(--success-border); color: var(--success-text); }
         .btn-approve:hover { background: var(--success-border); }
         .btn-reject  { background: var(--danger-tint); color: var(--danger-text); }
-        .btn-reject:hover  { background: #fecaca; }
+        .btn-reject:hover  { background: var(--danger-border); }
 
         .doc-link {
             display: inline-flex; align-items: center; gap: 4px;
@@ -84,7 +84,7 @@
     />
 
     @if(session('success'))
-        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid var(--success-border); color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -136,7 +136,7 @@
                                 <td>
                                     <div class="reason-text">{{ $j->reason }}</div>
                                 </td>
-                                <td style="font-size: 12.5px; color: #475569;">{{ $j->submittedBy->name ?? '—' }}</td>
+                                <td style="font-size: 12.5px; color: var(--text-secondary);">{{ $j->submittedBy->name ?? '—' }}</td>
                                 <td>
                                     @if($j->document_path)
                                         <a href="{{ route('teacher.justifications.document', $j) }}" class="doc-link">
@@ -175,7 +175,7 @@
                             <a href="{{ $justifications->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                         @endif
                         @if($justifications->hasMorePages())
-                            <a href="{{ $justifications->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
+                            <a href="{{ $justifications->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                         @else
                             <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                         @endif

@@ -41,8 +41,8 @@
             width: 32px;
             height: 32px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #eff6ff, #dbeafe);
-            color: #2563eb;
+            background: linear-gradient(135deg, var(--info-tint), var(--info-tint-2));
+            color: var(--info-dark);
             flex-shrink: 0;
         }
     </style>

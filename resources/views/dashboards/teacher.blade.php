@@ -1,7 +1,10 @@
 <x-layouts.app :pageTitle="__('Teacher Dashboard')">
     <style>
+        /* Fixed-dark hero: white text on a deep gradient in BOTH themes.
+           Deliberately literal hex — tokens that lighten in dark mode would
+           put light text on a light fill here. */
         .welcome-banner {
-            background: linear-gradient(135deg, var(--sidebar-bg) 0%, var(--primary-dark) 50%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #1C2321 0%, #1E3722 50%, #1E3722 100%);
             border-radius: 16px;
             padding: 28px 32px;
             color: white;
@@ -40,7 +43,7 @@
             padding: 16px 20px;
             background: linear-gradient(135deg, var(--primary-dark), #6d28d9);
             border-radius: 12px;
-            color: white;
+            color: var(--on-primary);
             text-decoration: none;
             margin-bottom: 16px;
             transition: all 0.2s;
@@ -104,9 +107,9 @@
 
     <div class="placeholder-grid">
         {{-- My Classes --}}
-        <x-dashboard.card :title="__('My Classes')" :subtitle="__(':count assigned', ['count' => $classrooms->count()])" iconBg="#eff6ff">
+        <x-dashboard.card :title="__('My Classes')" :subtitle="__(':count assigned', ['count' => $classrooms->count()])" iconBg="var(--info-tint)">
             <x-slot:icon>
-                <svg width="20" height="20" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
+                <svg width="20" height="20" fill="none" stroke="var(--info)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>
             </x-slot:icon>
@@ -157,7 +160,7 @@
                 </svg>
             </x-slot:icon>
             @forelse($assignments as $i => $assignment)
-                @php $colors = ['var(--primary)','var(--success)','#3b82f6','var(--warning)','#9333ea','#ec4899']; @endphp
+                @php $colors = ['var(--primary)','var(--success)','var(--info)','var(--warning)','var(--violet)','#ec4899']; @endphp
                 <div class="assignment-row">
                     <div class="assignment-dot" style="background: {{ $colors[$i % count($colors)] }};"></div>
                     <div style="flex: 1;">

@@ -10,10 +10,10 @@
         }
         .page-header p { font-size: 13px; color: var(--text-secondary); }
         .form-card {
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             padding: 28px;
             max-width: 600px;
         }
@@ -34,7 +34,7 @@
             border-radius: 10px;
             font-size: 14px;
             font-family: var(--font-body);
-            color: #1e293b;
+            color: var(--text-primary);
             background: var(--surface-3);
             transition: all 0.2s;
             appearance: none;
@@ -48,7 +48,7 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
-            background-color: white;
+            background-color: var(--surface);
         }
         .form-select option { padding: 4px 8px; }
         .form-select optgroup { font-weight: 700; color: var(--text-strong); }
@@ -72,7 +72,7 @@
             gap: 6px;
             padding: 10px 22px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border-radius: 10px;
             border: none;
             font-size: 13.5px;
@@ -108,9 +108,9 @@
     </div>
 
     @if($errors->any())
-    <div style="background: var(--danger-tint); border: 1px solid #fecaca; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
+    <div style="background: var(--danger-tint); border: 1px solid var(--danger-border); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
         <div style="color: var(--danger-text); font-size: 13px; font-weight: 600; margin-bottom: 4px;">{{ __("Please fix the following errors:") }}</div>
-        <ul style="margin: 0; padding-inline-start: 18px; color: #b91c1c; font-size: 12.5px;">
+        <ul style="margin: 0; padding-inline-start: 18px; color: var(--danger-dark); font-size: 12.5px;">
             @foreach($errors->all() as $e)
                 <li>{{ $e }}</li>
             @endforeach

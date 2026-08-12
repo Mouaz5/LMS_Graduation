@@ -21,7 +21,7 @@
             width: 52px;
             height: 52px;
             border-radius: 14px;
-            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            background: linear-gradient(135deg, var(--info-tint), var(--info-tint-2));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,10 +76,10 @@
             margin-bottom: 12px;
         }
         .related-card {
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             overflow: hidden;
         }
         .related-item {
@@ -116,7 +116,7 @@
     <div class="detail-card">
         <div class="detail-header">
             <div class="detail-icon">
-                <svg width="24" height="24" fill="none" stroke="#2563eb" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <svg width="24" height="24" fill="none" stroke="var(--info-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
             <div>
                 <div class="detail-title">{{ $classroom->name }}</div>

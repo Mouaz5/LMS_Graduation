@@ -13,7 +13,7 @@
             border-radius: 10px;
             font-size: 13.5px;
             font-family: var(--font-body);
-            background: white;
+            background: var(--surface);
             color: var(--text-primary);
             cursor: pointer;
             min-width: 200px;
@@ -25,7 +25,7 @@
         }
 
         .schedule-grid { overflow-x: auto; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-        table.grid-table { width: 100%; border-collapse: collapse; background: white; }
+        table.grid-table { width: 100%; border-collapse: collapse; background: var(--surface); }
         .grid-table th, .grid-table td { border: 1px solid var(--border); }
         .grid-table thead th {
             background: var(--sidebar-bg);
@@ -59,7 +59,7 @@
             transition: background 0.15s;
         }
         .grid-cell.empty:hover { background: var(--primary-tint); }
-        .grid-cell.filled { background: #f0fdf4; }
+        .grid-cell.filled { background: var(--success-tint); }
         .cell-add { font-size: 24px; color: var(--primary-light); line-height: 1; }
         .cell-content { display: flex; flex-direction: column; gap: 2px; align-items: center; }
         .cell-subject { color: var(--primary-dark); font-size: 12.5px; font-weight: 700; }
@@ -78,7 +78,7 @@
         }
         .modal-overlay.open { display: flex; }
         .modal {
-            background: white;
+            background: var(--surface);
             border-radius: 18px;
             padding: 32px;
             width: 100%;
@@ -112,7 +112,7 @@
             font-size: 13.5px;
             font-family: var(--font-body);
             color: var(--text-primary);
-            background: white;
+            background: var(--surface);
         }
         .form-group select:focus,
         .form-group input[type="time"]:focus {
@@ -128,7 +128,7 @@
             border-radius: 10px;
             font-size: 13.5px;
             font-family: var(--font-body);
-            background: white;
+            background: var(--surface);
             color: var(--text-secondary);
             cursor: pointer;
         }
@@ -136,7 +136,7 @@
         .btn-save {
             padding: 10px 24px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border: none;
             border-radius: 10px;
             font-size: 13.5px;
@@ -150,7 +150,7 @@
             margin-bottom: 16px;
             padding: 12px 16px;
             background: var(--danger-tint);
-            border: 1px solid #fecaca;
+            border: 1px solid var(--danger-border);
             border-radius: 10px;
             color: var(--danger-dark);
             font-size: 13px;
@@ -160,7 +160,7 @@
             text-align: center;
             color: var(--text-muted);
             font-size: 14px;
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border);
         }

@@ -7,6 +7,7 @@
     <title>{{ __('Reset Password') }} — SchoolLMS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <x-theme-script />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,9 +18,9 @@
             background: var(--surface-2); -webkit-font-smoothing: antialiased;
         }
         .card {
-            background: white; border-radius: 20px; padding: 40px;
+            background: var(--surface); border-radius: 20px; padding: 40px;
             width: 100%; max-width: 420px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.07); border: 1px solid var(--border);
+            box-shadow: var(--shadow-auth); border: 1px solid var(--border);
         }
         h1 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
         [dir="rtl"] body, [dir="rtl"] h1 { font-family: 'Cairo', sans-serif; }
@@ -32,12 +33,12 @@
             font-size: 14px; font-family: var(--font-body); color: var(--text-primary);
             background: var(--surface-3); outline: none; transition: all 0.2s;
         }
-        input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
+        input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .error { font-size: 12px; color: var(--danger); margin-top: 5px; }
         .btn {
             width: 100%; padding: 13px;
             background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-            color: white; border: none; border-radius: 10px;
+            color: var(--on-primary); border: none; border-radius: 10px;
             font-size: 14.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.2s;
             box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
@@ -60,6 +61,7 @@
 <body>
     <div class="auth-lang-switcher">
         <x-language-switcher />
+        <x-theme-switcher />
     </div>
     <div class="card">
         <h1>{{ __("Reset your password") }}</h1>

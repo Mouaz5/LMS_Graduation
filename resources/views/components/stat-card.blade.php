@@ -3,11 +3,11 @@
 @php
 $colorMap = [
     'indigo' => ['bg' => 'var(--accent-tint)', 'icon' => 'var(--accent)', 'text' => 'var(--accent-dark)'],
-    'blue'   => ['bg' => '#eff6ff', 'icon' => '#3b82f6', 'text' => '#2563eb'],
+    'blue'   => ['bg' => 'var(--info-tint)', 'icon' => 'var(--info)', 'text' => 'var(--info-dark)'],
     'green'  => ['bg' => 'var(--success-tint)', 'icon' => 'var(--success)', 'text' => 'var(--success-dark)'],
-    'purple' => ['bg' => '#faf5ff', 'icon' => '#9333ea', 'text' => '#7c3aed'],
+    'purple' => ['bg' => 'var(--violet-tint)', 'icon' => 'var(--violet)', 'text' => 'var(--violet-dark)'],
     'amber'  => ['bg' => 'var(--primary-tint)', 'icon' => 'var(--primary)', 'text' => 'var(--primary-dark)'],
-    'rose'   => ['bg' => 'var(--danger-tint)', 'icon' => '#f43f5e', 'text' => '#e11d48'],
+    'rose'   => ['bg' => 'var(--danger-tint)', 'icon' => 'var(--rose)', 'text' => 'var(--rose-dark)'],
 ];
 $c = $colorMap[$color] ?? $colorMap['indigo'];
 

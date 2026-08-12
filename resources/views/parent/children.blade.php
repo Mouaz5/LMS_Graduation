@@ -5,8 +5,8 @@
         .page-header p { font-size: 13px; color: var(--text-secondary); }
         .children-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
         .child-card {
-            background: white; border-radius: 14px; padding: 24px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 24px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             transition: all 0.2s;
         }
         .child-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent); }
@@ -36,11 +36,11 @@
         .btn-schedule {
             background: var(--primary-tint); color: var(--primary-dark); border: 1px solid var(--primary-light);
         }
-        .btn-schedule:hover { background: var(--primary-dark); color: white; }
+        .btn-schedule:hover { background: var(--primary-dark); color: var(--on-primary); }
         .btn-schedule svg { width: 14px; height: 14px; }
         .empty-state {
             text-align: center; padding: 80px 20px; color: var(--text-faint);
-            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
+            background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
         }
         .empty-state svg { margin-bottom: 16px; }
         .empty-state h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }
@@ -58,10 +58,10 @@
                 @php
                     $initials = collect(explode(' ', $child->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
                     $gradients = [
-                        'linear-gradient(135deg, #c084fc, #7c3aed)',
+                        'linear-gradient(135deg, #c084fc, var(--violet-dark))',
                         'linear-gradient(135deg, #f9a8d4, #ec4899)',
-                        'linear-gradient(135deg, #93c5fd, #3b82f6)',
-                        'linear-gradient(135deg, #6ee7b7, var(--success))',
+                        'linear-gradient(135deg, var(--info-border), var(--info))',
+                        'linear-gradient(135deg, var(--success-border), var(--success))',
                     ];
                     $profile = $child->studentProfile;
                 @endphp

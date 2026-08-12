@@ -6,7 +6,7 @@
             gap: 6px;
             padding: 9px 20px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;
@@ -127,7 +127,7 @@
                                 <div style="font-size: 12px; color: var(--text-muted);">{{ $a->classroom->grade->name }}</div>
                             </td>
                             <td>
-                                <span class="badge" style="background: #f0fdf4; color: var(--success-text);">{{ $a->academicYear->name }}</span>
+                                <span class="badge" style="background: var(--success-tint); color: var(--success-text);">{{ $a->academicYear->name }}</span>
                             </td>
                         </tr>
                     @empty
@@ -153,7 +153,7 @@
                 @endif
 
                 @if($assignments->hasMorePages())
-                    <a href="{{ $assignments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 30%, transparent);">{{ __("Next") }} &rarr;</a>
+                    <a href="{{ $assignments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 30%, transparent);">{{ __("Next") }} &rarr;</a>
                 @else
                     <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
                 @endif

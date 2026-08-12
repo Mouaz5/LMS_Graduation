@@ -72,8 +72,8 @@
     @php
         $typeConfig = [
             'holiday' => ['label' => __('Holiday'), 'bg' => 'var(--warning-tint)', 'color' => 'var(--warning-text)', 'iconBg' => 'var(--warning-tint)', 'iconColor' => 'var(--warning-dark)'],
-            'event'   => ['label' => __('Event'),   'bg' => '#dbeafe', 'color' => '#1e40af', 'iconBg' => '#dbeafe', 'iconColor' => '#2563eb'],
-            'exam'    => ['label' => __('Exam'),    'bg' => '#fce7f3', 'color' => '#9d174d', 'iconBg' => '#fce7f3', 'iconColor' => '#db2777'],
+            'event'   => ['label' => __('Event'),   'bg' => 'var(--info-tint-2)', 'color' => 'var(--info-strong)', 'iconBg' => 'var(--info-tint-2)', 'iconColor' => 'var(--info-dark)'],
+            'exam'    => ['label' => __('Exam'),    'bg' => 'var(--pink-tint)', 'color' => 'var(--pink-text)', 'iconBg' => 'var(--pink-tint)', 'iconColor' => 'var(--pink)'],
         ];
         $tc = $typeConfig[$event->type->value] ?? $typeConfig['event'];
     @endphp

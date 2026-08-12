@@ -69,10 +69,10 @@
             margin-bottom: 12px;
         }
         .related-card {
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             overflow: hidden;
         }
         .related-item {

@@ -4,9 +4,9 @@
         .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
         .child-selector {
-            background: white; border-radius: 14px;
+            background: var(--surface); border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             padding: 16px 20px; margin-bottom: 20px;
             display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
         }
@@ -17,9 +17,9 @@
         }
 
         .card {
-            background: white; border-radius: 14px;
+            background: var(--surface); border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             overflow: hidden;
         }
         .card-header {
@@ -47,7 +47,7 @@
         .note-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
         .note-teacher { font-weight: 700; color: var(--text-primary); font-size: 13.5px; }
         .note-meta { font-size: 12px; color: var(--text-muted); }
-        .note-text { font-size: 13px; color: #475569; line-height: 1.5; }
+        .note-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
         .badge {
             display: inline-flex; align-items: center;
@@ -55,7 +55,7 @@
             font-size: 11px; font-weight: 700;
         }
         .badge-info     { background: var(--primary-tint); color: var(--primary-dark); }
-        .badge-warning  { background: var(--warning-tint); color: #78350f; }
+        .badge-warning  { background: var(--warning-tint); color: var(--warning-text); }
         .badge-critical { background: var(--danger-tint); color: var(--danger-text); }
 
         .empty-state { text-align: center; padding: 56px 20px; }
@@ -142,7 +142,7 @@
                                 <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">← {{ __("Prev") }}</a>
                             @endif
                             @if($notes->hasMorePages())
-                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
+                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} →</a>
                             @else
                                 <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} →</span>
                             @endif

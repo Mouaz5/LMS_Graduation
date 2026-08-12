@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <x-theme-script />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -134,13 +135,15 @@
         }
 
         .nav-item:hover {
+            /* Sits on the translucent hover wash over the fixed-dark sidebar,
+               not on a brand fill — stays white in both themes. */
             background: var(--sidebar-hover);
             color: white;
         }
 
         .nav-item.active {
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 40%, transparent);
         }
 
@@ -195,7 +198,7 @@
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            color: white;
+            color: var(--on-primary);
             flex-shrink: 0;
         }
 
@@ -284,7 +287,7 @@
             justify-content: center;
             font-size: 11px;
             font-weight: 700;
-            color: white;
+            color: var(--on-primary);
         }
 
         .logout-btn {
@@ -371,7 +374,7 @@
                 display: none;
                 position: fixed;
                 inset: 0;
-                background: rgba(0,0,0,0.5);
+                background: var(--overlay);
                 z-index: 49;
             }
             .sidebar-overlay.open { display: block; }
@@ -402,7 +405,7 @@
             ['label' => 'Exam Types',    'route' => 'admin.exam-types.index',        'icon' => 'star'],
             ['label' => 'Test Builder',  'route' => 'admin.diagnostic.test-builder', 'icon' => 'bar-chart'],
             ['label' => 'Knowledge Map', 'route' => 'admin.diagnostic.knowledge-map','icon' => 'bar-chart'],
-            ['label' => 'Settings',      'route' => 'admin.settings.index',          'icon' => 'settings'],
+            ['label' => 'Settings',      'route' => 'settings.index',                'icon' => 'settings'],
             ['label' => 'Wallet',        'route' => 'admin.wallet.index',            'icon' => 'credit-card'],
         ],
         'teacher' => [
@@ -415,6 +418,7 @@
             ['label' => 'Grade Entry',       'route' => 'teacher.grades.entry',          'icon' => 'star'],
             ['label' => 'Knowledge Map',     'route' => 'teacher.diagnostic.knowledge-map','icon' => 'bar-chart'],
             ['label' => 'Salaries',          'route' => 'teacher.salaries',              'icon' => 'credit-card'],
+            ['label' => 'Settings',          'route' => 'settings.index',                'icon' => 'settings'],
         ],
         'student' => [
             ['label' => 'Dashboard',  'route' => 'dashboard',          'icon' => 'home'],
@@ -423,6 +427,7 @@
             ['label' => 'Diagnostic',    'route' => 'student.diagnostic.test',      'icon' => 'bar-chart'],
             ['label' => 'Knowledge Map', 'route' => 'student.diagnostic.knowledge-map','icon' => 'bar-chart'],
             ['label' => 'Attendance',    'route' => 'student.attendance',            'icon' => 'check-circle'],
+            ['label' => 'Settings',      'route' => 'settings.index',                'icon' => 'settings'],
         ],
         'parent' => [
             ['label' => 'Dashboard',       'route' => 'dashboard',               'icon' => 'home'],
@@ -431,6 +436,7 @@
             ['label' => 'Attendance',       'route' => 'parent.attendance',       'icon' => 'check-circle'],
             ['label' => 'Behavioral Notes', 'route' => 'parent.behavioral-notes', 'icon' => 'bar-chart'],
             ['label' => 'Payments',         'route' => 'parent.payments.index',   'icon' => 'credit-card'],
+            ['label' => 'Settings',         'route' => 'settings.index',          'icon' => 'settings'],
         ],
     ];
 
@@ -511,8 +517,8 @@
             </div>
 
             <div class="topbar-right">
-                <x-language-switcher />
-
+                {{-- Language and theme controls now live on the shared settings
+                     page (route: settings.index), linked from every role's sidebar. --}}
                 <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">{{ $user->name }}</span>
 
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">

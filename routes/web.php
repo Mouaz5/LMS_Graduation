@@ -48,6 +48,12 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name
 Route::middleware(['auth', 'impersonation'])->group(function () {
     Route::get('/', fn () => redirect()->route('dashboard'));
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Settings — available to every role (language + appearance preferences).
+    // Deliberately outside the role:admin group: all four roles link here from
+    // the sidebar, and it is the only place the theme/language controls live
+    // now that they are no longer in the topbar.
+    Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
     Route::post('/admin/stop-impersonate', [DashboardController::class, 'stopImpersonate'])
         ->middleware('actual-role:admin')
         ->name('admin.impersonate.stop');
@@ -104,9 +110,6 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::post('/diagnostic/questions', [AdminDiagnosticWebController::class, 'storeQuestion'])->name('diagnostic.questions.store');
         Route::delete('/diagnostic/questions/{question}', [AdminDiagnosticWebController::class, 'destroyQuestion'])->name('diagnostic.questions.destroy');
         Route::get('/diagnostic/knowledge-map', [DiagnosticKnowledgeMapWebController::class, 'admin'])->name('diagnostic.knowledge-map');
-
-        // Settings
-        Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
 
         // Wallet — E-Payment management
         Route::get('/wallet', [WalletWebController::class, 'index'])->name('wallet.index');

@@ -29,7 +29,7 @@
             gap: 4px;
             padding: 12px 20px;
             border-radius: 12px;
-            background: white;
+            background: var(--surface);
             border: 1.5px solid var(--border);
             cursor: pointer;
             text-decoration: none;
@@ -39,12 +39,12 @@
         }
         .day-tab:hover {
             border-color: var(--primary-light);
-            background: #f5f3ff;
+            background: var(--violet-wash);
         }
         .day-tab.active {
             background: var(--primary);
             border-color: var(--primary);
-            color: white;
+            color: var(--on-primary);
             box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .day-tab .day-name {
@@ -53,7 +53,7 @@
             color: var(--text-primary);
         }
         .day-tab.active .day-name {
-            color: white;
+            color: var(--on-primary);
         }
         .day-tab .day-count {
             font-size: 11px;
@@ -64,8 +64,8 @@
             font-weight: 600;
         }
         .day-tab.active .day-count {
-            background: rgba(255,255,255,0.25);
-            color: white;
+            background: color-mix(in srgb, var(--on-primary) 25%, transparent);
+            color: var(--on-primary);
         }
 
         .slots-list {
@@ -78,11 +78,11 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             padding: 20px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             transition: all 0.2s;
         }
         .slot-card:hover {
@@ -98,7 +98,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--on-primary);
             font-size: 14px;
             font-weight: 700;
             flex-shrink: 0;
@@ -153,7 +153,7 @@
             gap: 6px;
             padding: 8px 16px;
             border-radius: 8px;
-            background: white;
+            background: var(--surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
             font-size: 13px;

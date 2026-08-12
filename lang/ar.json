@@ -533,5 +533,13 @@
     "— Select Teacher —": "— اختر المعلم —",
     "— submitting will update existing records.": "— سيؤدي الإرسال إلى تحديث السجلات الموجودة.",
     "← Prev": "→ السابق",
-    "✓ Attendance already recorded": "✓ تم تسجيل الحضور مسبقاً"
+    "✓ Attendance already recorded": "✓ تم تسجيل الحضور مسبقاً",
+    "Manage your language and appearance preferences.": "إدارة تفضيلات اللغة والمظهر.",
+    "Language": "اللغة",
+    "Choose the language used across the dashboard. Arabic switches the interface to right-to-left.": "اختر اللغة المستخدمة في لوحة التحكم. تؤدي العربية إلى تحويل الواجهة من اليمين إلى اليسار.",
+    "Appearance": "المظهر",
+    "Pick a light or dark theme, or follow your device setting. Your choice is remembered on this browser.": "اختر المظهر الفاتح أو الداكن، أو اتبع إعداد جهازك. سيتم تذكر اختيارك في هذا المتصفح.",
+    "Light mode": "المظهر الفاتح",
+    "Dark mode": "المظهر الداكن",
+    "System theme": "مظهر النظام"
 }

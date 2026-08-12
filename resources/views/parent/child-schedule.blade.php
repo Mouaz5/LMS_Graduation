@@ -16,24 +16,24 @@
         .day-tabs { display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px; }
         .day-tab {
             display: flex; flex-direction: column; align-items: center; gap: 4px;
-            padding: 12px 20px; border-radius: 12px; background: white;
+            padding: 12px 20px; border-radius: 12px; background: var(--surface);
             border: 1.5px solid var(--border); cursor: pointer; text-decoration: none;
             transition: all 0.2s; min-width: 80px; flex-shrink: 0;
         }
-        .day-tab:hover { border-color: var(--primary-light); background: #f5f3ff; }
-        .day-tab.active { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent); }
+        .day-tab:hover { border-color: var(--primary-light); background: var(--violet-wash); }
+        .day-tab.active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent); }
         .day-tab .day-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-        .day-tab.active .day-name { color: white; }
+        .day-tab.active .day-name { color: var(--on-primary); }
         .day-tab .day-count {
             font-size: 11px; padding: 2px 8px; border-radius: 20px;
             background: var(--border-soft); color: var(--text-muted); font-weight: 600;
         }
-        .day-tab.active .day-count { background: rgba(255,255,255,0.25); color: white; }
+        .day-tab.active .day-count { background: color-mix(in srgb, var(--on-primary) 25%, transparent); color: var(--on-primary); }
         .slots-list { display: flex; flex-direction: column; gap: 12px; }
         .slot-card {
             display: flex; align-items: center; gap: 16px;
-            background: white; border-radius: 14px; padding: 20px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 20px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             transition: all 0.2s;
         }
         .slot-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 8%, transparent); }
@@ -41,7 +41,7 @@
             width: 48px; height: 48px; border-radius: 12px;
             background: linear-gradient(135deg, var(--primary-light), var(--primary));
             display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 14px; font-weight: 700; flex-shrink: 0;
+            color: var(--on-primary); font-size: 14px; font-weight: 700; flex-shrink: 0;
             box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent);
         }
         .slot-info { flex: 1; min-width: 0; }

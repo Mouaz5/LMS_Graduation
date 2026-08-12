@@ -17,7 +17,7 @@
         .page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
         .btn-edit {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 9px 18px; background: var(--primary); color: white;
+            padding: 9px 18px; background: var(--primary); color: var(--on-primary);
             border-radius: 10px; text-decoration: none; font-size: 13px;
             font-weight: 600; font-family: var(--font-body);
             transition: all 0.2s; box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -31,8 +31,8 @@
             gap: 14px; margin-bottom: 24px;
         }
         .stat-box {
-            background: white; border-radius: 12px; border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 12px; border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-card);
             padding: 18px 20px; display: flex; align-items: center; gap: 14px;
         }
         .stat-icon {
@@ -44,8 +44,8 @@
 
         /* Detail card */
         .detail-card {
-            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); overflow: hidden;
+            background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-card); overflow: hidden;
             max-width: 560px; margin-bottom: 28px;
         }
         .detail-row {
@@ -88,14 +88,14 @@
         }
         .classroom-chip {
             display: inline-block; padding: 2px 9px;
-            background: #f0fdf4; color: #15803d;
-            border: 1px solid #bbf7d0; border-radius: 6px;
+            background: var(--success-tint); color: var(--success-dark);
+            border: 1px solid var(--success-border); border-radius: 6px;
             font-size: 12px; font-weight: 600;
         }
         .year-chip {
             display: inline-block; padding: 2px 9px;
-            background: #fff7ed; color: #c2410c;
-            border: 1px solid #fed7aa; border-radius: 6px;
+            background: var(--warning-tint); color: var(--warning-text);
+            border: 1px solid var(--warning-border); border-radius: 6px;
             font-size: 12px; font-weight: 600;
         }
         .empty-state { text-align: center; padding: 40px; color: var(--text-faint); font-size: 14px; }
@@ -135,8 +135,8 @@
         </div>
 
         <div class="stat-box">
-            <div class="stat-icon" style="background: #f0fdf4;">
-                <svg width="20" height="20" fill="none" stroke="#16a34a" viewBox="0 0 24 24">
+            <div class="stat-icon" style="background: var(--success-tint);">
+                <svg width="20" height="20" fill="none" stroke="var(--success)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
@@ -148,8 +148,8 @@
         </div>
 
         <div class="stat-box">
-            <div class="stat-icon" style="background: #fff7ed;">
-                <svg width="20" height="20" fill="none" stroke="#ea580c" viewBox="0 0 24 24">
+            <div class="stat-icon" style="background: var(--warning-tint);">
+                <svg width="20" height="20" fill="none" stroke="var(--warning)" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                 </svg>

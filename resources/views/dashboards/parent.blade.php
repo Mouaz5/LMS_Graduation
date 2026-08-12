@@ -37,13 +37,13 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #c084fc, #7c3aed);
+            background: linear-gradient(135deg, #c084fc, var(--violet-dark));
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            color: white;
+            color: var(--on-primary);
             flex-shrink: 0;
         }
     </style>
@@ -62,14 +62,14 @@
 
     <div class="cards-grid">
         {{-- My Children --}}
-        <x-dashboard.card :title="__('My Children')" :subtitle="__(':count enrolled', ['count' => $children->count()])" iconBg="#faf5ff">
+        <x-dashboard.card :title="__('My Children')" :subtitle="__(':count enrolled', ['count' => $children->count()])" iconBg="var(--violet-tint)">
             <x-slot:icon>
-                <svg width="20" height="20" fill="none" stroke="#9333ea" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                <svg width="20" height="20" fill="none" stroke="var(--violet)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             </x-slot:icon>
             @forelse($children as $i => $child)
                 @php
                     $initials = collect(explode(' ', $child->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
-                    $gradients = ['linear-gradient(135deg, #c084fc, #7c3aed)', 'linear-gradient(135deg, #f9a8d4, #ec4899)', 'linear-gradient(135deg, #93c5fd, #3b82f6)', 'linear-gradient(135deg, #6ee7b7, var(--success))'];
+                    $gradients = ['linear-gradient(135deg, #c084fc, var(--violet-dark))', 'linear-gradient(135deg, #f9a8d4, #ec4899)', 'linear-gradient(135deg, var(--info-border), var(--info))', 'linear-gradient(135deg, var(--success-border), var(--success))'];
                 @endphp
                 <div class="child-card">
                     <div class="child-avatar" style="background: {{ $gradients[$i % count($gradients)] }};">{{ $initials }}</div>
@@ -115,9 +115,9 @@
         </x-dashboard.card>
 
         {{-- Fees --}}
-        <x-dashboard.card :title="__('Fees Overview')" :subtitle="__('Payment status')" iconBg="#eff6ff">
+        <x-dashboard.card :title="__('Fees Overview')" :subtitle="__('Payment status')" iconBg="var(--info-tint)">
             <x-slot:icon>
-                <svg width="20" height="20" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                <svg width="20" height="20" fill="none" stroke="var(--info)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
             </x-slot:icon>
             <div class="dash-card-empty">
                 <svg width="32" height="32" fill="none" stroke="var(--border)" viewBox="0 0 24 24" style="margin: 0 auto 8px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>

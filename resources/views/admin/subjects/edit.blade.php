@@ -1,8 +1,8 @@
 <x-layouts.app :pageTitle="__('Edit Subject')">
     <style>
         .form-card {
-            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 28px; max-width: 560px;
+            background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-card); padding: 28px; max-width: 560px;
         }
         .form-group { margin-bottom: 20px; }
         .form-group label {
@@ -12,7 +12,7 @@
         .field-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 4px; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 10px 24px; background: var(--primary); color: white; border: none;
+            padding: 10px 24px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 10px; font-size: 14px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -20,7 +20,7 @@
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-secondary {
             display: inline-flex; align-items: center; padding: 10px 24px;
-            background: white; color: var(--text-secondary); border: 1px solid var(--border);
+            background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border);
             border-radius: 10px; font-size: 14px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; text-decoration: none; transition: all 0.2s;
         }

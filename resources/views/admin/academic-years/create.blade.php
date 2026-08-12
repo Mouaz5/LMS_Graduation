@@ -1,10 +1,10 @@
 <x-layouts.app :pageTitle="__('Create Academic Year')">
     <style>
         .form-card {
-            background: white;
+            background: var(--surface);
             border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             padding: 28px;
             max-width: 560px;
         }
@@ -42,7 +42,7 @@
             gap: 6px;
             padding: 10px 24px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border: none;
             border-radius: 10px;
             font-size: 14px;
@@ -61,7 +61,7 @@
             display: inline-flex;
             align-items: center;
             padding: 10px 24px;
-            background: white;
+            background: var(--surface);
             color: var(--text-secondary);
             border: 1px solid var(--border);
             border-radius: 10px;

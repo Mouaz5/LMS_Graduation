@@ -4,8 +4,8 @@
     .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .filter-card {
-        background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04); padding: 20px; margin-bottom: 20px;
+        background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-card); padding: 20px; margin-bottom: 20px;
         display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end;
     }
     .filter-select {
@@ -15,7 +15,7 @@
     }
 
     .btn-primary {
-        padding: 9px 20px; background: var(--primary); color: white; border: none; border-radius: 8px;
+        padding: 9px 20px; background: var(--primary); color: var(--on-primary); border: none; border-radius: 8px;
         font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: background 0.2s;
     }
     .btn-primary:hover { background: var(--primary-dark); }

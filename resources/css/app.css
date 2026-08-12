@@ -22,8 +22,20 @@
    and resources/views/emails/password-reset-otp.blade.php, which
    render outside the browser (PDF engine / mail clients) and
    cannot resolve CSS custom properties — they keep literal hex.
+
+   THEMING: the dark palette lives in the :root[data-theme="dark"]
+   block directly below. It must stay unlayered for the same reason
+   as :root, and it wins by SPECIFICITY (0,1,1 vs 0,1,0) rather than
+   source order — so a page-local <style> that overrides a token
+   still wins in both themes. Only color-valued tokens are redefined
+   there; geometry and type tokens are theme-independent and are
+   declared once in :root.
+
+   To re-palette the whole app, edit these two blocks only.
    ========================================================== */
 :root {
+    color-scheme: light;
+
     --sidebar-width: 260px;
     --topbar-height: 64px;
 
@@ -81,10 +93,168 @@
     --font-display-rtl: 'Cairo', sans-serif;
     --font-body: 'Inter', 'Cairo', sans-serif;
 
+    /* interaction — semantic aliases so states are themeable centrally
+       rather than being re-derived with literal colors per page */
+    --input-bg: var(--surface-3);
+    --input-bg-focus: var(--surface);
+    --input-border: var(--border);
+    --hover-surface: var(--surface-2);
+    --focus-ring: color-mix(in srgb, var(--primary) 10%, transparent);
+    --overlay: rgba(0, 0, 0, 0.45);
+    --disabled-bg: var(--surface-2);
+    --disabled-text: var(--text-muted);
+    --selected-bg: var(--primary-tint);
+
+    /* secondary — the brass accent acting as the secondary brand role */
+    --secondary: var(--accent);
+    --secondary-dark: var(--accent-dark);
+    --secondary-tint: var(--accent-tint);
+
+    /* categorical tints — role badges, stat cards and calendar chips.
+       Named by role, not by hue, so dark mode can re-tone them. */
+    --info: #3b82f6;
+    --info-dark: #2563eb;
+    --info-strong: #1d4ed8;
+    --info-tint: #eff6ff;
+    --info-tint-2: #dbeafe;
+    --info-border: #93c5fd;
+
+    --violet: #9333ea;
+    --violet-dark: #7c3aed;
+    --violet-strong: #6b21a8;
+    --violet-tint: #faf5ff;
+
+    --rose: #f43f5e;
+    --rose-dark: #e11d48;
+
+    /* pink — the exam/event category. A distinct hue from --danger on purpose:
+       an exam is a category, not an error. Light values are the pre-dark-mode
+       literals, kept exactly so light mode is unchanged. */
+    --pink-tint: #fce7f3;
+    --pink-border: #f9a8d4;
+    --pink: #db2777;
+    --pink-text: #9d174d;
+
+    /* violet wash — the pale hover tint used by day-tabs and edit buttons.
+       Also the pre-dark-mode literals, preserved verbatim. */
+    --violet-wash: #f5f3ff;
+    --indigo-wash: #e0e7ff;
+    --ember-text: #9a3412;
+
     /* radius / shadow */
     --radius-card: 14px;
     --radius-control: 8px;
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.06);
+    --shadow-modal: 0 24px 70px rgba(23, 32, 51, 0.08);
+    --shadow-auth: 0 4px 24px rgba(0, 0, 0, 0.07);
+    --on-primary: #FFFFFF;
+}
+
+/* ==========================================================
+   DARK THEME
+   Stamped as data-theme="dark" on <html> by the inline
+   pre-paint script in each shell (see layouts/app.blade.php).
+   Warm-dark, not slate: the light palette is warm paper, so a
+   naive slate inversion would drop the brand character.
+   Status triplets get their own darker tints and lighter text
+   rather than reusing the light values, which would glare.
+   ========================================================== */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* brand — lifted for contrast against dark surfaces */
+    --primary: #7FAF77;
+    --primary-dark: #9BC493;
+    --primary-light: #A8CFA0;
+    --primary-tint: #1F2A20;
+    --accent: #D3A45C;
+    --accent-dark: #E2BA7C;
+    --accent-tint: #2C2417;
+
+    /* surfaces — warm charcoal, tinted toward the paper hue */
+    --surface: #1B201D;
+    --surface-2: #141815;
+    --surface-3: #232925;
+    --border: #333B34;
+    --border-soft: #2A312C;
+
+    /* text */
+    --text-primary: #E8EAE4;
+    --text-secondary: #A8AFA6;
+    --text-muted: #8A9188;
+    --text-strong: #D2D6CD;
+    --text-faint: #5A6058;
+
+    /* semantic — darker tints, lighter text (inverse of light mode) */
+    --success: #6FAF7C;
+    --success-dark: #8AC495;
+    --success-tint: #1A2A1E;
+    --success-border: #2F4D36;
+    --success-text: #A9D6B2;
+
+    --danger: #D98570;
+    --danger-dark: #E7A08D;
+    --danger-tint: #2C1B17;
+    --danger-border: #573328;
+    --danger-text: #EDB5A4;
+
+    --warning: #D3A45C;
+    --warning-dark: #E2BA7C;
+    --warning-tint: #2C2417;
+    --warning-border: #55442A;
+    --warning-text: #E8C88E;
+
+    /* sidebar — kept darker than the content surface so the shell
+       still reads as a distinct plane rather than merging with it */
+    --sidebar-bg: #0F1310;
+    --sidebar-text: #C3CFC0;
+    --sidebar-text-dim: #8BA083;
+    --sidebar-active: #2F5233;
+    --sidebar-hover: rgba(127, 175, 119, 0.16);
+
+    /* interaction */
+    --input-bg: #232925;
+    --input-bg-focus: #2A312C;
+    --input-border: #3B443C;
+    --hover-surface: #232925;
+    --focus-ring: color-mix(in srgb, var(--primary) 22%, transparent);
+    --overlay: rgba(0, 0, 0, 0.65);
+    --disabled-bg: #232925;
+    --disabled-text: #6E756C;
+    --selected-bg: #253026;
+
+    /* categorical tints — desaturated so they sit on dark without glare */
+    --info: #6BA6F5;
+    --info-dark: #8CBCF8;
+    --info-strong: #A9CDFA;
+    --info-tint: #16202E;
+    --info-tint-2: #1B2A3D;
+    --info-border: #2F4A6B;
+
+    --violet: #B27DEA;
+    --violet-dark: #C79CF1;
+    --violet-strong: #D6B5F5;
+    --violet-tint: #241B2E;
+
+    --rose: #F0798D;
+    --rose-dark: #F49BAA;
+
+    --pink-tint: #2E1A24;
+    --pink-border: #5A3145;
+    --pink: #EE86B4;
+    --pink-text: #F4A9C6;
+
+    --violet-wash: #241B2E;
+    --indigo-wash: #1E2036;
+    --ember-text: #E0A87C;
+
+    /* shadow — opacity alone is invisible on dark, so these deepen */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.5);
+    --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.6);
+    --shadow-auth: 0 4px 24px rgba(0, 0, 0, 0.55);
+    --on-primary: #10160F;
 }
 
 /* RTL: div-based display headings (not real h1/h2/h3) fall through
@@ -147,10 +317,10 @@
     .filter-input {
         min-width: 180px;
         padding: 9px 14px;
-        border: 1.5px solid var(--border);
+        border: 1.5px solid var(--input-border);
         border-radius: var(--radius-control);
         outline: none;
-        background: var(--surface-3);
+        background: var(--input-bg);
         color: var(--text-strong);
         font-family: var(--font-body);
         font-size: 13.5px;
@@ -160,7 +330,7 @@
     .filter-select:focus,
     .filter-input:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
+        box-shadow: 0 0 0 3px var(--focus-ring);
     }
 
     .card {
@@ -186,7 +356,7 @@
 
     .btn-primary {
         background: var(--primary);
-        color: #fff;
+        color: var(--on-primary);
     }
 
     .btn-primary:hover { background: var(--primary-dark); }
@@ -224,7 +394,7 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
-        background: rgba(0, 0, 0, 0.45);
+        background: var(--overlay);
     }
 
     .modal-overlay.open,
@@ -300,7 +470,7 @@
 
     .filter-select:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
+        box-shadow: 0 0 0 3px var(--focus-ring);
     }
 
     /* ── Buttons ── */
@@ -338,12 +508,12 @@
     .form-group select {
         width: 100%;
         padding: 10px 14px;
-        border: 1.5px solid var(--border);
+        border: 1.5px solid var(--input-border);
         border-radius: 10px;
         font-size: 14px;
         font-family: var(--font-body);
         color: var(--text-primary);
-        background: var(--surface-3);
+        background: var(--input-bg);
         transition: all 0.2s;
         outline: none;
     }
@@ -351,8 +521,8 @@
     .form-group input:focus,
     .form-group select:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
-        background: var(--surface);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+        background: var(--input-bg-focus);
     }
 
     /* ── Dashboard cards ── */

@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <x-theme-script />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -117,7 +118,7 @@
             box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 50%, transparent);
         }
 
-        .brand-logo-mark svg { width: 26px; height: 26px; color: white; }
+        .brand-logo-mark svg { width: 26px; height: 26px; color: var(--on-primary); }
 
         .brand-name {
             font-family: var(--font-display);
@@ -352,7 +353,7 @@
             width: 100%;
             padding: 13px;
             background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
-            color: white;
+            color: var(--on-primary);
             border: none;
             border-radius: 10px;
             font-size: 14.5px;
@@ -491,6 +492,7 @@
     <div class="form-panel">
         <div class="auth-lang-switcher">
             <x-language-switcher />
+            <x-theme-switcher />
         </div>
         <div class="login-card">
             <div class="form-header">

@@ -7,9 +7,9 @@
         @media(max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
 
         .card {
-            background: white; border-radius: 14px;
+            background: var(--surface); border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             overflow: hidden;
         }
         .card-header {
@@ -40,12 +40,12 @@
         .severity-label .sev-icon { font-size: 20px; }
         .severity-label .sev-text { font-size: 11.5px; font-weight: 700; }
         .severity-option:checked + .severity-label.info     { border-color: var(--primary-light); background: var(--primary-tint); color: var(--primary-dark); }
-        .severity-option:checked + .severity-label.warning  { border-color: var(--warning); background: var(--warning-tint); color: #78350f; }
+        .severity-option:checked + .severity-label.warning  { border-color: var(--warning); background: var(--warning-tint); color: var(--warning-text); }
         .severity-option:checked + .severity-label.critical { border-color: var(--danger); background: var(--danger-tint); color: var(--danger-text); }
 
         .btn-submit {
             width: 100%; padding: 11px;
-            background: var(--primary); color: white; border: none; border-radius: 10px;
+            background: var(--primary); color: var(--on-primary); border: none; border-radius: 10px;
             font-size: 13.5px; font-weight: 600; font-family: var(--font-body);
             cursor: pointer; transition: all 0.2s;
             box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
@@ -71,7 +71,7 @@
         .note-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
         .note-student { font-weight: 700; color: var(--text-primary); font-size: 13.5px; }
         .note-meta { font-size: 12px; color: var(--text-muted); }
-        .note-text { font-size: 13px; color: #475569; line-height: 1.5; }
+        .note-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
         .badge {
             display: inline-flex; align-items: center;
@@ -79,7 +79,7 @@
             font-size: 11px; font-weight: 700;
         }
         .badge-info     { background: var(--primary-tint); color: var(--primary-dark); }
-        .badge-warning  { background: var(--warning-tint); color: #78350f; }
+        .badge-warning  { background: var(--warning-tint); color: var(--warning-text); }
         .badge-critical { background: var(--danger-tint); color: var(--danger-text); }
 
         .empty-state { text-align: center; padding: 48px 20px; }
@@ -93,7 +93,7 @@
     </div>
 
     @if(session('success'))
-        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid var(--success-border); color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>
@@ -199,7 +199,7 @@
                                 <a href="{{ $notes->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                             @endif
                             @if($notes->hasMorePages())
-                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
+                                <a href="{{ $notes->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                             @else
                                 <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                             @endif

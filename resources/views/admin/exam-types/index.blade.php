@@ -4,10 +4,10 @@
     .page-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
 
     .card {
-        background: white;
+        background: var(--surface);
         border-radius: 14px;
         border: 1px solid var(--border-soft);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        box-shadow: var(--shadow-card);
         overflow: hidden;
         margin-bottom: 24px;
     }
@@ -39,7 +39,7 @@
     .btn-primary {
         padding: 9px 20px;
         background: var(--primary);
-        color: white;
+        color: var(--on-primary);
         border: none;
         border-radius: 8px;
         font-size: 13px;
@@ -61,11 +61,11 @@
         cursor: pointer;
         font-family: var(--font-body);
     }
-    .btn-danger:hover { background: #fecaca; }
+    .btn-danger:hover { background: var(--danger-border); }
     .btn-edit {
         padding: 6px 12px;
-        background: #dbeafe;
-        color: #1e40af;
+        background: var(--info-tint-2);
+        color: var(--info-strong);
         border: none;
         border-radius: 6px;
         font-size: 12px;
@@ -73,7 +73,7 @@
         cursor: pointer;
         font-family: var(--font-body);
     }
-    .btn-edit:hover { background: #bfdbfe; }
+    .btn-edit:hover { background: var(--info-tint-2); }
 
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: var(--surface-2); }
@@ -83,7 +83,7 @@
     tbody tr:hover { background: var(--surface-3); }
 
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
-    .badge-purple { background: var(--primary-tint); color: #5b21b6; }
+    .badge-purple { background: var(--primary-tint); color: var(--violet-strong); }
 
     .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 13px; font-weight: 500; }
     .alert-success { background: var(--success-tint); color: var(--success-text); }
@@ -92,19 +92,19 @@
     .modal-overlay {
         display: none;
         position: fixed; inset: 0;
-        background: rgba(0,0,0,0.4);
+        background: var(--overlay);
         z-index: 100;
         align-items: center;
         justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
-        background: white;
+        background: var(--surface);
         border-radius: 16px;
         padding: 28px;
         width: 100%;
         max-width: 440px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-modal);
     }
     .modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }

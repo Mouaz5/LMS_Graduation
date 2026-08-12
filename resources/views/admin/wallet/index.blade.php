@@ -6,8 +6,8 @@
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .stat-card {
-            background: white; border-radius: 14px; padding: 20px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 20px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
         }
         .stat-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
         .stat-value { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--text-primary); }
@@ -16,8 +16,8 @@
         .stat-card.failed .stat-value { color: var(--danger-dark); }
 
         .filter-bar {
-            background: white; border-radius: 14px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             padding: 16px 20px; margin-bottom: 20px;
             display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
         }
@@ -30,7 +30,7 @@
         }
         .filter-select:focus, .filter-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .btn-filter {
-            padding: 8px 18px; background: var(--primary); color: white; border: none;
+            padding: 8px 18px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
@@ -40,8 +40,8 @@
         }
 
         .table-card {
-            background: white; border-radius: 14px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             overflow: hidden;
         }
         .table-header { padding: 20px; border-bottom: 1px solid var(--border-soft); }
@@ -87,10 +87,10 @@
             font-size: 12px; color: var(--text-secondary);
         }
 
-        .wallet-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: white; border-radius: 12px; padding: 6px; border: 1px solid var(--border-soft); width: fit-content; }
+        .wallet-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); border-radius: 12px; padding: 6px; border: 1px solid var(--border-soft); width: fit-content; }
         .wallet-tab { padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 600; font-family: var(--font-body); color: var(--text-secondary); text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
         .wallet-tab:hover { background: var(--surface-2); color: var(--text-primary); }
-        .wallet-tab.active { background: var(--primary); color: white; }
+        .wallet-tab.active { background: var(--primary); color: var(--on-primary); }
         .wallet-tab svg { width: 16px; height: 16px; }
     </style>
 
@@ -221,7 +221,7 @@
                             <a href="{{ $payments->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">&larr; {{ __("Prev") }}</a>
                         @endif
                         @if($payments->hasMorePages())
-                            <a href="{{ $payments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
+                            <a href="{{ $payments->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</a>
                         @else
                             <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next") }} &rarr;</span>
                         @endif

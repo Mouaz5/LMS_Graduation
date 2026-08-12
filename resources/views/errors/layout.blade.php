@@ -4,7 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $status }} — {{ config('app.name', 'SchoolLMS') }}</title>
+    <x-theme-script />
     <style>
+        /* Self-contained on purpose: error pages must render even when the
+           Vite bundle is unavailable, so they cannot rely on app.css tokens.
+           The dark block below mirrors the app's mechanism (data-theme stamped
+           pre-paint by the inline script) but keeps this page's own palette —
+           light-mode appearance is unchanged.
+           NOTE: this palette is still the pre-rebrand indigo while the app is
+           forest green; aligning it is a light-mode visual change and so is
+           deliberately out of scope here. */
         :root {
             color-scheme: light;
             --ink: #172033;
@@ -14,6 +23,21 @@
             --background: #f7f8fc;
             --primary: #4f46e5;
             --primary-dark: #3730a3;
+            --secondary-hover: #f9fafb;
+            --on-primary: #fff;
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --ink: #E8EAE4;
+            --muted: #A0A6AD;
+            --line: #333B3E;
+            --surface: #1B201D;
+            --background: #141815;
+            --primary: #A5B4FC;
+            --primary-dark: #C4CCFE;
+            --secondary-hover: #232925;
+            --on-primary: #1E1B4B;
         }
 
         * { box-sizing: border-box; }
@@ -82,7 +106,7 @@
         }
 
         .button-primary {
-            color: #fff;
+            color: var(--on-primary);
             background: var(--primary);
         }
 
@@ -94,7 +118,7 @@
             background: var(--surface);
         }
 
-        .button-secondary:hover { background: #f9fafb; }
+        .button-secondary:hover { background: var(--secondary-hover); }
     </style>
 </head>
 <body>

@@ -10,8 +10,8 @@
         .success-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
 
         .receipt-card {
-            background: white; border-radius: 14px; padding: 28px;
-            border: 1px solid var(--border-soft); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            background: var(--surface); border-radius: 14px; padding: 28px;
+            border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);
             text-align: start; margin-bottom: 24px;
         }
         .receipt-row {
@@ -37,7 +37,7 @@
         .btn-actions { display: flex; gap: 12px; justify-content: center; }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 11px 24px; background: var(--primary); color: white; border: none;
+            padding: 11px 24px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 10px; font-size: 13.5px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
             text-decoration: none;
@@ -53,7 +53,7 @@
         .btn-secondary:hover { background: var(--border-soft); }
 
         .pending-note {
-            background: var(--warning-tint); border: 1px solid #fde68a;
+            background: var(--warning-tint); border: 1px solid var(--warning-border);
             padding: 14px 18px; border-radius: 12px; margin-bottom: 24px;
             font-size: 13px; color: var(--warning-text); text-align: center;
         }

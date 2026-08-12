@@ -5,7 +5,7 @@
         .page-header p { font-size: 13px; color: var(--text-secondary); }
         .empty-state {
             text-align: center; padding: 80px 20px; color: var(--text-faint);
-            background: white; border-radius: 14px; border: 1px solid var(--border-soft);
+            background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);
         }
         .empty-state svg { margin-bottom: 16px; }
         .empty-state h3 { font-family: var(--font-display); font-size: 18px; color: var(--text-muted); margin-bottom: 8px; }

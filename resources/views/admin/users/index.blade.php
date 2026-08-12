@@ -6,7 +6,7 @@
             gap: 6px;
             padding: 9px 20px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border-radius: 10px;
             text-decoration: none;
             font-size: 13.5px;
@@ -114,7 +114,7 @@
                 @endif
 
                 @if($users->hasMorePages())
-                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 30%, transparent);">{{ __("Next →") }}</a>
+                    <a href="{{ $users->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600; box-shadow: 0 2px 6px color-mix(in srgb, var(--primary) 30%, transparent);">{{ __("Next →") }}</a>
                 @else
                     <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                 @endif

@@ -26,9 +26,9 @@
         .student-avatar {
             width: 34px; height: 34px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--violet-dark));
             display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 12px; font-weight: 700; flex-shrink: 0;
+            color: var(--on-primary); font-size: 12px; font-weight: 700; flex-shrink: 0;
         }
         .student-name { font-weight: 600; color: var(--text-primary); font-size: 13.5px; }
 
@@ -48,7 +48,7 @@
         .radio-label.present:has(input:checked) { background: var(--success-border); border-color: var(--success); }
         .radio-label.absent  { border-color: var(--danger); color: var(--danger-text); }
         .radio-label.absent:has(input:checked) { background: var(--danger-tint); border-color: var(--danger); }
-        .radio-label.late    { border-color: var(--warning); color: #78350f; }
+        .radio-label.late    { border-color: var(--warning); color: var(--warning-text); }
         .radio-label.late:has(input:checked) { background: var(--warning-tint); border-color: var(--warning); }
         .radio-label.excused { border-color: var(--primary-light); color: var(--primary-dark); }
         .radio-label.excused:has(input:checked) { background: var(--primary-tint); border-color: var(--primary-light); }
@@ -61,7 +61,7 @@
         .btn-submit {
             padding: 10px 28px;
             background: var(--primary);
-            color: white;
+            color: var(--on-primary);
             border: none;
             border-radius: 10px;
             font-size: 13.5px;
@@ -92,7 +92,7 @@
             border: 1.5px solid var(--border);
             font-size: 12px; font-weight: 600;
             cursor: pointer;
-            background: white;
+            background: var(--surface);
             font-family: var(--font-body);
             transition: all 0.15s;
         }
@@ -105,7 +105,7 @@
     />
 
     @if(session('success'))
-        <div style="background: var(--success-border); border: 1px solid #6ee7b7; color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--success-border); border: 1px solid var(--success-border); color: var(--success-text); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; font-weight: 500; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             {{ session('success') }}
         </div>

@@ -7,9 +7,9 @@
         @media(max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
 
         .stat-card {
-            background: white; border-radius: 12px;
+            background: var(--surface); border-radius: 12px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             padding: 16px 18px;
             display: flex; align-items: center; gap: 12px;
         }
@@ -21,9 +21,9 @@
         .stat-label { font-size: 11.5px; color: var(--text-muted); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .filter-card {
-            background: white; border-radius: 14px;
+            background: var(--surface); border-radius: 14px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             padding: 16px 20px;
             margin-bottom: 20px;
             display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;
@@ -35,7 +35,7 @@
         }
         .filter-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
         .btn-filter {
-            padding: 8px 18px; background: var(--primary); color: white; border: none;
+            padding: 8px 18px; background: var(--primary); color: var(--on-primary); border: none;
             border-radius: 8px; font-size: 13px; font-weight: 600;
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
@@ -170,7 +170,7 @@
                                     <div style="font-weight: 600; color: var(--text-primary);">{{ $record->date?->format('M j, Y') }}</div>
                                     <div style="font-size: 11.5px; color: var(--text-muted);">{{ $record->date?->format('l') }}</div>
                                 </td>
-                                <td style="color: #475569;">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
+                                <td style="color: var(--text-secondary);">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
                                 <td><span class="badge badge-{{ $record->status->value }}">{{ ucfirst($record->status->value) }}</span></td>
                                 <td>
                                     @if($record->justification)
@@ -197,7 +197,7 @@
                             <a href="{{ $records->previousPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-strong); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("← Prev") }}</a>
                         @endif
                         @if($records->hasMorePages())
-                            <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: white; text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
+                            <a href="{{ $records->nextPageUrl() }}" style="padding: 6px 12px; border-radius: 6px; background: var(--primary); color: var(--on-primary); text-decoration: none; font-size: 12px; font-weight: 600;">{{ __("Next →") }}</a>
                         @else
                             <span style="padding: 6px 12px; border-radius: 6px; background: var(--surface-2); color: var(--text-faint); font-size: 12px; font-weight: 600;">{{ __("Next →") }}</span>
                         @endif
