@@ -1,15 +1,6 @@
 <x-layouts.app :pageTitle="__('Create User')">
     <style>
-        .form-container {
-            max-width: 600px;
-        }
-        .form-card {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 32px;
-            border: 1px solid var(--border-soft);
-            box-shadow: var(--shadow-card);
-        }
+        .form-container { max-width: 600px; }
         .form-header {
             margin-bottom: 28px;
             padding-bottom: 20px;
@@ -23,45 +14,20 @@
             margin-bottom: 4px;
         }
         .form-header-sub { font-size: 13px; color: var(--text-secondary); }
+
+        /* Two-column field grid. .form-field keeps its own bottom margin,
+           so the row gap only needs to cover the horizontal axis. */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            column-gap: 18px;
         }
         @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group.full { grid-column: 1 / -1; }
-        .form-label {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-strong);
-            letter-spacing: 0.2px;
-        }
-        .form-label .req { color: var(--danger); margin-inline-start: 2px; }
-        .form-input, .form-select {
-            padding: 10px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: var(--font-body);
-            color: var(--text-primary);
-            background: var(--surface-3);
-            outline: none;
-            transition: all 0.2s;
-            width: 100%;
-        }
-        .form-input:focus, .form-select:focus {
-            border-color: var(--primary);
-            background: var(--surface);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent);
-        }
-        .form-input.is-error { border-color: var(--danger); }
-        .password-input-wrapper {
-            position: relative;
-        }
-        .password-input-wrapper .form-input {
-            padding-inline-end: 44px;
-        }
+        .form-grid .full { grid-column: 1 / -1; }
+
+        /* Password reveal button, overlaid on a standard .form-control. */
+        .password-input-wrapper { position: relative; }
+        .password-input-wrapper .form-control { padding-inline-end: 44px; }
         .password-toggle {
             position: absolute;
             inset-inline-end: 10px;
@@ -86,17 +52,9 @@
             background: var(--primary-tint);
             outline: none;
         }
-        .password-toggle svg {
-            width: 17px;
-            height: 17px;
-        }
-        .field-error {
-            font-size: 11.5px;
-            color: var(--danger);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+        .password-toggle svg { width: 17px; height: 17px; }
+
+        /* Role picker: radio cards, not a standard control. */
         .role-options {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -111,8 +69,8 @@
             align-items: center;
             gap: 6px;
             padding: 12px 8px;
-            border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border-radius: var(--field-radius);
+            border: var(--field-border-width) solid var(--border);
             cursor: pointer;
             transition: all 0.2s;
             font-size: 12px;
@@ -125,44 +83,12 @@
             background: var(--primary-tint);
             color: var(--primary-dark);
         }
+        .role-option input:focus-visible + label {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+        }
         .role-option label:hover { border-color: var(--primary-light); background: var(--primary-tint); }
         .role-icon { font-size: 20px; }
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-soft);
-        }
-        .btn-submit {
-            padding: 11px 28px;
-            background: var(--primary);
-            color: var(--on-primary);
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            font-family: var(--font-body);
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
-        }
-        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-cancel {
-            padding: 11px 20px;
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: var(--font-body);
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .btn-cancel:hover { background: var(--surface-2); color: var(--text-strong); }
     </style>
 
     <div class="form-container">
@@ -173,136 +99,102 @@
             <span>{{ __("Create New User") }}</span>
         </div>
 
-        <div class="form-card">
+        <x-ui.form :action="route('admin.users.store')" :summary="false" novalidate>
             <div class="form-header">
                 <div class="form-header-title">{{ __("Create New User") }}</div>
                 <div class="form-header-sub">{{ __("Add a new account to the school system") }}</div>
             </div>
 
-            <form action="{{ route('admin.users.store') }}" method="POST" novalidate>
-                @csrf
+            <div class="form-grid">
+                <x-ui.form.field
+                    name="name"
+                    :label="__('Full Name')"
+                    placeholder="e.g. Ahmad Al-Rashid"
+                    required
+                />
 
-                <div class="form-grid">
-                    {{-- Name --}}
-                    <div class="form-group">
-                        <label class="form-label" for="name">{{ __("Full Name") }} <span class="req">*</span></label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}"
-                               placeholder="e.g. Ahmad Al-Rashid"
-                               class="form-input {{ $errors->has('name') ? 'is-error' : '' }}">
-                        @error('name')
-                            <div class="field-error">
-                                <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
+                <x-ui.form.field
+                    name="phone"
+                    :label="__('Phone Number')"
+                    placeholder="+962 79 xxx xxxx"
+                />
+
+                <x-ui.form.field
+                    name="email"
+                    type="email"
+                    :label="__('Email Address')"
+                    placeholder="user@school.edu"
+                    class="full"
+                    required
+                />
+
+                <x-ui.form.field name="password" :label="__('Password')" required>
+                    <div class="password-input-wrapper">
+                        <x-ui.form.input
+                            type="password"
+                            name="password"
+                            :placeholder="__('Min. 8 characters')"
+                            :invalid="$errors->has('password')"
+                        />
+                        <button type="button" class="password-toggle" data-password-toggle="password"
+                                data-show-label="{{ __('Show password') }}"
+                                data-hide-label="{{ __('Hide password') }}"
+                                aria-label="{{ __('Show password') }}" aria-pressed="false">
+                            <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </button>
                     </div>
+                </x-ui.form.field>
 
-                    {{-- Phone --}}
-                    <div class="form-group">
-                        <label class="form-label" for="phone">{{ __("Phone Number") }}</label>
-                        <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
-                               placeholder="+962 79 xxx xxxx"
-                               class="form-input {{ $errors->has('phone') ? 'is-error' : '' }}">
-                        @error('phone')
-                            <div class="field-error">
-                                <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
+                <x-ui.form.field name="password_confirmation" :label="__('Confirm Password')" required>
+                    <div class="password-input-wrapper">
+                        <x-ui.form.input
+                            type="password"
+                            name="password_confirmation"
+                            :placeholder="__('Repeat password')"
+                        />
+                        <button type="button" class="password-toggle" data-password-toggle="password_confirmation"
+                                data-show-label="{{ __('Show password') }}"
+                                data-hide-label="{{ __('Hide password') }}"
+                                aria-label="{{ __('Show password') }}" aria-pressed="false">
+                            <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </button>
                     </div>
+                </x-ui.form.field>
 
-                    {{-- Email --}}
-                    <div class="form-group full">
-                        <label class="form-label" for="email">{{ __("Email Address") }} <span class="req">*</span></label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}"
-                               placeholder="user@school.edu"
-                               class="form-input {{ $errors->has('email') ? 'is-error' : '' }}">
-                        @error('email')
-                            <div class="field-error">
-                                <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- Password --}}
-                    <div class="form-group">
-                        <label class="form-label" for="password">{{ __("Password") }} <span class="req">*</span></label>
-                        <div class="password-input-wrapper">
-                            <input type="password" id="password" name="password"
-                                   placeholder="{{ __('Min. 8 characters') }}"
-                                   class="form-input {{ $errors->has('password') ? 'is-error' : '' }}">
-                            <button type="button" class="password-toggle" data-password-toggle="password"
-                                    data-show-label="{{ __('Show password') }}"
-                                    data-hide-label="{{ __('Hide password') }}"
-                                    aria-label="{{ __('Show password') }}" aria-pressed="false">
-                                <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </button>
+                <x-ui.form.field name="role" :label="__('Role')" class="full" label-for="none" required>
+                    <div class="role-options">
+                        @foreach([
+                            ['admin',   __('Admin'),   '🔑'],
+                            ['teacher', __('Teacher'), '📚'],
+                            ['student', __('Student'), '🎓'],
+                            ['parent',  __('Parent'),  '👨‍👩‍👧'],
+                        ] as [$value, $label, $emoji])
+                        <div class="role-option">
+                            <input type="radio" name="role" id="role_{{ $value }}" value="{{ $value }}"
+                                   {{ old('role', 'student') === $value ? 'checked' : '' }}>
+                            <label for="role_{{ $value }}">
+                                <span class="role-icon">{{ $emoji }}</span>
+                                {{ $label }}
+                            </label>
                         </div>
-                        @error('password')
-                            <div class="field-error">
-                                <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
+                        @endforeach
                     </div>
+                </x-ui.form.field>
+            </div>
 
-                    {{-- Confirm Password --}}
-                    <div class="form-group">
-                        <label class="form-label" for="password_confirmation">{{ __("Confirm Password") }} <span class="req">*</span></label>
-                        <div class="password-input-wrapper">
-                            <input type="password" id="password_confirmation" name="password_confirmation"
-                                   placeholder="{{ __('Repeat password') }}"
-                                   class="form-input">
-                            <button type="button" class="password-toggle" data-password-toggle="password_confirmation"
-                                    data-show-label="{{ __('Show password') }}"
-                                    data-hide-label="{{ __('Hide password') }}"
-                                    aria-label="{{ __('Show password') }}" aria-pressed="false">
-                                <svg class="eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    {{-- Role --}}
-                    <div class="form-group full">
-                        <label class="form-label">{{ __("Role") }} <span class="req">*</span></label>
-                        <div class="role-options">
-                            @foreach([
-                                ['admin',   __('Admin'),   '🔑'],
-                                ['teacher', __('Teacher'), '📚'],
-                                ['student', __('Student'), '🎓'],
-                                ['parent',  __('Parent'),  '👨‍👩‍👧'],
-                            ] as [$value, $label, $emoji])
-                            <div class="role-option">
-                                <input type="radio" name="role" id="role_{{ $value }}" value="{{ $value }}"
-                                       {{ old('role', 'student') === $value ? 'checked' : '' }}>
-                                <label for="role_{{ $value }}">
-                                    <span class="role-icon">{{ $emoji }}</span>
-                                    {{ $label }}
-                                </label>
-                            </div>
-                            @endforeach
-                        </div>
-                        @error('role')
-                            <div class="field-error">
-                                <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-submit">{{ __("Create User") }}</button>
-                    <a href="{{ route('admin.users.index') }}" class="btn-cancel">{{ __("Cancel") }}</a>
-                </div>
-            </form>
-        </div>
+            <x-slot:actions>
+                <x-ui.form.actions
+                    :submit="__('Create User')"
+                    :cancel="route('admin.users.index')"
+                    :icon="null"
+                />
+            </x-slot:actions>
+        </x-ui.form>
     </div>
 </x-layouts.app>
