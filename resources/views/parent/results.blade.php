@@ -22,7 +22,7 @@
     }
     .btn-download:hover { background: var(--primary-dark); }
 
-    .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; }
     .subject-card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-card); overflow: hidden; }
     .subject-card-header { padding: 16px 18px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: space-between; }
     .subject-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }

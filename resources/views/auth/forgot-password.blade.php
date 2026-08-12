@@ -31,6 +31,11 @@
             box-shadow: var(--shadow-auth);
             border: 1px solid var(--border);
         }
+        /* Keep the card off the screen edges and ease its padding on phones. */
+        @media (max-width: 480px) {
+            body { padding: 16px; }
+            .card { padding: 28px 22px; border-radius: 16px; }
+        }
         .icon-wrap {
             width: 56px; height: 56px;
             background: var(--primary-tint);
@@ -79,6 +84,15 @@
             top: 24px;
             inset-inline-end: 24px;
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* Tuck the controls closer to the corner and give the card room to
+           clear them on a short screen. */
+        @media (max-width: 480px) {
+            .auth-lang-switcher { top: 12px; inset-inline-end: 12px; gap: 8px; }
+            body { padding-top: 64px; }
         }
     </style>
 </head>

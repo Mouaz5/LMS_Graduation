@@ -300,6 +300,18 @@
     font-family: var(--font-display-rtl);
 }
 
+/* Horizontal scroll container for wide tables on narrow screens.
+   Unlayered on purpose: `.table-card` sets `overflow: hidden`, and several
+   pages redefine `.table-card` in their own unlayered <style> block, so a
+   rule in @layer components would lose to them and the table would stay
+   clipped. Put this on a wrapper *inside* the card — the card keeps its
+   rounded corners while the table scrolls instead of being cut off.
+   -webkit-overflow-scrolling keeps momentum scrolling on iOS Safari. */
+.table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 /* ==========================================================
    Shared UI utilities — promoted from per-page <style> blocks.
    Only classes that were byte-for-byte identical across all
@@ -341,7 +353,10 @@
 
     .filter-select,
     .filter-input {
-        min-width: 180px;
+        /* min() keeps the 180px floor on desktop but lets the control shrink
+           inside a narrower flex row rather than forcing an overflow. */
+        min-width: min(180px, 100%);
+        max-width: 100%;
         padding: 9px 14px;
         border: 1.5px solid var(--input-border);
         border-radius: var(--radius-control);

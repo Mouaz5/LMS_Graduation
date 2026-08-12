@@ -30,6 +30,7 @@
             display: grid; grid-template-columns: repeat(3, 1fr);
             gap: 14px; margin-bottom: 24px;
         }
+        @media (max-width: 768px) { .stats-strip { grid-template-columns: 1fr; } }
         .stat-box {
             background: var(--surface); border-radius: 12px; border: 1px solid var(--border-soft);
             box-shadow: var(--shadow-card);
@@ -184,6 +185,7 @@
     {{-- Teacher assignments --}}
     <div class="section-title">{{ __("Teacher Assignments (:count)", ['count' => $subject->teacherAssignments->count()]) }}</div>
     <div class="table-card">
+        <div class="table-scroll">
         <table>
             <thead>
                 <tr>
@@ -213,5 +215,6 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
 </x-layouts.app>

@@ -3,7 +3,7 @@
         .page-header { margin-bottom: 24px; }
         .page-header h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
         .page-header p { font-size: 13px; color: var(--text-secondary); }
-        .children-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+        .children-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 16px; }
         .child-card {
             background: var(--surface); border-radius: 14px; padding: 24px;
             border: 1px solid var(--border-soft); box-shadow: var(--shadow-card);

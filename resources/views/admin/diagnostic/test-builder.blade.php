@@ -20,6 +20,7 @@
     }
 
     .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 768px) { .grid-two { grid-template-columns: 1fr; } }
     .card { background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft); box-shadow: var(--shadow-card); }
     .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border-soft); font-size: 14px; font-weight: 700; color: var(--text-primary); }
     .card-body { padding: 20px; }
@@ -177,6 +178,7 @@
     @if($questions->isEmpty())
         <div class="empty-state">{{ __('No questions yet. Add your first question above.') }}</div>
     @else
+        <div class="table-scroll">
         <table>
             <thead>
                 <tr>
@@ -212,6 +214,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     @endif
 </div>
 @endif

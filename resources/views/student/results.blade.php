@@ -21,7 +21,7 @@
     }
     .btn-download:hover { background: var(--primary-dark); }
 
-    .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .subject-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 16px; }
 
     .subject-card {
         background: var(--surface); border-radius: 14px; border: 1px solid var(--border-soft);

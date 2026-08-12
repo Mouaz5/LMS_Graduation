@@ -65,6 +65,7 @@
     @endif
 
     <div class="table-card">
+        <div class="table-scroll">
         <table>
             <thead>
                 <tr>
@@ -105,5 +106,6 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
 </x-layouts.app>

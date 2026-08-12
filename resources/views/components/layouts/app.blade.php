@@ -26,7 +26,10 @@
             font-family: var(--font-body);
             background: var(--surface-2);
             color: var(--text-primary);
+            /* dvh tracks the mobile URL bar as it collapses; the vh line is the
+               fallback for browsers without dvh support. */
             min-height: 100vh;
+            min-height: 100dvh;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -49,6 +52,8 @@
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
             min-height: 100vh;
+            min-height: 100dvh;
+            max-height: 100dvh;
             position: fixed;
             top: 0;
             inset-inline-start: 0;
@@ -112,6 +117,10 @@
         .sidebar-nav {
             padding: 16px 12px;
             flex: 1;
+            /* A flex item won't shrink below its content without this, so on a
+               short screen the nav would push the user footer out of the
+               clipped sidebar instead of scrolling. */
+            min-height: 0;
             overflow-y: auto;
             position: relative;
             z-index: 1;
@@ -386,6 +395,24 @@
                 z-index: 49;
             }
             .sidebar-overlay.open { display: block; }
+
+            /* The drawer is the only way to navigate on mobile, so it must not
+               exceed the viewport on small phones. */
+            .sidebar { width: min(var(--sidebar-width), 82vw); }
+
+            .topbar { padding: 0 16px; gap: 10px; }
+            .topbar-left, .topbar-right { gap: 10px; }
+            .page-title { font-size: 17px; }
+
+            /* The name already shows in the sidebar footer; dropping it here
+               keeps the logout button on-screen at 360px. */
+            .topbar-username { display: none; }
+        }
+
+        /* Below 380px the logout label pushes the row over; keep the icon. */
+        @media (max-width: 380px) {
+            .logout-btn { padding: 7px 10px; }
+            .logout-btn span { display: none; }
         }
     </style>
 </head>
@@ -527,15 +554,15 @@
             <div class="topbar-right">
                 {{-- Language and theme controls now live on the shared settings
                      page (route: settings.index), linked from every role's sidebar. --}}
-                <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">{{ $user->name }}</span>
+                <span class="topbar-username" style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">{{ $user->name }}</span>
 
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                     @csrf
-                    <button type="submit" class="logout-btn">
+                    <button type="submit" class="logout-btn" aria-label="{{ __('Logout') }}">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
-                        {{ __("Logout") }}
+                        <span>{{ __("Logout") }}</span>
                     </button>
                 </form>
             </div>

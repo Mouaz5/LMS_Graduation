@@ -127,6 +127,7 @@
             </div>
 
             @if($students->isNotEmpty())
+                <div class="table-scroll">
                 <table>
                     <thead>
                         <tr>
@@ -164,6 +165,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">{{ __("Save Grades") }}</button>
                 </div>

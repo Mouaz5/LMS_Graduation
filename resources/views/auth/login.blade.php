@@ -193,6 +193,9 @@
             position: absolute;
             top: 24px;
             inset-inline-end: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .login-card {
@@ -429,7 +432,24 @@
                 width: 620px;
                 opacity: 0.28;
             }
-            .form-panel { padding: 32px 24px; }
+            /* Stack the panel so the switcher row can sit above the card.
+               Absolute positioning only works on desktop, where the panel is a
+               tall column with empty space at the top; once the panel stacks
+               under the brand banner the form starts at the top edge and the
+               switchers land on the "Welcome back" heading. */
+            .form-panel {
+                padding: 24px;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+            }
+            .auth-lang-switcher {
+                position: static;
+                width: 100%;
+                max-width: 400px;
+                justify-content: flex-end;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>

@@ -84,6 +84,15 @@
             width: 100%;
             max-width: 460px;
             box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+            /* A tall form can exceed a phone screen; scroll inside the modal
+               rather than letting it run off the viewport. */
+            max-height: calc(100dvh - 32px);
+            overflow-y: auto;
+        }
+        /* Gutter so the modal never sits flush against the screen edges. */
+        @media (max-width: 520px) {
+            .modal-overlay { padding: 16px; }
+            .modal { padding: 24px 20px; }
         }
         .modal-header { margin-bottom: 24px; }
         .modal-header h3 {
@@ -120,7 +129,10 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
         }
+        /* Local .form-row is unlayered, so it beats app.css's @layer components
+           collapse rule — it needs its own breakpoint here. */
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
         .btn-cancel {
             padding: 10px 20px;

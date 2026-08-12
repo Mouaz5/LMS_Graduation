@@ -45,6 +45,12 @@
             transition: all 0.2s;
         }
         .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 10%, transparent); }
+        /* The toolbar already wraps; let the search fill the row it wraps onto
+           instead of sitting at 220px beside empty space. */
+        @media (max-width: 640px) {
+            .table-toolbar { align-items: stretch; }
+            .search-input { width: 100%; }
+        }
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: var(--surface-2); }
         th {

@@ -22,6 +22,11 @@
             width: 100%; max-width: 420px;
             box-shadow: var(--shadow-auth); border: 1px solid var(--border);
         }
+        /* Keep the card off the screen edges and ease its padding on phones. */
+        @media (max-width: 480px) {
+            body { padding: 16px; }
+            .card { padding: 28px 22px; border-radius: 16px; }
+        }
         h1 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
         [dir="rtl"] body, [dir="rtl"] h1 { font-family: 'Cairo', sans-serif; }
         .sub { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
@@ -55,6 +60,15 @@
             top: 24px;
             inset-inline-end: 24px;
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* Tuck the controls closer to the corner and give the card room to
+           clear them on a short screen. */
+        @media (max-width: 480px) {
+            .auth-lang-switcher { top: 12px; inset-inline-end: 12px; gap: 8px; }
+            body { padding-top: 64px; }
         }
     </style>
 </head>

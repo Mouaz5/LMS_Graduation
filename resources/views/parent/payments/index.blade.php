@@ -12,7 +12,7 @@
         }
         .info-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
 
-        .fees-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+        .fees-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); gap: 16px; }
 
         .fee-card {
             background: var(--surface); border-radius: 14px; padding: 24px;
@@ -90,7 +90,10 @@
         .modal {
             background: var(--surface); border-radius: 16px; padding: 32px;
             max-width: 440px; width: 100%; box-shadow: var(--shadow-modal);
+            /* Scroll inside the modal instead of off the viewport. */
+            max-height: calc(100dvh - 40px); overflow-y: auto;
         }
+        @media (max-width: 520px) { .modal { padding: 24px 20px; } }
         .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
         .modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
         .modal-summary {

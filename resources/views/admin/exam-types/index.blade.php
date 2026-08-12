@@ -105,6 +105,14 @@
         width: 100%;
         max-width: 440px;
         box-shadow: var(--shadow-modal);
+        /* Scroll inside the box instead of off the viewport on short screens. */
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+    }
+    /* Gutter so the modal never sits flush against the screen edges. */
+    @media (max-width: 520px) {
+        .modal-overlay { padding: 16px; }
+        .modal-box { padding: 22px 18px; }
     }
     .modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; }
     .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
@@ -167,6 +175,7 @@
         <span class="card-title">{{ __("All Exam Types") }}</span>
         <span style="font-size:12px; color:var(--text-muted);">{{ __(":count total", ['count' => $examTypes->total()]) }}</span>
     </div>
+    <div class="table-scroll">
     <table>
         <thead>
             <tr>
@@ -202,6 +211,7 @@
             @endforelse
         </tbody>
     </table>
+    </div>
     @if($examTypes->hasPages())
         <div style="padding:16px 20px;">{{ $examTypes->links() }}</div>
     @endif

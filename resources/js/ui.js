@@ -5,6 +5,11 @@ document.addEventListener('change', (event) => {
     if (element) submitForm(element);
 });
 
+const closeSidebar = () => {
+    document.getElementById('sidebar')?.classList.remove('open');
+    document.getElementById('sidebarOverlay')?.classList.remove('open');
+};
+
 document.addEventListener('click', (event) => {
     const toggle = event.target.closest('[data-sidebar-toggle]');
     if (toggle) {
@@ -14,9 +19,24 @@ document.addEventListener('click', (event) => {
     }
 
     if (event.target.closest('[data-sidebar-close]')) {
-        document.getElementById('sidebar')?.classList.remove('open');
-        document.getElementById('sidebarOverlay')?.classList.remove('open');
+        closeSidebar();
+        return;
     }
+
+    // Tapping a nav link navigates away; close the drawer so it isn't left
+    // open over the new page (same-page anchors included).
+    if (event.target.closest('.sidebar .nav-item')) closeSidebar();
+});
+
+// Escape closes the drawer, matching the overlay tap.
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeSidebar();
+});
+
+// Resizing past the mobile breakpoint restores the docked sidebar; drop the
+// open state so the overlay doesn't linger over the desktop layout.
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) closeSidebar();
 });
 
 document.addEventListener('submit', (event) => {
