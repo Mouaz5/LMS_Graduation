@@ -113,7 +113,7 @@
             <x-empty-state
                 icon="📝"
                 :title="__('Ready to test your knowledge?')"
-                :description="__('Click \"Start New Test\" to begin a diagnostic test for :subject.', ['subject' => $subject->name])"
+                :description="__('Click \'Start New Test\' to begin a diagnostic test for :subject.', ['subject' => $subject->name])"
             />
             <form method="POST" action="{{ route('student.diagnostic.start') }}" data-confirm="{{ __('Start a new test? Any in-progress test will end.') }}">
                 @csrf

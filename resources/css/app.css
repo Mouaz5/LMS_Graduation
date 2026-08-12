@@ -529,264 +529,6 @@
         border-bottom: none;
     }
 
-        font-size: 12.5px;
-    }
-
-/* ==========================================================
-   Shared form system — deliberately UNLAYERED.
-
-   components/layouts/app.blade.php opens with an unlayered
-   `* { margin: 0; padding: 0 }` reset. An unlayered rule always
-   beats a layered one regardless of specificity or source order,
-   so anything inside @layer components would lose its padding,
-   margin and border to that reset. These rules must therefore
-   stay outside @layer — same reasoning as the :root token block.
-   ========================================================== */
-/* ==========================================================
-   Shared form system — owned by the <x-ui.form.*> components.
-   Pages describe fields; this block owns how they look. To
-   restyle every form in the app, edit the --field-* tokens in
-   :root, not the pages.
-
-   Legacy note: this replaces the old `.form-group input,
-   .form-group select` fallback, which never covered <textarea>
-   (why calendar/create used to re-declare its own controls).
-   ========================================================== */
-
-/* Card the fields sit in */
-.form-card {
-    background: var(--surface);
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
-    padding: 28px;
-}
-
-/* One field: label, control, then hint/error */
-.form-field {
-    margin-bottom: var(--field-gap);
-}
-
-.form-field:last-child {
-    margin-bottom: 0;
-}
-
-.form-label {
-    display: block;
-    margin-bottom: var(--field-label-gap);
-    color: var(--text-strong);
-    font-size: var(--field-label-size);
-    font-weight: var(--field-label-weight);
-    letter-spacing: var(--field-label-tracking);
-    text-transform: uppercase;
-}
-
-.form-label .req {
-    margin-inline-start: 2px;
-    color: var(--danger);
-}
-
-/* Every standard control — text/number/email/password/date/search
-   inputs, selects and textareas — resolves to this one rule. */
-.form-control {
-    width: 100%;
-    padding: var(--field-pad-y) var(--field-pad-x);
-    /* Longhands, not the `border` shorthand: Tailwind's preflight sets
-       `border: 0 solid` on *, and the shorthand loses the token width
-       against it. Setting width/style/color explicitly holds 1.5px. */
-    border-width: var(--field-border-width);
-    border-style: solid;
-    border-color: var(--input-border);
-    border-radius: var(--field-radius);
-    background: var(--input-bg);
-    color: var(--text-primary);
-    font-family: var(--font-body);
-    font-size: var(--field-font-size);
-    outline: none;
-    transition: all 0.2s;
-}
-
-.form-control::placeholder {
-    color: var(--text-muted);
-}
-
-.form-control:focus {
-    border-color: var(--primary);
-    background: var(--input-bg-focus);
-    box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
-.form-control:disabled {
-    background: var(--disabled-bg);
-    color: var(--disabled-text);
-    cursor: not-allowed;
-}
-
-/* Invalid: red border in both rest and focus, so the error state
-   is not masked the moment the user clicks back into the field. */
-.form-control.is-error {
-    border-color: var(--danger);
-}
-
-.form-control.is-error:focus {
-    border-color: var(--danger);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 12%, transparent);
-}
-
-/* Select — native arrow replaced with the shared chevron */
-select.form-control {
-    appearance: none;
-    padding-inline-end: calc(var(--field-pad-x) + 20px);
-    background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%2394a3b8' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 18px;
-    cursor: pointer;
-}
-
-[dir="rtl"] select.form-control {
-    background-position: left 12px center;
-}
-
-select.form-control optgroup {
-    font-weight: 700;
-    color: var(--text-strong);
-}
-
-select.form-control option[value=""] {
-    color: var(--text-muted);
-}
-
-textarea.form-control {
-    min-height: var(--field-min-height);
-    resize: vertical;
-}
-
-.form-hint {
-    margin-top: var(--field-hint-gap);
-    color: var(--text-muted);
-    font-size: var(--field-hint-size);
-}
-
-.form-error {
-    margin-top: var(--field-message-gap);
-    color: var(--danger-dark);
-    font-size: var(--field-message-size);
-}
-
-/* Two-up field row, collapsing on small screens */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-@media (max-width: 640px) {
-    .form-row { grid-template-columns: 1fr; }
-}
-
-/* Checkbox / radio sitting beside its label */
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-check input[type="checkbox"],
-.form-check input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary);
-}
-
-.form-check label {
-    margin-bottom: 0;
-    text-transform: none;
-    letter-spacing: normal;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-/* Submit / cancel row */
-.form-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-soft);
-}
-
-.btn-submit {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 22px;
-    border: none;
-    border-radius: var(--field-radius);
-    background: var(--primary);
-    color: var(--on-primary);
-    font-family: var(--font-body);
-    font-size: 13.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
-}
-
-.btn-submit:hover {
-    background: var(--primary-dark);
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
-    transform: translateY(-1px);
-}
-
-.btn-submit svg {
-    width: 15px;
-    height: 15px;
-}
-
-.btn-cancel {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 22px;
-    border: var(--field-border-width) solid var(--border);
-    border-radius: var(--field-radius);
-    background: transparent;
-    color: var(--text-secondary);
-    font-family: var(--font-body);
-    font-size: 13.5px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-cancel:hover {
-    border-color: var(--text-faint);
-    color: var(--text-strong);
-}
-
-/* Summary of all validation errors, shown above the card */
-.form-error-summary {
-    margin-bottom: var(--field-gap);
-    padding: 12px 16px;
-    border: 1px solid var(--danger-border);
-    border-radius: var(--field-radius);
-    background: var(--danger-tint);
-}
-
-.form-error-summary-title {
-    margin-bottom: 4px;
-    color: var(--danger-text);
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.form-error-summary ul {
-    margin: 0;
-    padding-inline-start: 18px;
-    color: var(--danger-dark);
 
     /* ── Dashboard cards ── */
     .dash-card {
@@ -845,4 +587,252 @@ textarea.form-control {
         font-size: 13px;
         color: var(--text-muted);
     }
+    /* ==========================================================
+       Shared form system — owned by the <x-ui.form.*> components.
+       Pages describe fields; this block owns how they look. To
+       restyle every form in the app, edit the --field-* tokens in
+       :root, not the pages.
+
+       Legacy note: this replaces the old `.form-group input,
+       .form-group select` fallback, which never covered <textarea>
+       (why calendar/create used to re-declare its own controls).
+       ========================================================== */
+
+    /* Card the fields sit in */
+    .form-card {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 28px;
+    }
+
+    /* One field: label, control, then hint/error */
+    .form-field {
+        margin-bottom: var(--field-gap);
+    }
+
+    .form-field:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: var(--field-label-gap);
+        color: var(--text-strong);
+        font-size: var(--field-label-size);
+        font-weight: var(--field-label-weight);
+        letter-spacing: var(--field-label-tracking);
+        text-transform: uppercase;
+    }
+
+    .form-label .req {
+        margin-inline-start: 2px;
+        color: var(--danger);
+    }
+
+    /* Every standard control — text/number/email/password/date/search
+       inputs, selects and textareas — resolves to this one rule. */
+    .form-control {
+        width: 100%;
+        padding: var(--field-pad-y) var(--field-pad-x);
+        /* Longhands, not the `border` shorthand: Tailwind's preflight sets
+           `border: 0 solid` on *, and the shorthand loses the token width
+           against it. Setting width/style/color explicitly holds 1.5px. */
+        border-width: var(--field-border-width);
+        border-style: solid;
+        border-color: var(--input-border);
+        border-radius: var(--field-radius);
+        background: var(--input-bg);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        font-size: var(--field-font-size);
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .form-control::placeholder {
+        color: var(--text-muted);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        background: var(--input-bg-focus);
+        box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    .form-control:disabled {
+        background: var(--disabled-bg);
+        color: var(--disabled-text);
+        cursor: not-allowed;
+    }
+
+    /* Invalid: red border in both rest and focus, so the error state
+       is not masked the moment the user clicks back into the field. */
+    .form-control.is-error {
+        border-color: var(--danger);
+    }
+
+    .form-control.is-error:focus {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 12%, transparent);
+    }
+
+    /* Select — native arrow replaced with the shared chevron */
+    select.form-control {
+        appearance: none;
+        padding-inline-end: calc(var(--field-pad-x) + 20px);
+        background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%2394a3b8' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 18px;
+        cursor: pointer;
+    }
+
+    [dir="rtl"] select.form-control {
+        background-position: left 12px center;
+    }
+
+    select.form-control optgroup {
+        font-weight: 700;
+        color: var(--text-strong);
+    }
+
+    select.form-control option[value=""] {
+        color: var(--text-muted);
+    }
+
+    textarea.form-control {
+        min-height: var(--field-min-height);
+        resize: vertical;
+    }
+
+    .form-hint {
+        margin-top: var(--field-hint-gap);
+        color: var(--text-muted);
+        font-size: var(--field-hint-size);
+    }
+
+    .form-error {
+        margin-top: var(--field-message-gap);
+        color: var(--danger-dark);
+        font-size: var(--field-message-size);
+    }
+
+    /* Two-up field row, collapsing on small screens */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+        .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Checkbox / radio sitting beside its label */
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-check input[type="checkbox"],
+    .form-check input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary);
+    }
+
+    .form-check label {
+        margin-bottom: 0;
+        text-transform: none;
+        letter-spacing: normal;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    /* Submit / cancel row */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-soft);
+    }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 22px;
+        border: none;
+        border-radius: var(--field-radius);
+        background: var(--primary);
+        color: var(--on-primary);
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+
+    .btn-submit:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 40%, transparent);
+        transform: translateY(-1px);
+    }
+
+    .btn-submit svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 22px;
+        border: var(--field-border-width) solid var(--border);
+        border-radius: var(--field-radius);
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--text-faint);
+        color: var(--text-strong);
+    }
+
+    /* Summary of all validation errors, shown above the card */
+    .form-error-summary {
+        margin-bottom: var(--field-gap);
+        padding: 12px 16px;
+        border: 1px solid var(--danger-border);
+        border-radius: var(--field-radius);
+        background: var(--danger-tint);
+    }
+
+    .form-error-summary-title {
+        margin-bottom: 4px;
+        color: var(--danger-text);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .form-error-summary ul {
+        margin: 0;
+        padding-inline-start: 18px;
+        color: var(--danger-dark);
+        font-size: 12.5px;
+    }
+
 }

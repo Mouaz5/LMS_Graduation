@@ -12,7 +12,15 @@
     <x-theme-script />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Wrapped in @layer base on purpose. Unlayered, this reset beat every
+           rule in app.css's @layer components — an unlayered rule always wins
+           over a layered one — which silently stripped the padding, margin and
+           border off .card, .btn, .filter-card, .empty-state and the shared
+           form controls. Inside `base` it still resets the browser defaults
+           while losing to the component layer, which is what it was for. */
+        @layer base {
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+        }
 
         body {
             font-family: var(--font-body);
