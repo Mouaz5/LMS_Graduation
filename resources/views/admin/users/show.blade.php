@@ -212,7 +212,7 @@
                 @endforelse
             </div>
 
-            @if($availableParents->count() > 0)
+            @if($user->parents->isEmpty() && $availableParents->count() > 0)
                 <div class="link-form-card">
                     <div class="link-form-title">{{ __('Link a parent to this student') }}</div>
                     <form method="POST" action="{{ route('admin.users.link-parent', $user) }}">

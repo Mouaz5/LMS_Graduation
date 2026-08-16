@@ -10,6 +10,7 @@ use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -162,6 +163,52 @@ class DomainTest extends TestCase
             'parent_user_id' => $parent->id,
             'student_user_id' => $student->id,
         ]);
+    }
+
+    public function test_student_cannot_be_linked_to_multiple_parents(): void
+    {
+        Sanctum::actingAs($this->admin);
+
+        $firstParent = User::factory()->create(['role' => 'parent']);
+        $secondParent = User::factory()->create(['role' => 'parent']);
+        $student = User::factory()->create(['role' => 'student']);
+
+        DB::table('parent_student')->insert([
+            'parent_user_id' => $firstParent->id,
+            'student_user_id' => $student->id,
+            'relation' => 'father',
+        ]);
+
+        $this->postJson('/api/parent-student', [
+            'parent_user_id' => $secondParent->id,
+            'student_user_id' => $student->id,
+            'relation' => 'mother',
+        ])->assertStatus(422);
+
+        $this->assertDatabaseCount('parent_student', 1);
+    }
+
+    public function test_parent_can_be_linked_to_multiple_students(): void
+    {
+        Sanctum::actingAs($this->admin);
+
+        $parent = User::factory()->create(['role' => 'parent']);
+        $firstStudent = User::factory()->create(['role' => 'student']);
+        $secondStudent = User::factory()->create(['role' => 'student']);
+
+        $this->postJson('/api/parent-student', [
+            'parent_user_id' => $parent->id,
+            'student_user_id' => $firstStudent->id,
+            'relation' => 'father',
+        ])->assertStatus(201);
+
+        $this->postJson('/api/parent-student', [
+            'parent_user_id' => $parent->id,
+            'student_user_id' => $secondStudent->id,
+            'relation' => 'father',
+        ])->assertStatus(201);
+
+        $this->assertDatabaseCount('parent_student', 2);
     }
 
     public function test_linking_non_parent_user_returns_422(): void

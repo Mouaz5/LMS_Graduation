@@ -32,15 +32,15 @@ class AdminUserController extends Controller
             'teacherAssignments.academicYear',
         ]);
 
-        $availableParents  = $user->role === 'student'
+        $availableParents  = $user->role->value === 'student'
             ? User::where('role', 'parent')
                   ->whereNotIn('id', $user->parents->pluck('id'))
                   ->orderBy('name')->get()
             : collect();
 
-        $availableStudents = $user->role === 'parent'
+        $availableStudents = $user->role->value === 'parent'
             ? User::where('role', 'student')
-                  ->whereNotIn('id', $user->children->pluck('id'))
+                  ->whereDoesntHave('parents')
                   ->orderBy('name')->get()
             : collect();
 
@@ -74,10 +74,11 @@ class AdminUserController extends Controller
 
     public function linkParent(LinkParentRequest $request, User $user): RedirectResponse
     {
-        abort_unless($user->role === 'student', 422, __('User is not a student.'));
+        abort_unless($user->role->value === 'student', 422, __('User is not a student.'));
 
         $parent = User::findOrFail($request->parent_user_id);
-        abort_unless($parent->role === 'parent', 422, __('Selected user is not a parent.'));
+        abort_unless($parent->role->value === 'parent', 422, __('Selected user is not a parent.'));
+        abort_if($user->parents()->exists(), 422, __('This student is already linked to a parent.'));
 
         $exists = DB::table('parent_student')
             ->where('parent_user_id', $parent->id)
@@ -109,10 +110,11 @@ class AdminUserController extends Controller
 
     public function linkChild(LinkChildRequest $request, User $user): RedirectResponse
     {
-        abort_unless($user->role === 'parent', 422, __('User is not a parent.'));
+        abort_unless($user->role->value === 'parent', 422, __('User is not a parent.'));
 
         $student = User::findOrFail($request->student_user_id);
-        abort_unless($student->role === 'student', 422, __('Selected user is not a student.'));
+        abort_unless($student->role->value === 'student', 422, __('Selected user is not a student.'));
+        abort_if($student->parents()->exists(), 422, __('This student is already linked to a parent.'));
 
         $exists = DB::table('parent_student')
             ->where('parent_user_id', $user->id)

@@ -27,6 +27,10 @@ class ParentStudentController extends Controller
             return response()->json(['message' => 'The specified user is not a student.'], 422);
         }
 
+        if ($student->parents()->exists()) {
+            return response()->json(['message' => 'This student is already linked to a parent.'], 422);
+        }
+
         $exists = DB::table('parent_student')
             ->where('parent_user_id', $validated['parent_user_id'])
             ->where('student_user_id', $validated['student_user_id'])
