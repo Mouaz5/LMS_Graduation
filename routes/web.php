@@ -66,6 +66,7 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
         Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::post('/users/{user}/link-parent', [AdminUserController::class, 'linkParent'])->name('users.link-parent');
         Route::delete('/users/{user}/unlink-parent', [AdminUserController::class, 'unlinkParent'])->name('users.unlink-parent');

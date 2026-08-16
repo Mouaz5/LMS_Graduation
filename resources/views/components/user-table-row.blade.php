@@ -130,5 +130,23 @@ $ac = $avatarColors[$user->role->value] ?? $avatarColors['student'];
                 {{ $user->is_active ? __('Deactivate') : __('Activate') }}
             </button>
         </form>
+        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display: inline; margin-inline-start: 6px;" data-confirm="{{ __('Delete :name? This action cannot be undone.', ['name' => $user->name]) }}">
+            @csrf
+            @method('DELETE')
+            <button type="submit" style="
+                padding: 6px 14px;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 600;
+                font-family: var(--font-body);
+                cursor: pointer;
+                transition: all 0.2s;
+                border: 1px solid var(--danger-border);
+                background: var(--danger-tint);
+                color: var(--danger-dark);
+            ">
+                {{ __('Delete') }}
+            </button>
+        </form>
     </td>
 </tr>

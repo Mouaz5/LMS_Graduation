@@ -72,6 +72,13 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users.index')->with('success', __('User status updated.'));
     }
 
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', __('User deleted successfully.'));
+    }
+
     public function linkParent(LinkParentRequest $request, User $user): RedirectResponse
     {
         abort_unless($user->role->value === 'student', 422, __('User is not a student.'));

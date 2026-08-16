@@ -146,6 +146,17 @@ class DomainTest extends TestCase
     // UC-06: Parent-student linking
     // ---------------------------------------------------------------
 
+    public function test_admin_can_delete_a_user_account(): void
+    {
+        $user = User::factory()->create(['role' => 'teacher']);
+
+        $this->actingAs($this->admin)
+            ->delete(route('admin.users.destroy', $user))
+            ->assertRedirect(route('admin.users.index'));
+
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+    }
+
     public function test_admin_can_link_student_to_parent(): void
     {
         Sanctum::actingAs($this->admin);
