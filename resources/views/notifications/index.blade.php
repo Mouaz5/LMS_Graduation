@@ -57,7 +57,11 @@
 
     <div class="notifications-list">
         @forelse($notifications as $notification)
-            @php($data = $notification->data)
+            @php
+                $data = $notification->data;
+                $notificationTitle = __($data['title_key'] ?? $data['title'] ?? 'Notification');
+                $notificationMessage = __($data['message_key'] ?? $data['message'] ?? '', $data['message_data'] ?? []);
+            @endphp
             <form method="POST" action="{{ route('notifications.read', $notification) }}">
                 @csrf
                 <button type="submit" class="notification-item {{ $notification->read_at ? '' : 'unread' }}" style="width: 100%; border-top: 0; border-inline: 0; text-align: start; cursor: pointer;">
@@ -65,8 +69,8 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                     </span>
                     <span class="notification-content">
-                        <span class="notification-title">{{ $data['title'] ?? __('Notification') }}</span>
-                        <span class="notification-message">{{ $data['message'] ?? '' }}</span>
+                        <span class="notification-title">{{ $notificationTitle }}</span>
+                        <span class="notification-message">{{ $notificationMessage }}</span>
                         <span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span>
                     </span>
                     @if(!$notification->read_at)

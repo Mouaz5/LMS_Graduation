@@ -96,13 +96,14 @@ class AttendanceService
         foreach ($students as $student) {
             foreach ($student->parents as $parent) {
                 $parent->notify(new SystemNotification(
-                    __('Student absent'),
-                    __(':student was marked absent on :date.', [
-                        'student' => $student->name,
-                        'date' => $data->date,
-                    ]),
+                    'Student absent',
+                    ':student was marked absent on :date.',
                     route('parent.attendance', ['child_id' => $student->id]),
                     'attendance',
+                    [
+                        'student' => $student->name,
+                        'date' => $data->date,
+                    ],
                 ));
             }
         }

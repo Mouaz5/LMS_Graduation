@@ -55,7 +55,7 @@ class AdminUserController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        User::create([
+        $newUser = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
@@ -63,6 +63,13 @@ class AdminUserController extends Controller
             'phone' => $request->phone,
             'is_active' => true,
         ]);
+
+        $newUser->notify(new SystemNotification(
+            'Welcome to SchoolLMS',
+            'Your account has been created successfully.',
+            route('dashboard'),
+            'account',
+        ));
 
         return redirect()->route('admin.users.index')->with('success', __('User created successfully.'));
     }
@@ -101,10 +108,11 @@ class AdminUserController extends Controller
             ]);
 
             $parent->notify(new SystemNotification(
-                __('Student linked'),
-                __(':student is now linked to your account.', ['student' => $user->name]),
+                'Student linked',
+                ':student is now linked to your account.',
                 route('parent.children'),
                 'relationship',
+                ['student' => $user->name],
             ));
         }
 
@@ -114,10 +122,28 @@ class AdminUserController extends Controller
 
     public function unlinkParent(UnlinkParentRequest $request, User $user): RedirectResponse
     {
-        DB::table('parent_student')
-            ->where('parent_user_id', $request->parent_user_id)
+        $parent = User::findOrFail($request->parent_user_id);
+        $deleted = DB::table('parent_student')
+            ->where('parent_user_id', $parent->id)
             ->where('student_user_id', $user->id)
             ->delete();
+
+        if ($deleted) {
+            $parent->notify(new SystemNotification(
+                'Student unlinked',
+                ':student is no longer linked to your account.',
+                route('parent.children'),
+                'relationship',
+                ['student' => $user->name],
+            ));
+            $user->notify(new SystemNotification(
+                'Parent unlinked',
+                ':parent is no longer linked to your account.',
+                route('dashboard'),
+                'relationship',
+                ['parent' => $parent->name],
+            ));
+        }
 
         return redirect()->route('admin.users.show', $user)
                          ->with('success', __('Parent unlinked.'));
@@ -144,10 +170,11 @@ class AdminUserController extends Controller
             ]);
 
             $user->notify(new SystemNotification(
-                __('Student linked'),
-                __(':student is now linked to your account.', ['student' => $student->name]),
+                'Student linked',
+                ':student is now linked to your account.',
                 route('parent.children'),
                 'relationship',
+                ['student' => $student->name],
             ));
         }
 
@@ -157,10 +184,28 @@ class AdminUserController extends Controller
 
     public function unlinkChild(UnlinkChildRequest $request, User $user): RedirectResponse
     {
-        DB::table('parent_student')
+        $student = User::findOrFail($request->student_user_id);
+        $deleted = DB::table('parent_student')
             ->where('parent_user_id', $user->id)
-            ->where('student_user_id', $request->student_user_id)
+            ->where('student_user_id', $student->id)
             ->delete();
+
+        if ($deleted) {
+            $user->notify(new SystemNotification(
+                'Student unlinked',
+                ':student is no longer linked to your account.',
+                route('parent.children'),
+                'relationship',
+                ['student' => $student->name],
+            ));
+            $student->notify(new SystemNotification(
+                'Parent unlinked',
+                ':parent is no longer linked to your account.',
+                route('dashboard'),
+                'relationship',
+                ['parent' => $user->name],
+            ));
+        }
 
         return redirect()->route('admin.users.show', $user)
                          ->with('success', __('Child unlinked.'));

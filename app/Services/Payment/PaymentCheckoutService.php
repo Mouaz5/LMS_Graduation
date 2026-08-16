@@ -9,6 +9,7 @@ use App\Enums\PaymentStatus;
 use App\Models\Payment;
 use App\Models\TuitionFee;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use App\Services\Parent\ParentAccessService;
 use Illuminate\Support\Str;
 use Throwable;
@@ -165,6 +166,14 @@ class PaymentCheckoutService
             'stripe_payment_intent_id' => $paymentIntentId,
             'paid_at' => now(),
         ]);
+
+        $parent->notify(new SystemNotification(
+            'Payment completed',
+            'Your payment for :student was completed successfully.',
+            route('parent.payments.history'),
+            'payment',
+            ['student' => $child->name],
+        ));
 
         return new PaymentCheckoutResult(
             PaymentCheckoutStatus::CREATED,

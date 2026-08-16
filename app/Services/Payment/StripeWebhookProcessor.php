@@ -4,6 +4,7 @@ namespace App\Services\Payment;
 
 use App\Enums\PaymentStatus;
 use App\Models\Payment;
+use App\Notifications\SystemNotification;
 use Illuminate\Support\Facades\Log;
 use Stripe\Event;
 
@@ -45,6 +46,15 @@ class StripeWebhookProcessor
             'stripe_payment_intent_id' => $session->payment_intent,
             'paid_at' => now(),
         ]);
+
+        $payment->load(['parent', 'student']);
+        $payment->parent?->notify(new SystemNotification(
+            'Payment completed',
+            'Your payment for :student was completed successfully.',
+            route('parent.payments.history'),
+            'payment',
+            ['student' => $payment->student?->name ?? 'your student'],
+        ));
     }
 
     private function checkoutExpired(Event $event): void

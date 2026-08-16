@@ -10,10 +10,11 @@ class SystemNotification extends Notification
     use Queueable;
 
     public function __construct(
-        private readonly string $title,
-        private readonly string $message,
+        private readonly string $titleKey,
+        private readonly string $messageKey,
         private readonly ?string $url = null,
         private readonly string $notificationType = 'system',
+        private readonly array $messageData = [],
     ) {}
 
     public function via(object $notifiable): array
@@ -24,8 +25,9 @@ class SystemNotification extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'title' => $this->title,
-            'message' => $this->message,
+            'title_key' => $this->titleKey,
+            'message_key' => $this->messageKey,
+            'message_data' => $this->messageData,
             'url' => $this->url,
             'type' => $this->notificationType,
         ];

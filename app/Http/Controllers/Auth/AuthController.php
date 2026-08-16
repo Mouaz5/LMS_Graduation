@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use App\Services\PasswordResetOtpService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -66,6 +67,13 @@ class AuthController extends Controller
             'phone' => $request->phone,
             'is_active' => true,
         ]);
+
+        $user->notify(new SystemNotification(
+            'Welcome to SchoolLMS',
+            'Your account has been created successfully.',
+            route('dashboard'),
+            'account',
+        ));
 
         return ApiResponse::success(data: ['user' => new UserResource($user)], status: 201);
     }

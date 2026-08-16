@@ -61,10 +61,11 @@ class TeacherBehavioralNoteController extends Controller
         $student = User::with('parents')->findOrFail($validated['student_user_id']);
         foreach ($student->parents as $parent) {
             $parent->notify(new SystemNotification(
-                __('New behavioral note'),
-                __('A new behavioral note was added for :student.', ['student' => $student->name]),
+                'New behavioral note',
+                'A new behavioral note was added for :student.',
                 route('parent.behavioral-notes', ['child_id' => $student->id]),
                 'behavioral_note',
+                ['student' => $student->name],
             ));
         }
 

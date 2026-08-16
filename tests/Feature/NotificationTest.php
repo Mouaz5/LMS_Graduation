@@ -26,6 +26,26 @@ class NotificationTest extends TestCase
             ->assertDontSee('Not for me');
     }
 
+    public function test_notifications_are_translated_using_the_current_locale(): void
+    {
+        $user = User::factory()->create(['role' => 'parent']);
+        $user->notify(new SystemNotification(
+            'Student linked',
+            ':student is now linked to your account.',
+            null,
+            'relationship',
+            ['student' => 'Student7'],
+        ));
+
+        app()->setLocale('ar');
+
+        $this->actingAs($user)
+            ->get(route('notifications.index'))
+            ->assertOk()
+            ->assertSee('تم ربط الطالب')
+            ->assertSee('تم الآن ربط Student7 بحسابك.');
+    }
+
     public function test_user_can_mark_a_notification_as_read(): void
     {
         $user = User::factory()->create(['role' => 'student']);

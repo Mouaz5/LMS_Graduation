@@ -6,7 +6,9 @@ use App\Enums\AbsenceJustificationStatus;
 use App\Enums\UserRole;
 use App\Models\AbsenceJustification;
 use App\Models\Attendance;
+use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use App\Services\Parent\ParentAccessService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
@@ -39,13 +41,33 @@ class AbsenceJustificationService
 
         $documentPath = $document?->store('justifications', 'local');
 
-        return AbsenceJustification::create([
+        $justification = AbsenceJustification::create([
             'attendance_id' => $attendance->id,
             'reason' => $reason,
             'submitted_by' => $parent->id,
             'document_path' => $documentPath,
             'status' => AbsenceJustificationStatus::PENDING,
         ]);
+
+        $attendance->loadMissing('student', 'classroom');
+        $teachers = TeacherSubjectClassroom::with('teacher')
+            ->where('classroom_id', $attendance->classroom_id)
+            ->get()
+            ->pluck('teacher')
+            ->filter()
+            ->unique('id');
+
+        foreach ($teachers as $teacher) {
+            $teacher->notify(new SystemNotification(
+                'Justification submitted',
+                'A new absence justification was submitted for :student.',
+                route('teacher.justifications'),
+                'justification',
+                ['student' => $attendance->student?->name ?? 'a student'],
+            ));
+        }
+
+        return $justification;
     }
 
     public function download(User $user, AbsenceJustification $justification): StreamedResponse

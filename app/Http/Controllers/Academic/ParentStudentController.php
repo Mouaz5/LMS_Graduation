@@ -52,6 +52,7 @@ class ParentStudentController extends Controller
             ':student is now linked to your account.',
             route('parent.children'),
             'relationship',
+            ['student' => $student->name],
         ));
 
         return ApiResponse::success(

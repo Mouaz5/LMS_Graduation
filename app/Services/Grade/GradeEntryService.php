@@ -86,25 +86,29 @@ class GradeEntryService
                 continue;
             }
 
-            $subjectName = $subjects->get($row->subjectId, __('a subject'));
-            $message = __('A new grade is available for :student in :subject.', [
-                'student' => $student->name,
-                'subject' => $subjectName,
-            ]);
+            $subjectName = $subjects->get($row->subjectId, 'a subject');
 
             $student->notify(new SystemNotification(
-                __('New grade available'),
-                $message,
+                'New grade available',
+                'A new grade is available for :student in :subject.',
                 route('student.results'),
                 'grade',
+                [
+                    'student' => $student->name,
+                    'subject' => $subjectName,
+                ],
             ));
 
             foreach ($student->parents as $parent) {
                 $parent->notify(new SystemNotification(
-                    __('New grade available'),
-                    $message,
+                    'New grade available',
+                    'A new grade is available for :student in :subject.',
                     route('parent.results', ['child_id' => $student->id]),
                     'grade',
+                    [
+                        'student' => $student->name,
+                        'subject' => $subjectName,
+                    ],
                 ));
             }
         }

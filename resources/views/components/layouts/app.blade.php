@@ -604,13 +604,17 @@
                             <a class="notification-dropdown-link" href="{{ route('notifications.index') }}">{{ __('View all') }}</a>
                         </div>
                         @forelse($recentNotifications as $notification)
-                            @php($notificationData = $notification->data)
+                            @php
+                                $notificationData = $notification->data;
+                                $notificationTitle = __($notificationData['title_key'] ?? $notificationData['title'] ?? 'Notification');
+                                $notificationMessage = __($notificationData['message_key'] ?? $notificationData['message'] ?? '', $notificationData['message_data'] ?? []);
+                            @endphp
                             <form method="POST" action="{{ route('notifications.read', $notification) }}">
                                 @csrf
                                 <button type="submit" class="notification-dropdown-item {{ $notification->read_at ? '' : 'unread' }}">
                                     <span>
-                                        <strong>{{ $notificationData['title'] ?? __('Notification') }}</strong>
-                                        <span>{{ $notificationData['message'] ?? '' }}</span>
+                                        <strong>{{ $notificationTitle }}</strong>
+                                        <span>{{ $notificationMessage }}</span>
                                         <span>{{ $notification->created_at->diffForHumans() }}</span>
                                     </span>
                                 </button>
