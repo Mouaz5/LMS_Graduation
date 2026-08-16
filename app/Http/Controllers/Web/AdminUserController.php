@@ -9,6 +9,7 @@ use App\Http\Requests\Web\StoreUserRequest;
 use App\Http\Requests\Web\UnlinkChildRequest;
 use App\Http\Requests\Web\UnlinkParentRequest;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -98,6 +99,13 @@ class AdminUserController extends Controller
                 'student_user_id' => $user->id,
                 'relation'        => $request->relation,
             ]);
+
+            $parent->notify(new SystemNotification(
+                __('Student linked'),
+                __(':student is now linked to your account.', ['student' => $user->name]),
+                route('parent.children'),
+                'relationship',
+            ));
         }
 
         return redirect()->route('admin.users.show', $user)
@@ -134,6 +142,13 @@ class AdminUserController extends Controller
                 'student_user_id' => $student->id,
                 'relation'        => $request->relation,
             ]);
+
+            $user->notify(new SystemNotification(
+                __('Student linked'),
+                __(':student is now linked to your account.', ['student' => $student->name]),
+                route('parent.children'),
+                'relationship',
+            ));
         }
 
         return redirect()->route('admin.users.show', $user)

@@ -7,6 +7,8 @@ use App\Http\Requests\Web\StoreBehavioralNoteWebRequest;
 use App\Models\BehavioralNote;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
+use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -55,6 +57,16 @@ class TeacherBehavioralNoteController extends Controller
             ...$validated,
             'teacher_user_id' => $teacher->id,
         ]);
+
+        $student = User::with('parents')->findOrFail($validated['student_user_id']);
+        foreach ($student->parents as $parent) {
+            $parent->notify(new SystemNotification(
+                __('New behavioral note'),
+                __('A new behavioral note was added for :student.', ['student' => $student->name]),
+                route('parent.behavioral-notes', ['child_id' => $student->id]),
+                'behavioral_note',
+            ));
+        }
 
         return redirect()->route('teacher.behavioral-notes')
             ->with('success', 'Behavioral note created successfully.');

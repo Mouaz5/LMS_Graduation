@@ -30,7 +30,16 @@ document.addEventListener('click', (event) => {
 
 // Escape closes the drawer, matching the overlay tap.
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeSidebar();
+    if (event.key === 'Escape') {
+        closeSidebar();
+        document.querySelectorAll('.notification-menu[open]').forEach((menu) => menu.removeAttribute('open'));
+    }
+});
+
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('.notification-menu')) {
+        document.querySelectorAll('.notification-menu[open]').forEach((menu) => menu.removeAttribute('open'));
+    }
 });
 
 // Resizing past the mobile breakpoint restores the docked sidebar; drop the

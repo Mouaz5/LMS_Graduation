@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DiagnosticKnowledgeMapWebController;
 use App\Http\Controllers\Web\ExamTypeWebController;
 use App\Http\Controllers\Web\LocaleController;
+use App\Http\Controllers\Web\NotificationWebController;
 use App\Http\Controllers\Web\ParentWebController;
 use App\Http\Controllers\Web\PaymentWebController;
 use App\Http\Controllers\Web\SalaryWebController;
@@ -54,6 +55,11 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
     // the sidebar, and it is the only place the theme/language controls live
     // now that they are no longer in the topbar.
     Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
+
+    Route::get('/notifications', [NotificationWebController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationWebController::class, 'markAllRead'])->name('notifications.read-all');
+    Route::post('/notifications/{notification}/read', [NotificationWebController::class, 'markRead'])->name('notifications.read');
+
     Route::post('/admin/stop-impersonate', [DashboardController::class, 'stopImpersonate'])
         ->middleware('actual-role:admin')
         ->name('admin.impersonate.stop');

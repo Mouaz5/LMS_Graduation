@@ -11,6 +11,7 @@ use App\Models\ScheduleSlot;
 use App\Models\StudentProfile;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -78,7 +79,33 @@ class AttendanceService
             ));
         }
 
+        $this->notifyParentsOfAbsences($data);
+
         return $records;
+    }
+
+    private function notifyParentsOfAbsences(BulkAttendanceData $data): void
+    {
+        $studentIds = collect($data->entries)
+            ->filter(fn ($entry) => $entry->status === AttendanceStatus::ABSENT)
+            ->pluck('studentId')
+            ->unique();
+
+        $students = User::with('parents')->whereIn('id', $studentIds)->get();
+
+        foreach ($students as $student) {
+            foreach ($student->parents as $parent) {
+                $parent->notify(new SystemNotification(
+                    __('Student absent'),
+                    __(':student was marked absent on :date.', [
+                        'student' => $student->name,
+                        'date' => $data->date,
+                    ]),
+                    route('parent.attendance', ['child_id' => $student->id]),
+                    'attendance',
+                ));
+            }
+        }
     }
 
     /**

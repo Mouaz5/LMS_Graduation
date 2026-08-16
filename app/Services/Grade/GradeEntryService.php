@@ -6,7 +6,9 @@ use App\Data\BulkGradeData;
 use App\Data\GradeEntryData;
 use App\Models\ExamType;
 use App\Models\StudentGrade;
+use App\Models\Subject;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use App\Services\Access\StudentRecordAccessService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -64,7 +66,48 @@ class GradeEntryService
             $this->grades->refreshSummaries($tuples);
         });
 
+        $this->notifyGradeRecipients($data);
+
         return count($data->entries);
+    }
+
+    private function notifyGradeRecipients(BulkGradeData $data): void
+    {
+        $students = User::with('parents')
+            ->whereIn('id', collect($data->entries)->pluck('studentId')->unique())
+            ->get()
+            ->keyBy('id');
+        $subjects = Subject::whereIn('id', collect($data->entries)->pluck('subjectId')->unique())
+            ->pluck('name', 'id');
+
+        foreach ($data->entries as $row) {
+            $student = $students->get($row->studentId);
+            if (! $student) {
+                continue;
+            }
+
+            $subjectName = $subjects->get($row->subjectId, __('a subject'));
+            $message = __('A new grade is available for :student in :subject.', [
+                'student' => $student->name,
+                'subject' => $subjectName,
+            ]);
+
+            $student->notify(new SystemNotification(
+                __('New grade available'),
+                $message,
+                route('student.results'),
+                'grade',
+            ));
+
+            foreach ($student->parents as $parent) {
+                $parent->notify(new SystemNotification(
+                    __('New grade available'),
+                    $message,
+                    route('parent.results', ['child_id' => $student->id]),
+                    'grade',
+                ));
+            }
+        }
     }
 
     public function storeWeb(

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreParentStudentRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
+use App\Notifications\SystemNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -45,6 +46,13 @@ class ParentStudentController extends Controller
             'student_user_id' => $validated['student_user_id'],
             'relation' => $validated['relation'],
         ]);
+
+        $parent->notify(new SystemNotification(
+            'Student linked',
+            ':student is now linked to your account.',
+            route('parent.children'),
+            'relationship',
+        ));
 
         return ApiResponse::success(
             data: [

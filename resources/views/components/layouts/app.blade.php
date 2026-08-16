@@ -332,6 +332,43 @@
 
         .logout-btn svg { width: 15px; height: 15px; }
 
+        .notification-menu { position: relative; }
+        .notification-trigger {
+            position: relative; width: 36px; height: 36px; display: flex; align-items: center;
+            justify-content: center; border: 1px solid var(--border); border-radius: 9px;
+            background: var(--surface); color: var(--text-secondary); cursor: pointer;
+            list-style: none;
+        }
+        .notification-trigger::-webkit-details-marker { display: none; }
+        .notification-trigger svg { width: 17px; height: 17px; }
+        .notification-trigger:hover { color: var(--primary-dark); border-color: var(--primary-light); }
+        .notification-count {
+            position: absolute; top: -5px; inset-inline-end: -5px; min-width: 17px; height: 17px;
+            display: flex; align-items: center; justify-content: center; padding: 0 4px;
+            border-radius: 9px; background: var(--danger); color: white; font-size: 10px; font-weight: 700;
+        }
+        .notification-dropdown {
+            position: absolute; top: calc(100% + 10px); inset-inline-end: 0; width: min(360px, calc(100vw - 32px));
+            z-index: 60; background: var(--surface); border: 1px solid var(--border-soft);
+            border-radius: 13px; box-shadow: var(--shadow-card); overflow: hidden;
+        }
+        .notification-dropdown-header {
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            padding: 14px 16px; border-bottom: 1px solid var(--border-soft);
+        }
+        .notification-dropdown-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+        .notification-dropdown-link { color: var(--primary-dark); font-size: 11px; font-weight: 600; text-decoration: none; }
+        .notification-dropdown-item {
+            display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 12px 16px;
+            border: 0; border-bottom: 1px solid var(--border-soft); background: transparent;
+            color: var(--text-primary); text-align: start; cursor: pointer; font-family: var(--font-body);
+        }
+        .notification-dropdown-item:hover { background: var(--surface-2); }
+        .notification-dropdown-item.unread { background: var(--primary-tint); }
+        .notification-dropdown-item strong { display: block; font-size: 12px; }
+        .notification-dropdown-item span { display: block; margin-top: 3px; color: var(--text-muted); font-size: 11px; line-height: 1.4; }
+        .notification-dropdown-empty { padding: 24px 16px; color: var(--text-muted); font-size: 12px; text-align: center; }
+
         /* === CONTENT AREA === */
         .content-area {
             padding: 28px;
@@ -426,6 +463,8 @@
         ? \Illuminate\Support\Carbon::createFromTimestamp((int) session('impersonate_expires_at'))
         : null;
     $initials = collect(explode(' ', $user->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
+    $unreadNotificationCount = $user->unreadNotifications()->count();
+    $recentNotifications = $user->notifications()->latest()->limit(5)->get();
 
     $allMenuItems = [
         'admin' => [
@@ -552,6 +591,36 @@
             </div>
 
             <div class="topbar-right">
+                <details class="notification-menu">
+                    <summary class="notification-trigger" aria-label="{{ __('Notifications') }}">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        @if($unreadNotificationCount > 0)
+                            <span class="notification-count">{{ $unreadNotificationCount > 99 ? '99+' : $unreadNotificationCount }}</span>
+                        @endif
+                    </summary>
+                    <div class="notification-dropdown">
+                        <div class="notification-dropdown-header">
+                            <span class="notification-dropdown-title">{{ __('Notifications') }}</span>
+                            <a class="notification-dropdown-link" href="{{ route('notifications.index') }}">{{ __('View all') }}</a>
+                        </div>
+                        @forelse($recentNotifications as $notification)
+                            @php($notificationData = $notification->data)
+                            <form method="POST" action="{{ route('notifications.read', $notification) }}">
+                                @csrf
+                                <button type="submit" class="notification-dropdown-item {{ $notification->read_at ? '' : 'unread' }}">
+                                    <span>
+                                        <strong>{{ $notificationData['title'] ?? __('Notification') }}</strong>
+                                        <span>{{ $notificationData['message'] ?? '' }}</span>
+                                        <span>{{ $notification->created_at->diffForHumans() }}</span>
+                                    </span>
+                                </button>
+                            </form>
+                        @empty
+                            <div class="notification-dropdown-empty">{{ __('You have no notifications yet.') }}</div>
+                        @endforelse
+                    </div>
+                </details>
+
                 {{-- Language and theme controls now live on the shared settings
                      page (route: settings.index), linked from every role's sidebar. --}}
                 <span class="topbar-username" style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">{{ $user->name }}</span>
