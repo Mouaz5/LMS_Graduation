@@ -122,9 +122,13 @@
                clipped sidebar instead of scrolling. */
             min-height: 0;
             overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             position: relative;
             z-index: 1;
         }
+
+        .sidebar-nav::-webkit-scrollbar { display: none; }
 
         .nav-section-label {
             font-size: 10px;
@@ -481,6 +485,7 @@
             ['label' => 'Knowledge Map', 'route' => 'admin.diagnostic.knowledge-map','icon' => 'bar-chart'],
             ['label' => 'Settings',      'route' => 'settings.index',                'icon' => 'settings'],
             ['label' => 'Wallet',        'route' => 'admin.wallet.index',            'icon' => 'credit-card'],
+            ['label' => 'Reports',       'route' => 'admin.reports.index',         'icon' => 'bar-chart'],
         ],
         'teacher' => [
             ['label' => 'Dashboard',        'route' => 'dashboard',                'icon' => 'home'],

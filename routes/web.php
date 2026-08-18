@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\AcademicYearWebController;
 use App\Http\Controllers\Web\AdminDiagnosticWebController;
+use App\Http\Controllers\Web\AdminReportWebController;
 use App\Http\Controllers\Web\AdminUserController;
 use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\AuthWebController;
@@ -72,6 +73,11 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+
+        // Reports
+        Route::get('/reports', [AdminReportWebController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export', [AdminReportWebController::class, 'export'])->name('reports.export');
+        Route::get('/reports/students/{student}/report-card', [AdminReportWebController::class, 'reportCard'])->name('reports.student-report-card');
         Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
         Route::patch('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::post('/users/{user}/link-parent', [AdminUserController::class, 'linkParent'])->name('users.link-parent');

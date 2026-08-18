@@ -373,6 +373,7 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        $this->call(ReportsDemoSeeder::class);
         $this->call(DiagnosticSeeder::class);
     }
 }
