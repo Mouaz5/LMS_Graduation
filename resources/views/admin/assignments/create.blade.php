@@ -41,7 +41,7 @@
         <x-ui.form.field name="classroom_id" :label="__('Classroom')">
             <x-ui.form.select name="classroom_id" :placeholder="__('-- Select Classroom --')" required>
                 @foreach($classrooms as $classroom)
-                    <option value="{{ $classroom->id }}" @selected(old('classroom_id') == $classroom->id)>{{ $classroom->grade->name }} — {{ $classroom->name }}</option>
+                    <option value="{{ $classroom->id }}" data-academic-year-id="{{ $classroom->academic_year_id }}" @selected(old('classroom_id') == $classroom->id)>{{ $classroom->grade->name }} — {{ $classroom->name }} ({{ $classroom->academicYear?->name ?? __('No academic year') }})</option>
                 @endforeach
             </x-ui.form.select>
         </x-ui.form.field>

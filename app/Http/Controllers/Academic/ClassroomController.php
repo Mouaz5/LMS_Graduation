@@ -23,11 +23,11 @@ class ClassroomController extends Controller
                 ->unique()
                 ->toArray();
 
-            $classrooms = Classroom::with(['grade', 'teacherAssignments.subject', 'studentProfiles.student'])
+            $classrooms = Classroom::with(['grade', 'academicYear', 'teacherAssignments.subject', 'studentProfiles.student'])
                 ->whereIn('id', $classroomIds)
                 ->get();
         } else {
-            $classrooms = Classroom::with(['grade', 'studentProfiles.student'])->get();
+            $classrooms = Classroom::with(['grade', 'academicYear', 'studentProfiles.student'])->get();
         }
 
         return ApiResponse::success(data: ClassroomResource::collection($classrooms));

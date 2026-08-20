@@ -1,5 +1,13 @@
 <x-layouts.app :pageTitle="__('Academic Year Details')">
     <style>
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 20px; background: var(--primary); color: var(--on-primary);
+            border-radius: 10px; text-decoration: none; font-size: 13.5px;
+            font-weight: 600; font-family: var(--font-body);
+            transition: all 0.2s; box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .back-link {
             font-size: 13px;
             color: var(--text-secondary);
@@ -132,6 +140,43 @@
                     </span>
                 @endif
             </div>
+        </div>
+    </div>
+
+    {{-- Classrooms --}}
+    <div class="related-section" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div class="related-title" style="margin-bottom: 0;">{{ __('Classrooms (:count)', ['count' => $year->classrooms->count()]) }}</div>
+            <a href="{{ route('admin.classrooms.create', ['academic_year_id' => $year->id]) }}" class="btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                {{ __('Add Classroom') }}
+            </a>
+        </div>
+        <div class="related-card" style="overflow-x: auto;">
+            @if($year->classrooms->isEmpty())
+                <div style="padding: 24px; text-align: center; color: var(--text-faint);">{{ __('No classrooms created for this academic year yet.') }}</div>
+            @else
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: var(--surface-2);">
+                            <th style="padding: 12px 20px; text-align: start; color: var(--text-muted); font-size: 11px;">{{ __('Grade') }}</th>
+                            <th style="padding: 12px 20px; text-align: start; color: var(--text-muted); font-size: 11px;">{{ __('Section') }}</th>
+                            <th style="padding: 12px 20px; text-align: start; color: var(--text-muted); font-size: 11px;">{{ __('Students') }}</th>
+                            <th style="padding: 12px 20px; text-align: start; color: var(--text-muted); font-size: 11px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($year->classrooms->sortBy(fn ($classroom) => sprintf('%05d-%s', $classroom->grade->order_index, $classroom->name)) as $classroom)
+                            <tr>
+                                <td style="padding: 13px 20px; border-top: 1px solid var(--border-soft);">{{ $classroom->grade->name }}</td>
+                                <td style="padding: 13px 20px; border-top: 1px solid var(--border-soft); font-weight: 600;">{{ $classroom->name }}</td>
+                                <td style="padding: 13px 20px; border-top: 1px solid var(--border-soft);">{{ $classroom->studentEnrollments->count() }} / {{ $classroom->capacity }}</td>
+                                <td style="padding: 13px 20px; border-top: 1px solid var(--border-soft); text-align: end;"><a href="{{ route('classrooms.show', $classroom) }}" style="color: var(--primary); text-decoration: none;">{{ __('Manage') }} →</a></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
 

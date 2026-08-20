@@ -85,7 +85,7 @@
                         <td>{{ $event->date->format('M d, Y') }}</td>
                         <td>
                             <span class="badge badge-{{ $event->type->value }}">
-                                {{ ucfirst($event->type->value) }}
+                                {{ __(ucfirst($event->type->value)) }}
                             </span>
                         </td>
                         <td>{{ $event->description }}</td>

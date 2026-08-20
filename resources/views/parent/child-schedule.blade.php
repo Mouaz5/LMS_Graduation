@@ -79,7 +79,7 @@
                     $isSelected = $day === $selectedDay;
                 @endphp
                 <a href="{{ route('parent.child-schedule', ['child' => $child, 'day' => $day]) }}" class="day-tab {{ $isSelected ? 'active' : '' }}">
-                    <span class="day-name">{{ ucfirst(substr($day, 0, 3)) }}</span>
+                    <span class="day-name">{{ __(ucfirst($day)) }}</span>
                     <span class="day-count">{{ $count }}</span>
                 </a>
             @endforeach
@@ -106,7 +106,7 @@
         @else
             <div class="empty-state">
                 <svg width="48" height="48" fill="none" stroke="var(--border)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                <p>{{ __("No classes on :day", ['day' => ucfirst($selectedDay)]) }}</p>
+                <p>{{ __('No classes on :day', ['day' => __(ucfirst($selectedDay))]) }}</p>
             </div>
         @endif
     @endif

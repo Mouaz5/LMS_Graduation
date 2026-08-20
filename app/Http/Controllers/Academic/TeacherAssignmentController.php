@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Academic\StoreTeacherAssignmentRequest;
 use App\Http\Resources\TeacherAssignmentResource;
 use App\Http\Responses\ApiResponse;
+use App\Models\Classroom;
 use App\Models\TeacherSubjectClassroom;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TeacherAssignmentController extends Controller
 {
@@ -31,7 +33,16 @@ class TeacherAssignmentController extends Controller
 
     public function store(StoreTeacherAssignmentRequest $request): JsonResponse
     {
-        $assignment = TeacherSubjectClassroom::firstOrCreate($request->validated());
+        $data = $request->validated();
+        $classroom = Classroom::findOrFail($data['classroom_id']);
+
+        if ((int) $classroom->academic_year_id !== (int) $data['academic_year_id']) {
+            throw ValidationException::withMessages([
+                'academic_year_id' => __('The selected classroom does not belong to the selected academic year.'),
+            ]);
+        }
+
+        $assignment = TeacherSubjectClassroom::firstOrCreate($data);
 
         return ApiResponse::success(data: new TeacherAssignmentResource($assignment->load(['subject', 'classroom.grade', 'academicYear'])), status: 201);
     }

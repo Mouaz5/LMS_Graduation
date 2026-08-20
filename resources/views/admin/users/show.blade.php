@@ -198,7 +198,7 @@
                             <div style="font-weight: 600;">{{ $parent->name }}</div>
                             <div style="font-size: 12px; color: var(--text-muted);">{{ $parent->email }}</div>
                         </div>
-                        <span class="relation-chip">{{ ucfirst($parent->pivot->relation) }}</span>
+                        <span class="relation-chip">{{ __(ucfirst($parent->pivot->relation)) }}</span>
                         <form method="POST" action="{{ route('admin.users.unlink-parent', $user) }}"
                               class="unlink-relation-form"
                               data-confirm="{{ __('Unlink :name?', ['name' => $parent->name]) }}">
@@ -260,7 +260,7 @@
                                 @endif
                             </div>
                         </div>
-                        <span class="relation-chip">{{ ucfirst($child->pivot->relation) }}</span>
+                        <span class="relation-chip">{{ __(ucfirst($child->pivot->relation)) }}</span>
                         <form method="POST" action="{{ route('admin.users.unlink-child', $user) }}"
                               class="unlink-relation-form"
                               data-confirm="{{ __('Unlink :name?', ['name' => $child->name]) }}">

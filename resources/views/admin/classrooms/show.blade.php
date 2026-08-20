@@ -120,7 +120,12 @@
             </div>
             <div>
                 <div class="detail-title">{{ $classroom->name }}</div>
-                <div class="detail-subtitle">{{ $classroom->grade->name }}</div>
+                <div class="detail-subtitle">
+                    {{ $classroom->grade->name }}
+                    @if($classroom->academicYear)
+                        · {{ $classroom->academicYear->name }}
+                    @endif
+                </div>
             </div>
         </div>
         <div class="detail-body">
@@ -129,9 +134,9 @@
                 <span class="detail-value">{{ $classroom->grade->name }}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">{{ __("Students") }}</span>
+                <span class="detail-label">{{ __('Students') }}</span>
                 <span class="badge" style="background: var(--success-tint); color: var(--success-text);">
-                    {{ $classroom->studentProfiles->count() }} / {{ $classroom->capacity }}
+                    {{ $classroom->studentEnrollments->count() }} / {{ $classroom->capacity }}
                 </span>
             </div>
             <div class="detail-row">
@@ -141,26 +146,100 @@
         </div>
     </div>
 
+    @if(auth()->user()->role->value === 'admin')
+        <div class="related-section">
+            <div class="related-title">{{ __('Add Students') }}</div>
+            <div class="related-card" style="padding: 20px;">
+                @if($errors->has('student_user_ids'))
+                    <div style="margin-bottom: 12px; color: var(--danger-text); font-size: 13px;">{{ $errors->first('student_user_ids') }}</div>
+                @endif
+                @if($availableStudents->isEmpty())
+                    <div class="empty-msg" style="padding: 8px 0;">{{ __('All students are already enrolled in this academic year.') }}</div>
+                @else
+                    <form method="POST" action="{{ route('admin.classrooms.students.store', $classroom) }}">
+                        @csrf
+                        <label for="student_user_ids" class="detail-label" style="display: block; margin-bottom: 8px;">{{ __('Available students') }}</label>
+                        <select id="student_user_ids" name="student_user_ids[]" class="form-control" multiple size="6" required>
+                            @foreach($availableStudents as $student)
+                                <option value="{{ $student->id }}" {{ collect(old('student_user_ids', []))->contains($student->id) ? 'selected' : '' }}>
+                                    {{ $student->name }} — {{ $student->email }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 12px;">
+                            <span style="font-size: 12px; color: var(--text-muted);">{{ __('Select one or more students. Capacity: :available places left.', ['available' => max(0, $classroom->capacity - $classroom->studentEnrollments->count())]) }}</span>
+                            <button type="submit" class="btn btn-primary">{{ __('Enroll Selected') }}</button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
+    @endif
+
     {{-- Students --}}
     <div class="related-section">
-        <div class="related-title">{{ __("Students (:count)", ['count' => $classroom->studentProfiles->count()]) }}</div>
+        <div class="related-title">{{ __('Students (:count)', ['count' => $classroom->studentEnrollments->count()]) }}</div>
         <div class="related-card">
-            @forelse($classroom->studentProfiles as $profile)
+            @forelse($classroom->studentEnrollments as $enrollment)
                 <div class="related-item">
                     <div class="related-item-icon" style="background: var(--success-tint);">
                         <svg width="16" height="16" fill="none" stroke="var(--success-dark)" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422c-.523.28-1.12.422-1.735.422H7.575c-.615 0-1.212-.142-1.735-.422L12 14z"/></svg>
                     </div>
                     <div style="flex: 1;">
-                        <div style="font-weight: 600;">{{ $profile->student->name }}</div>
-                        <div style="font-size: 12px; color: var(--text-muted);">{{ $profile->student->email }}</div>
+                        <div style="font-weight: 600;">{{ $enrollment->student->name }}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">{{ $enrollment->student->email }}</div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted);">{{ __("Enrolled :date", ['date' => $profile->enrollment_date->format('M d, Y')]) }}</span>
+                    <span style="font-size: 11px; color: var(--text-muted);">{{ __('Enrolled :date', ['date' => $enrollment->enrollment_date->format('M d, Y')]) }}</span>
                 </div>
             @empty
                 <div class="empty-msg">{{ __("No students enrolled yet.") }}</div>
             @endforelse
         </div>
     </div>
+
+    @if(auth()->user()->role->value === 'admin')
+        <div class="related-section">
+            <div class="related-title">{{ __('Add Subject to Classroom') }}</div>
+            <div class="related-card" style="padding: 20px;">
+                @if($errors->has('subject_id') || $errors->has('teacher_user_id'))
+                    <div style="margin-bottom: 12px; color: var(--danger-text); font-size: 13px;">
+                        {{ $errors->first('subject_id') ?: $errors->first('teacher_user_id') }}
+                    </div>
+                @endif
+
+                @if($availableSubjects->isEmpty())
+                    <div class="empty-msg" style="padding: 8px 0;">{{ __('All subjects are already assigned to this classroom.') }}</div>
+                @else
+                    <form method="POST" action="{{ route('admin.classrooms.subjects.store', $classroom) }}">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="detail-label" for="subject_id" style="display: block; margin-bottom: 8px;">{{ __('Subject') }}</label>
+                                <select id="subject_id" name="subject_id" class="form-control" required>
+                                    <option value="">{{ __('Select subject…') }}</option>
+                                    @foreach($availableSubjects as $subject)
+                                        <option value="{{ $subject->id }}" @selected(old('subject_id') == $subject->id)>{{ $subject->name }} ({{ $subject->code }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="detail-label" for="teacher_user_id" style="display: block; margin-bottom: 8px;">{{ __('Teacher') }}</label>
+                                <select id="teacher_user_id" name="teacher_user_id" class="form-control" required>
+                                    <option value="">{{ __('Select teacher…') }}</option>
+                                    @foreach($availableTeachers as $teacher)
+                                        <option value="{{ $teacher->id }}" @selected(old('teacher_user_id') == $teacher->id)>{{ $teacher->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+                            <button type="submit" class="btn btn-primary">{{ __('Assign Subject') }}</button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
+    @endif
 
     {{-- Teacher Assignments --}}
     @if($classroom->teacherAssignments->count() > 0)

@@ -81,7 +81,7 @@
                                 </td>
                                 <td style="font-weight: 600;">{{ strtoupper($transfer->currency) }} {{ number_format((float) $transfer->amount, 2) }}</td>
                                 <td style="color: var(--text-secondary);">{{ $transfer->description ?? '—' }}</td>
-                                <td><span class="badge badge-{{ $transfer->status->value }}">{{ ucfirst($transfer->status->value) }}</span></td>
+                                <td><span class="badge badge-{{ $transfer->status->value }}">{{ __(ucfirst($transfer->status->value)) }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -10,6 +10,7 @@ use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AssignmentWebController extends Controller
@@ -30,7 +31,7 @@ class AssignmentWebController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
         $subjects = Subject::orderBy('name')->get(['id', 'name', 'code']);
-        $classrooms = Classroom::with('grade')->orderBy('name')->get();
+        $classrooms = Classroom::with(['grade', 'academicYear'])->orderBy('name')->get();
         $academicYears = AcademicYear::orderByDesc('start_date')->get(['id', 'name']);
 
         return view('admin.assignments.create', compact('teachers', 'subjects', 'classrooms', 'academicYears'));
@@ -39,6 +40,13 @@ class AssignmentWebController extends Controller
     public function store(StoreAssignmentRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $classroom = Classroom::findOrFail($validated['classroom_id']);
+
+        if ((int) $classroom->academic_year_id !== (int) $validated['academic_year_id']) {
+            throw ValidationException::withMessages([
+                'academic_year_id' => __('The selected classroom does not belong to the selected academic year.'),
+            ]);
+        }
 
         // Prevent duplicate assignment
         $exists = TeacherSubjectClassroom::where('teacher_user_id', $validated['teacher_user_id'])

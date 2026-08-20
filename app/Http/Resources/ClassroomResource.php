@@ -12,8 +12,13 @@ class ClassroomResource extends JsonResource
         return [
             'id' => $this->id,
             'grade_id' => $this->grade_id,
+            'academic_year_id' => $this->academic_year_id,
             'name' => $this->name,
             'capacity' => $this->capacity,
+            'academic_year' => $this->whenLoaded('academicYear', fn () => [
+                'id' => $this->academicYear->id,
+                'name' => $this->academicYear->name,
+            ]),
             'grade' => $this->whenLoaded('grade', fn () => [
                 'id' => $this->grade->id,
                 'name' => $this->grade->name,

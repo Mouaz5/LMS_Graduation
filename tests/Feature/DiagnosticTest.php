@@ -186,6 +186,38 @@ class DiagnosticTest extends TestCase
         ])->assertNotFound();
     }
 
+    public function test_admin_can_create_true_false_question_without_empty_options(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->post(route('admin.diagnostic.questions.store'), [
+                'subject_id' => $this->subject->id,
+                'learning_objective_id' => $this->question->learning_objective_id,
+                'question_text' => 'The sky is blue.',
+                'type' => 'true_false',
+                'correct_option' => 0,
+                'options' => [
+                    ['option_text' => 'True'],
+                    ['option_text' => 'False'],
+                    ['option_text' => ''],
+                    ['option_text' => ''],
+                ],
+            ])
+            ->assertRedirect();
+
+        $createdQuestion = DiagnosticQuestion::query()
+            ->where('question_text', 'The sky is blue.')
+            ->firstOrFail();
+
+        $this->assertSame(2, $createdQuestion->options()->count());
+        $this->assertDatabaseHas('question_options', [
+            'question_id' => $createdQuestion->id,
+            'option_text' => 'True',
+            'is_correct' => true,
+        ]);
+    }
+
     public function test_split_student_diagnostic_route_renders(): void
     {
         $this->actingAs($this->student)

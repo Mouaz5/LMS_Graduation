@@ -196,7 +196,7 @@
                         <td>{{ $i + 1 }}</td>
                         <td style="max-width:250px;">{{ Str::limit($q->question_text, 80) }}</td>
                         <td><span class="tag">{{ $q->learningObjective->name ?? '—' }}</span></td>
-                        <td>{{ strtoupper($q->type->value) }}</td>
+                        <td>{{ $q->type->value === 'true_false' ? __('True / False') : __('Multiple Choice (MCQ)') }}</td>
                         <td>
                             @foreach($q->options as $opt)
                                 <div style="font-size:11px; {{ $opt->is_correct ? 'color:var(--success-text); font-weight:700;' : 'color:var(--text-secondary);' }}">

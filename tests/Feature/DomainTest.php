@@ -6,6 +6,8 @@ use App\Models\AcademicYear;
 use App\Models\Classroom;
 use App\Models\Grade;
 use App\Models\School;
+use App\Models\StudentEnrollment;
+use App\Models\StudentProfile;
 use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
 use App\Models\User;
@@ -59,6 +61,7 @@ class DomainTest extends TestCase
 
         $this->classroom = Classroom::create([
             'grade_id' => $grade->id,
+            'academic_year_id' => $this->year->id,
             'name' => '7-A',
             'capacity' => 30,
         ]);
@@ -119,9 +122,210 @@ class DomainTest extends TestCase
         ])->assertStatus(403);
     }
 
+    public function test_admin_can_create_and_manage_grades(): void
+    {
+        $this->actingAs($this->admin)
+            ->post(route('admin.grades.store'), [
+                'name' => 'Grade 10',
+                'order_index' => 10,
+            ])
+            ->assertRedirect(route('admin.grades.index'));
+
+        $this->assertDatabaseHas('grades', [
+            'school_id' => $this->school->id,
+            'name' => 'Grade 10',
+            'order_index' => 10,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.classrooms.create', ['academic_year_id' => $this->year->id]))
+            ->assertOk()
+            ->assertSee('Grade 10')
+            ->assertSee(__('Manage Grades'));
+    }
+
+    public function test_admin_can_create_classroom_for_an_academic_year(): void
+    {
+        $this->actingAs($this->admin)
+            ->post(route('admin.classrooms.store'), [
+                'academic_year_id' => $this->year->id,
+                'grade_id' => $this->classroom->grade_id,
+                'name' => '7-B',
+                'capacity' => 25,
+            ])
+            ->assertRedirect(route('admin.academic-years.show', $this->year));
+
+        $this->assertDatabaseHas('classrooms', [
+            'academic_year_id' => $this->year->id,
+            'grade_id' => $this->classroom->grade_id,
+            'name' => '7-B',
+            'capacity' => 25,
+        ]);
+    }
+
+    public function test_admin_can_enroll_students_in_a_classroom(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.classrooms.students.store', $this->classroom), [
+                'student_user_ids' => [$student->id],
+            ])
+            ->assertRedirect(route('classrooms.show', $this->classroom));
+
+        $this->assertDatabaseHas('student_enrollments', [
+            'student_user_id' => $student->id,
+            'academic_year_id' => $this->year->id,
+            'classroom_id' => $this->classroom->id,
+            'status' => 'active',
+        ]);
+        $this->assertDatabaseHas('student_profiles', [
+            'user_id' => $student->id,
+            'classroom_id' => $this->classroom->id,
+        ]);
+    }
+
+    public function test_admin_can_assign_a_subject_and_teacher_to_a_classroom(): void
+    {
+        $newSubject = Subject::create([
+            'school_id' => $this->school->id,
+            'name' => 'Science',
+            'code' => 'SCI',
+        ]);
+        $newTeacher = User::factory()->create(['role' => 'teacher']);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.classrooms.subjects.store', $this->classroom), [
+                'subject_id' => $newSubject->id,
+                'teacher_user_id' => $newTeacher->id,
+            ])
+            ->assertRedirect(route('classrooms.show', $this->classroom));
+
+        $this->assertDatabaseHas('teacher_subject_classroom', [
+            'teacher_user_id' => $newTeacher->id,
+            'subject_id' => $newSubject->id,
+            'classroom_id' => $this->classroom->id,
+            'academic_year_id' => $this->year->id,
+        ]);
+    }
+
+    public function test_student_cannot_be_enrolled_twice_in_the_same_academic_year(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        StudentEnrollment::create([
+            'student_user_id' => $student->id,
+            'academic_year_id' => $this->year->id,
+            'classroom_id' => $this->classroom->id,
+            'enrollment_date' => '2025-09-01',
+            'status' => 'active',
+        ]);
+
+        $otherClassroom = Classroom::create([
+            'grade_id' => $this->classroom->grade_id,
+            'academic_year_id' => $this->year->id,
+            'name' => '7-C',
+            'capacity' => 30,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->post(route('admin.classrooms.students.store', $otherClassroom), [
+                'student_user_ids' => [$student->id],
+            ])
+            ->assertSessionHasErrors('student_user_ids');
+
+        $this->assertDatabaseCount('student_enrollments', 1);
+    }
+
+    public function test_admin_can_view_academic_year_and_classroom_management_pages(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('admin.academic-years.show', $this->year))
+            ->assertOk()
+            ->assertSee($this->classroom->name);
+
+        $this->actingAs($this->admin)
+            ->get(route('classrooms.show', $this->classroom))
+            ->assertOk()
+            ->assertSee(__('Add Students'));
+    }
+
+    public function test_arabic_translations_are_rendered_on_teacher_and_classroom_pages(): void
+    {
+        app()->setLocale('ar');
+
+        $this->actingAs($this->teacher)
+            ->get(route('teacher.salaries'))
+            ->assertOk()
+            ->assertSee('الرواتب')
+            ->assertSee('سجل الرواتب');
+
+        $this->actingAs($this->admin)
+            ->get(route('classrooms.index'))
+            ->assertOk()
+            ->assertSee('إدارة الفصول والطلاب المسجلين');
+    }
+
     // ---------------------------------------------------------------
     // UC-07: Teacher assignment to classroom
     // ---------------------------------------------------------------
+
+    public function test_teacher_sees_assigned_classrooms_across_academic_years(): void
+    {
+        $otherYear = AcademicYear::create([
+            'school_id' => $this->school->id,
+            'name' => '2026-2027',
+            'start_date' => '2026-09-01',
+            'end_date' => '2027-06-30',
+            'is_active' => false,
+        ]);
+        $otherClassroom = Classroom::create([
+            'grade_id' => $this->classroom->grade_id,
+            'academic_year_id' => $otherYear->id,
+            'name' => '7-B-Next Year',
+            'capacity' => 30,
+        ]);
+        TeacherSubjectClassroom::create([
+            'teacher_user_id' => $this->teacher->id,
+            'subject_id' => $this->subject->id,
+            'classroom_id' => $otherClassroom->id,
+            'academic_year_id' => $otherYear->id,
+        ]);
+
+        $this->actingAs($this->teacher)
+            ->get(route('classrooms.index'))
+            ->assertOk()
+            ->assertSee($this->classroom->name)
+            ->assertSee($otherClassroom->name);
+    }
+
+    public function test_admin_can_view_teacher_assignments_on_teacher_profile(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('admin.users.show', $this->teacher))
+            ->assertOk()
+            ->assertSee($this->classroom->name)
+            ->assertSee($this->subject->name);
+    }
+
+    public function test_assignment_rejects_a_classroom_from_another_academic_year(): void
+    {
+        $otherYear = AcademicYear::create([
+            'school_id' => $this->school->id,
+            'name' => '2026-2027',
+            'start_date' => '2026-09-01',
+            'end_date' => '2027-06-30',
+            'is_active' => false,
+        ]);
+
+        Sanctum::actingAs($this->admin);
+
+        $this->postJson('/api/teacher-assignments', [
+            'teacher_user_id' => $this->teacher->id,
+            'subject_id' => $this->subject->id,
+            'classroom_id' => $this->classroom->id,
+            'academic_year_id' => $otherYear->id,
+        ])->assertStatus(422);
+    }
 
     public function test_admin_can_assign_teacher_to_classroom(): void
     {

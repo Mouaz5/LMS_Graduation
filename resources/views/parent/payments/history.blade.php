@@ -80,7 +80,7 @@
                                     <div style="font-weight: 600; color: var(--text-primary);">{{ $payment->created_at?->format('M j, Y') }}</div>
                                     <div style="font-size: 11.5px; color: var(--text-muted);">{{ $payment->created_at?->format('H:i') }}</div>
                                 </td>
-                                <td><span class="badge badge-{{ $payment->status->value }}">{{ ucfirst($payment->status->value) }}</span></td>
+                                <td><span class="badge badge-{{ $payment->status->value }}">{{ __(ucfirst($payment->status->value)) }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\ClassroomWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DiagnosticKnowledgeMapWebController;
 use App\Http\Controllers\Web\ExamTypeWebController;
+use App\Http\Controllers\Web\GradeWebController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\NotificationWebController;
 use App\Http\Controllers\Web\ParentWebController;
@@ -101,6 +102,11 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/schedule', [ScheduleWebController::class, 'index'])->name('schedule.index');
         Route::post('/schedule', [ScheduleWebController::class, 'store'])->name('schedule.store');
 
+        // Grades
+        Route::get('/grades', [GradeWebController::class, 'index'])->name('grades.index');
+        Route::post('/grades', [GradeWebController::class, 'store'])->name('grades.store');
+        Route::delete('/grades/{grade}', [GradeWebController::class, 'destroy'])->name('grades.destroy');
+
         // Subjects
         Route::get('/subjects', [SubjectWebController::class, 'index'])->name('subjects.index');
         Route::get('/subjects/create', [SubjectWebController::class, 'create'])->name('subjects.create');
@@ -115,6 +121,12 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::post('/exam-types', [ExamTypeWebController::class, 'store'])->name('exam-types.store');
         Route::put('/exam-types/{examType}', [ExamTypeWebController::class, 'update'])->name('exam-types.update');
         Route::delete('/exam-types/{examType}', [ExamTypeWebController::class, 'destroy'])->name('exam-types.destroy');
+
+        // Classroom management
+        Route::get('/classrooms/create', [ClassroomWebController::class, 'create'])->name('classrooms.create');
+        Route::post('/classrooms', [ClassroomWebController::class, 'store'])->name('classrooms.store');
+        Route::post('/classrooms/{classroom}/subjects', [ClassroomWebController::class, 'storeSubject'])->name('classrooms.subjects.store');
+        Route::post('/classrooms/{classroom}/students', [ClassroomWebController::class, 'enroll'])->name('classrooms.students.store');
 
         // Diagnostic Test Builder & Knowledge Map
         Route::get('/diagnostic/test-builder', [AdminDiagnosticWebController::class, 'testBuilder'])->name('diagnostic.test-builder');

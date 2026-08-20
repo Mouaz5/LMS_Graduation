@@ -11,6 +11,7 @@ use App\Models\SalaryTransfer;
 use App\Models\School;
 use App\Models\SchoolCalendar;
 use App\Models\Semester;
+use App\Models\StudentEnrollment;
 use App\Models\StudentProfile;
 use App\Models\Subject;
 use App\Models\TeacherSubjectClassroom;
@@ -204,7 +205,11 @@ class DatabaseSeeder extends Seeder
             $gradeNum = $grade->order_index + 6; // Grade 7, 8, 9
             foreach (['A', 'B'] as $letter) {
                 $classrooms[] = Classroom::firstOrCreate(
-                    ['name' => "{$gradeNum}-{$letter}", 'grade_id' => $grade->id],
+                    [
+                        'name' => "{$gradeNum}-{$letter}",
+                        'grade_id' => $grade->id,
+                        'academic_year_id' => $academicYear->id,
+                    ],
                     ['capacity' => 30]
                 );
             }
@@ -235,6 +240,18 @@ class DatabaseSeeder extends Seeder
                 [
                     'classroom_id' => $classroom->id,
                     'enrollment_date' => '2025-09-01',
+                ]
+            );
+
+            StudentEnrollment::firstOrCreate(
+                [
+                    'student_user_id' => $student->id,
+                    'academic_year_id' => $academicYear->id,
+                ],
+                [
+                    'classroom_id' => $classroom->id,
+                    'enrollment_date' => '2025-09-01',
+                    'status' => 'active',
                 ]
             );
         }

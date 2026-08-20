@@ -1,5 +1,13 @@
 <x-layouts.app :pageTitle="__('Classrooms')">
     <style>
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 20px; background: var(--primary); color: var(--on-primary);
+            border-radius: 10px; text-decoration: none; font-size: 13.5px;
+            font-weight: 600; font-family: var(--font-body);
+            transition: all 0.2s; box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
+        }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         table { width: 100%; border-collapse: collapse; }
         thead tr { background: var(--surface-2); }
         th {
@@ -49,8 +57,24 @@
 
     <div class="page-actions">
         <div>
-            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("Classrooms") }}</div>
-            <div class="page-desc">{{ __("View all classrooms and their students") }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __('Classrooms') }}</div>
+            <div class="page-desc">{{ __('Manage classrooms and enrolled students') }}</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <form method="GET" action="{{ route('classrooms.index') }}" style="display: flex; gap: 8px; align-items: center;">
+                <select name="academic_year_id" class="filter-select" onchange="this.form.submit()">
+                    <option value="">{{ __('All academic years') }}</option>
+                    @foreach($academicYears as $year)
+                        <option value="{{ $year->id }}" {{ (string) $yearId === (string) $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                    @endforeach
+                </select>
+            </form>
+            @if(auth()->user()->role->value === 'admin')
+                <a href="{{ route('admin.classrooms.create', ['academic_year_id' => $yearId]) }}" class="btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    {{ __('Add Classroom') }}
+                </a>
+            @endif
         </div>
     </div>
 
@@ -60,8 +84,9 @@
             <thead>
                 <tr>
                     <th>{{ __("Classroom") }}</th>
-                    <th>{{ __("Grade") }}</th>
-                    <th>{{ __("Students") }}</th>
+                    <th>{{ __('Academic Year') }}</th>
+                    <th>{{ __('Grade') }}</th>
+                    <th>{{ __('Students') }}</th>
                     <th>{{ __("Capacity") }}</th>
                     <th>{{ __("Subjects") }}</th>
                 </tr>
@@ -78,10 +103,11 @@
                                 <span style="font-weight: 600; color: var(--text-primary);">{{ $classroom->name }}</span>
                             </div>
                         </td>
+                        <td>{{ $classroom->academicYear?->name ?? '—' }}</td>
                         <td>{{ $classroom->grade->name }}</td>
                         <td>
                             <span class="badge" style="background: var(--success-tint); color: var(--success-text); border: 1px solid var(--success-border);">
-                                {{ $classroom->studentProfiles->count() }}
+                                {{ $classroom->active_students_count }}
                             </span>
                         </td>
                         <td>{{ $classroom->capacity }}</td>
@@ -105,7 +131,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="empty-state">{{ __("No classrooms found.") }}</td>
+                        <td colspan="6" class="empty-state">{{ __('No classrooms found.') }}</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -18,7 +18,12 @@ class AcademicYearWebController extends Controller
 
     public function show(AcademicYear $year): View
     {
-        $year->load(['semesters', 'school']);
+        $year->load([
+            'semesters',
+            'school',
+            'classrooms.grade',
+            'classrooms.studentEnrollments' => fn ($query) => $query->active(),
+        ]);
         return view('admin.academic-years.show', compact('year'));
     }
 

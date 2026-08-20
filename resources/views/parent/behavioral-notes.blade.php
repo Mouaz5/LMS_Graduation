@@ -124,7 +124,7 @@
                                         <div class="note-teacher">{{ $note->teacher->name ?? '—' }}</div>
                                         <div class="note-meta">{{ $note->date?->format('l, M j, Y') }}</div>
                                     </div>
-                                    <span class="badge badge-{{ $note->severity->value }}">{{ ucfirst($note->severity->value) }}</span>
+                                    <span class="badge badge-{{ $note->severity->value }}">{{ __(ucfirst($note->severity->value)) }}</span>
                                 </div>
                                 <div class="note-text">{{ $note->note }}</div>
                             </div>

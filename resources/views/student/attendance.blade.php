@@ -171,10 +171,10 @@
                                     <div style="font-size: 11.5px; color: var(--text-muted);">{{ $record->date?->format('l') }}</div>
                                 </td>
                                 <td style="color: var(--text-secondary);">{{ $record->scheduleSlot?->subject?->name ?? '—' }}</td>
-                                <td><span class="badge badge-{{ $record->status->value }}">{{ ucfirst($record->status->value) }}</span></td>
+                                <td><span class="badge badge-{{ $record->status->value }}">{{ __(ucfirst($record->status->value)) }}</span></td>
                                 <td>
                                     @if($record->justification)
-                                        <span class="badge badge-{{ $record->justification->status->value }}">{{ ucfirst($record->justification->status->value) }}</span>
+                                        <span class="badge badge-{{ $record->justification->status->value }}">{{ __(ucfirst($record->justification->status->value)) }}</span>
                                     @elseif($record->isAbsent())
                                         <span class="badge badge-none" style="font-size: 11px;">{{ __("No justification") }}</span>
                                     @else
