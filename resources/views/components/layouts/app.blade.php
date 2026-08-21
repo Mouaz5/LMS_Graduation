@@ -492,6 +492,7 @@
             ['label' => 'Dashboard',        'route' => 'dashboard',                'icon' => 'home'],
             ['label' => 'My Schedule',       'route' => 'teacher.schedule',         'icon' => 'calendar'],
             ['label' => 'Classrooms',        'route' => 'classrooms.index',         'icon' => 'book'],
+            ['label' => 'Homework',          'route' => 'teacher.homework',           'icon' => 'book'],
             ['label' => 'Attendance',        'route' => 'teacher.attendance',       'icon' => 'check-circle'],
             ['label' => 'Justifications',    'route' => 'teacher.justifications',   'icon' => 'check-circle'],
             ['label' => 'Behavioral Notes',  'route' => 'teacher.behavioral-notes', 'icon' => 'bar-chart'],
@@ -503,6 +504,7 @@
         'student' => [
             ['label' => 'Dashboard',  'route' => 'dashboard',          'icon' => 'home'],
             ['label' => 'My Schedule','route' => 'student.schedule',   'icon' => 'calendar'],
+            ['label' => 'Homework',   'route' => 'student.homework',    'icon' => 'book'],
             ['label' => 'My Results',    'route' => 'student.results',              'icon' => 'star'],
             ['label' => 'Diagnostic',    'route' => 'student.diagnostic.test',      'icon' => 'bar-chart'],
             ['label' => 'Knowledge Map', 'route' => 'student.diagnostic.knowledge-map','icon' => 'bar-chart'],

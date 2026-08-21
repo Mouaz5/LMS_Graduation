@@ -50,7 +50,7 @@
     // disabled …) are forwarded to it rather than landing on the wrapper.
     // Everything else — class, style, data-* — stays on the wrapper div.
     $controlKeys = ['placeholder', 'autocomplete', 'autofocus', 'disabled', 'readonly',
-                    'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'rows', 'inputmode'];
+                    'min', 'max', 'step', 'minlength', 'maxlength', 'pattern', 'rows', 'inputmode', 'accept'];
 
     $controlAttributes = $attributes->only($controlKeys);
     $wrapperAttributes = $attributes->except($controlKeys);

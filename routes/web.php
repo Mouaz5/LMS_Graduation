@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DiagnosticKnowledgeMapWebController;
 use App\Http\Controllers\Web\ExamTypeWebController;
 use App\Http\Controllers\Web\GradeWebController;
+use App\Http\Controllers\Web\HomeworkWebController;
 use App\Http\Controllers\Web\LocaleController;
 use App\Http\Controllers\Web\NotificationWebController;
 use App\Http\Controllers\Web\ParentWebController;
@@ -174,12 +175,24 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
 
         // Salaries — teacher sees own salary transfers
         Route::get('/salaries', [SalaryWebController::class, 'index'])->name('salaries');
+
+        // Homework
+        Route::get('/homework', [HomeworkWebController::class, 'teacherIndex'])->name('homework');
+        Route::post('/homework', [HomeworkWebController::class, 'teacherStore'])->name('homework.store');
+        Route::get('/homework/{homework}/submissions', [HomeworkWebController::class, 'teacherSubmissions'])->name('homework.submissions');
+        Route::post('/homework/submissions/{submission}/review', [HomeworkWebController::class, 'reviewSubmission'])->name('homework.submissions.review');
+        Route::get('/homework/{homework}/attachment', [HomeworkWebController::class, 'downloadAssignment'])->name('homework.attachment');
+        Route::get('/homework/submissions/{submission}/download', [HomeworkWebController::class, 'downloadSubmission'])->name('homework.submissions.download');
     });
 
     // Student pages
     Route::middleware('role:student')->prefix('student')->name('student.')->group(function () {
         Route::get('/schedule', [StudentWebController::class, 'schedule'])->name('schedule');
         Route::get('/grades', [StudentWebController::class, 'grades'])->name('grades');
+        Route::get('/homework', [HomeworkWebController::class, 'studentIndex'])->name('homework');
+        Route::post('/homework/{homework}/submit', [HomeworkWebController::class, 'studentSubmit'])->name('homework.submit');
+        Route::get('/homework/{homework}/attachment', [HomeworkWebController::class, 'downloadAssignment'])->name('homework.attachment');
+        Route::get('/homework/submissions/{submission}/download', [HomeworkWebController::class, 'downloadSubmission'])->name('homework.submissions.download');
         Route::get('/results', [StudentWebController::class, 'results'])->name('results');
         Route::get('/results/pdf', [StudentWebController::class, 'downloadReportCard'])->name('results.pdf');
         Route::get('/attendance', [StudentWebController::class, 'attendance'])->name('attendance');
