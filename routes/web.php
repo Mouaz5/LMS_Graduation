@@ -22,6 +22,7 @@ use App\Http\Controllers\Web\SalaryWebController;
 use App\Http\Controllers\Web\SchoolWebController;
 use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\SettingsWebController;
+use App\Http\Controllers\Web\SemesterWebController;
 use App\Http\Controllers\Web\StripeWebhookController;
 use App\Http\Controllers\Web\StudentDiagnosticWebController;
 use App\Http\Controllers\Web\StudentWebController;
@@ -111,6 +112,10 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/calendar/create', [CalendarWebController::class, 'create'])->name('calendar.create');
         Route::get('/calendar/{event}', [CalendarWebController::class, 'show'])->name('calendar.show');
         Route::post('/calendar', [CalendarWebController::class, 'store'])->name('calendar.store');
+
+        // Semesters
+        Route::get('/semesters/create', [SemesterWebController::class, 'create'])->name('semesters.create');
+        Route::post('/semesters', [SemesterWebController::class, 'store'])->name('semesters.store');
 
         // Schedule builder
         Route::get('/schedule', [ScheduleWebController::class, 'index'])->name('schedule.index');

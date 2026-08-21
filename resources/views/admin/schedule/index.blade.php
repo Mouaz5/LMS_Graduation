@@ -204,13 +204,14 @@
             @endforeach
         </select>
         <select name="semester_id" data-auto-submit>
-            <option value="">{{ __("— Select Semester —") }}</option>
+            <option value="">{{ __('— Select Semester —') }}</option>
             @foreach($semesters as $sem)
                 <option value="{{ $sem->id }}" @selected($semesterId == $sem->id)>
                     {{ $sem->name }} — {{ $sem->academicYear->name }}
                 </option>
             @endforeach
         </select>
+        <a href="{{ route('admin.semesters.create', ['academic_year_id' => request('academic_year_id')]) }}" class="btn btn-outline" style="white-space: nowrap;">+ {{ __('Add Semester') }}</a>
     </form>
 
     @if(!$classroomId || !$semesterId)

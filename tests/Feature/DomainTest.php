@@ -110,6 +110,25 @@ class DomainTest extends TestCase
             ->assertJsonPath('data.name', 'Fall Semester');
     }
 
+    public function test_admin_can_create_semester_from_the_schedule_workflow(): void
+    {
+        $this->actingAs($this->admin)
+            ->post(route('admin.semesters.store'), [
+                'academic_year_id' => $this->year->id,
+                'name' => 'Spring Semester',
+                'start_date' => '2026-02-01',
+                'end_date' => '2026-06-30',
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('admin.schedule.index', ['semester_id' => 1]));
+
+        $this->assertDatabaseHas('semesters', [
+            'academic_year_id' => $this->year->id,
+            'name' => 'Spring Semester',
+            'is_active' => true,
+        ]);
+    }
+
     public function test_non_admin_cannot_create_academic_year(): void
     {
         Sanctum::actingAs($this->teacher);

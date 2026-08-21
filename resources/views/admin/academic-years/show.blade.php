@@ -187,25 +187,31 @@
     </div>
 
     {{-- Semesters --}}
-    @if($year->semesters->count() > 0)
-        <div class="related-section">
-            <div class="related-title">{{ __("Semesters (:count)", ['count' => $year->semesters->count()]) }}</div>
-            <div class="related-card">
-                @foreach($year->semesters as $semester)
-                    <div class="related-item">
-                        <div class="related-item-icon" style="background: {{ $semester->is_active ? 'var(--success-tint)' : 'var(--surface-2)' }};">
-                            <svg width="16" height="16" fill="none" stroke="{{ $semester->is_active ? 'var(--success-dark)' : 'var(--text-muted)' }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600;">{{ $semester->name }}</div>
-                            <div style="font-size: 12px; color: var(--text-muted);">{{ $semester->start_date->format('M d') }} — {{ $semester->end_date->format('M d, Y') }}</div>
-                        </div>
-                        @if($semester->is_active)
-                            <span class="badge" style="background: var(--success-tint); color: var(--success-text); font-size: 10px;">{{ __("Active") }}</span>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
+    <div class="related-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div class="related-title" style="margin-bottom: 0;">{{ __('Semesters (:count)', ['count' => $year->semesters->count()]) }}</div>
+            <a href="{{ route('admin.semesters.create', ['academic_year_id' => $year->id]) }}" class="btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                {{ __('Add Semester') }}
+            </a>
         </div>
-    @endif
+        <div class="related-card">
+            @forelse($year->semesters as $semester)
+                <div class="related-item">
+                    <div class="related-item-icon" style="background: {{ $semester->is_active ? 'var(--success-tint)' : 'var(--surface-2)' }};">
+                        <svg width="16" height="16" fill="none" stroke="{{ $semester->is_active ? 'var(--success-dark)' : 'var(--text-muted)' }}" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">{{ $semester->name }}</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">{{ $semester->start_date->format('M d') }} — {{ $semester->end_date->format('M d, Y') }}</div>
+                    </div>
+                    @if($semester->is_active)
+                        <span class="badge" style="background: var(--success-tint); color: var(--success-text); font-size: 10px;">{{ __('Active') }}</span>
+                    @endif
+                </div>
+            @empty
+                <div style="padding: 24px; text-align: center; color: var(--text-faint);">{{ __('No semesters created for this academic year yet.') }}</div>
+            @endforelse
+        </div>
+    </div>
 </x-layouts.app>
