@@ -8,6 +8,8 @@ use App\Http\Requests\Web\LinkParentRequest;
 use App\Http\Requests\Web\StoreUserRequest;
 use App\Http\Requests\Web\UnlinkChildRequest;
 use App\Http\Requests\Web\UnlinkParentRequest;
+use App\Models\AcademicYear;
+use App\Models\GradeSummary;
 use App\Models\User;
 use App\Notifications\SystemNotification;
 use Illuminate\Http\RedirectResponse;
@@ -18,8 +20,37 @@ class AdminUserController extends Controller
 {
     public function index(): View
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.users.index', compact('users'));
+        $allowedRoles = ['admin', 'teacher', 'student', 'parent'];
+        $role = in_array(request('role'), $allowedRoles, true) ? request('role') : null;
+        $users = User::when($role, fn ($query) => $query->where('role', $role))
+            ->orderBy('created_at', 'desc')
+            ->paginate(15)
+            ->withQueryString();
+        $topStudents = collect();
+
+        if ($role === 'student') {
+            $activeYearId = AcademicYear::where('is_active', true)->value('id');
+            $topScores = GradeSummary::query()
+                ->when($activeYearId, fn ($query) => $query->whereHas('semester', fn ($semesterQuery) => $semesterQuery->where('academic_year_id', $activeYearId)))
+                ->select('student_user_id')
+                ->selectRaw('AVG(weighted_average) as average_score')
+                ->groupBy('student_user_id')
+                ->orderByDesc('average_score')
+                ->limit(5)
+                ->get();
+            $students = User::where('role', 'student')
+                ->with('studentProfile.classroom.grade')
+                ->whereIn('id', $topScores->pluck('student_user_id'))
+                ->get()
+                ->keyBy('id');
+
+            $topStudents = $topScores->map(fn ($score) => [
+                'student' => $students->get($score->student_user_id),
+                'average' => round((float) $score->average_score, 1),
+            ])->filter(fn (array $row) => $row['student'] !== null)->values();
+        }
+
+        return view('admin.users.index', compact('users', 'role', 'topStudents'));
     }
 
     public function show(User $user): View

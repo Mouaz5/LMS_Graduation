@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\AcademicYear;
 use App\Models\Classroom;
 use App\Models\Grade;
+use App\Models\GradeSummary;
 use App\Models\School;
+use App\Models\Semester;
 use App\Models\StudentEnrollment;
 use App\Models\StudentProfile;
 use App\Models\Subject;
@@ -329,6 +331,41 @@ class DomainTest extends TestCase
             ->get(route('classrooms.index'))
             ->assertOk()
             ->assertSee('إدارة الفصول والطلاب المسجلين');
+    }
+
+    public function test_admin_can_filter_students_and_view_top_students(): void
+    {
+        $semester = Semester::create([
+            'academic_year_id' => $this->year->id,
+            'name' => 'Fall Semester',
+            'start_date' => '2025-09-01',
+            'end_date' => '2026-01-31',
+            'is_active' => true,
+        ]);
+        $topStudent = User::factory()->create(['role' => 'student', 'name' => 'Top Student']);
+        $secondStudent = User::factory()->create(['role' => 'student', 'name' => 'Second Student']);
+        GradeSummary::create([
+            'student_user_id' => $topStudent->id,
+            'subject_id' => $this->subject->id,
+            'semester_id' => $semester->id,
+            'weighted_average' => 96,
+            'letter_grade' => 'A',
+        ]);
+        GradeSummary::create([
+            'student_user_id' => $secondStudent->id,
+            'subject_id' => $this->subject->id,
+            'semester_id' => $semester->id,
+            'weighted_average' => 88,
+            'letter_grade' => 'B',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.users.index', ['role' => 'student']))
+            ->assertOk()
+            ->assertSee('Top Students')
+            ->assertSee('Top Student')
+            ->assertSee('96.0%')
+            ->assertSee('Second Student');
     }
 
     // ---------------------------------------------------------------

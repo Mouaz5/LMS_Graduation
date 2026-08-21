@@ -64,18 +64,45 @@
         }
         th:first-child { padding-inline-start: 20px; }
         th:last-child { padding-inline-end: 20px; text-align: end; }
+        .top-students-card { margin-bottom: 20px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 14px; box-shadow: var(--shadow-card); overflow: hidden; }
+        .top-students-header { padding: 16px 20px; border-bottom: 1px solid var(--border-soft); font-weight: 700; color: var(--text-primary); }
+        .top-students-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .top-student { padding: 16px; border-inline-end: 1px solid var(--border-soft); }
+        .top-student:last-child { border-inline-end: 0; }
+        @media (max-width: 900px) { .top-students-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 520px) { .top-students-grid { grid-template-columns: 1fr; } .top-student { border-inline-end: 0; border-bottom: 1px solid var(--border-soft); } }
     </style>
 
     <div class="page-actions">
         <div>
-            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ __("All Users") }}</div>
-            <div class="page-desc">{{ __(':count users registered in the system', ['count' => $users->total()]) }}</div>
+            <div class="rtl-display" style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary);">{{ $role ? __(ucfirst($role)) : __('All Users') }}</div>
+            <div class="page-desc">{{ $role ? __(':count :role accounts', ['count' => $users->total(), 'role' => __(ucfirst($role))]) : __(':count users registered in the system', ['count' => $users->total()]) }}</div>
         </div>
         <a href="{{ route('admin.users.create') }}" class="btn-primary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             {{ __("Create User") }}
         </a>
     </div>
+
+    @if($role === 'student')
+        <div class="top-students-card">
+            <div class="top-students-header">{{ __('Top Students') }}</div>
+            @if($topStudents->isEmpty())
+                <div style="padding: 24px 20px; color: var(--text-faint); font-size: 13px;">{{ __('No grade data is available for the active academic year yet.') }}</div>
+            @else
+                <div class="top-students-grid">
+                    @foreach($topStudents as $index => $row)
+                        <div class="top-student">
+                            <div style="font-size: 11px; color: var(--primary); font-weight: 700;">#{{ $index + 1 }}</div>
+                            <div style="font-weight: 700; color: var(--text-primary); margin-top: 5px;">{{ $row['student']->name }}</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">{{ $row['student']->studentProfile?->classroom?->name ?? __('No classroom') }}</div>
+                            <div style="font-size: 18px; font-weight: 700; color: var(--success-dark); margin-top: 8px;">{{ number_format($row['average'], 1) }}%</div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @endif
 
     <div class="table-card">
         <div class="table-toolbar">

@@ -192,6 +192,15 @@
         }
 
         .nav-item.active svg { opacity: 1; }
+        .nav-group { margin-bottom: 2px; }
+        .nav-group summary { list-style: none; cursor: pointer; }
+        .nav-group summary::-webkit-details-marker { display: none; }
+        .nav-group summary::after { content: '⌄'; margin-inline-start: auto; font-size: 13px; opacity: 0.65; transition: transform 0.2s; }
+        .nav-group[open] summary::after { transform: rotate(180deg); }
+        .nav-submenu { padding: 2px 0 4px 28px; }
+        [dir="rtl"] .nav-submenu { padding: 2px 28px 4px 0; }
+        .nav-subitem { display: block; padding: 7px 12px; border-radius: 8px; color: var(--sidebar-text); text-decoration: none; font-size: 12.5px; }
+        .nav-subitem:hover, .nav-subitem.active { background: var(--sidebar-hover); color: white; }
 
         .sidebar-footer {
             padding: 16px 12px 20px;
@@ -473,7 +482,13 @@
     $allMenuItems = [
         'admin' => [
             ['label' => 'Dashboard',     'route' => 'dashboard',                  'icon' => 'home'],
-            ['label' => 'Users',         'route' => 'admin.users.index',          'icon' => 'users'],
+            ['label' => 'Users',         'icon' => 'users', 'children' => [
+                ['label' => 'All Users',         'route' => 'admin.users.index'],
+                ['label' => 'Administrators',     'route' => 'admin.users.index', 'query' => ['role' => 'admin']],
+                ['label' => 'Teachers',           'route' => 'admin.users.index', 'query' => ['role' => 'teacher']],
+                ['label' => 'Students',           'route' => 'admin.users.index', 'query' => ['role' => 'student']],
+                ['label' => 'Parents',            'route' => 'admin.users.index', 'query' => ['role' => 'parent']],
+            ]],
             ['label' => 'Complaints',    'route' => 'admin.complaints.index',      'icon' => 'check-circle'],
             ['label' => 'Schools',       'route' => 'admin.schools.index',          'icon' => 'book'],
             ['label' => 'Academic Year', 'route' => 'admin.academic-years.index', 'icon' => 'calendar'],
@@ -565,15 +580,40 @@
         <nav class="sidebar-nav">
             <div class="nav-section-label">{{ __("Navigation") }}</div>
             @foreach($menuItems as $item)
-                @php
-                    $isActive = request()->routeIs($item['route']) || (isset($item['active']) && $item['active']);
-                    $routeExists = \Illuminate\Support\Facades\Route::has($item['route']);
-                    $href = $routeExists ? route($item['route']) : '#';
-                @endphp
-                <a href="{{ $href }}" class="nav-item {{ $isActive ? 'active' : '' }}">
-                    {!! $icons[$item['icon']] ?? $icons['home'] !!}
-                    <span>{{ __($item['label']) }}</span>
-                </a>
+                @if(isset($item['children']))
+                    @php
+                        $hasActiveChild = collect($item['children'])->contains(function (array $child): bool {
+                            return request()->routeIs($child['route'])
+                                && request()->query('role') === ($child['query']['role'] ?? null);
+                        });
+                    @endphp
+                    <details class="nav-group" @if($hasActiveChild) open @endif>
+                        <summary class="nav-item {{ $hasActiveChild ? 'active' : '' }}">
+                            {!! $icons[$item['icon']] ?? $icons['home'] !!}
+                            <span>{{ __($item['label']) }}</span>
+                        </summary>
+                        <div class="nav-submenu">
+                            @foreach($item['children'] as $child)
+                                @php
+                                    $childQuery = $child['query'] ?? [];
+                                    $childActive = request()->routeIs($child['route'])
+                                        && request()->query('role') === ($childQuery['role'] ?? null);
+                                @endphp
+                                <a href="{{ route($child['route'], $childQuery) }}" class="nav-subitem {{ $childActive ? 'active' : '' }}">{{ __($child['label']) }}</a>
+                            @endforeach
+                        </div>
+                    </details>
+                @else
+                    @php
+                        $isActive = request()->routeIs($item['route']) || (isset($item['active']) && $item['active']);
+                        $routeExists = \Illuminate\Support\Facades\Route::has($item['route']);
+                        $href = $routeExists ? route($item['route']) : '#';
+                    @endphp
+                    <a href="{{ $href }}" class="nav-item {{ $isActive ? 'active' : '' }}">
+                        {!! $icons[$item['icon']] ?? $icons['home'] !!}
+                        <span>{{ __($item['label']) }}</span>
+                    </a>
+                @endif
             @endforeach
         </nav>
 
