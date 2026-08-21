@@ -474,6 +474,7 @@
         'admin' => [
             ['label' => 'Dashboard',     'route' => 'dashboard',                  'icon' => 'home'],
             ['label' => 'Users',         'route' => 'admin.users.index',          'icon' => 'users'],
+            ['label' => 'Schools',       'route' => 'admin.schools.index',          'icon' => 'book'],
             ['label' => 'Academic Year', 'route' => 'admin.academic-years.index', 'icon' => 'calendar'],
             ['label' => 'Classrooms',    'route' => 'classrooms.index',           'icon' => 'book'],
             ['label' => 'Grades',        'route' => 'admin.grades.index',           'icon' => 'book'],

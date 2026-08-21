@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreAcademicYearWebRequest;
 use App\Models\AcademicYear;
+use App\Models\School;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -29,12 +30,20 @@ class AcademicYearWebController extends Controller
 
     public function create(): View
     {
-        return view('admin.academic-years.create');
+        return view('admin.academic-years.create', [
+            'hasSchool' => School::exists(),
+        ]);
     }
 
     public function store(StoreAcademicYearWebRequest $request): RedirectResponse
     {
-        $school = \App\Models\School::first();
+        $school = School::first();
+
+        if (! $school) {
+            return redirect()
+                ->route('admin.schools.index')
+                ->with('error', __('Create a school before adding an academic year.'));
+        }
 
         AcademicYear::create([
             'school_id' => $school->id,

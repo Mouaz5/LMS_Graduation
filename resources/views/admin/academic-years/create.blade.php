@@ -5,6 +5,13 @@
         </a>
     </div>
 
+    @if(! $hasSchool)
+        <div class="alert-warning" style="max-width: 560px; margin-bottom: 18px;">
+            {{ __('You need to create a school before adding an academic year.') }}
+            <a href="{{ route('admin.schools.index') }}" style="color: inherit; font-weight: 700;">{{ __('Create School') }}</a>
+        </div>
+    @endif
+
     <x-ui.form :action="route('admin.academic-years.store')" max-width="560px">
         <x-ui.form.field
             name="name"

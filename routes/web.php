@@ -18,6 +18,7 @@ use App\Http\Controllers\Web\NotificationWebController;
 use App\Http\Controllers\Web\ParentWebController;
 use App\Http\Controllers\Web\PaymentWebController;
 use App\Http\Controllers\Web\SalaryWebController;
+use App\Http\Controllers\Web\SchoolWebController;
 use App\Http\Controllers\Web\ScheduleWebController;
 use App\Http\Controllers\Web\SettingsWebController;
 use App\Http\Controllers\Web\StripeWebhookController;
@@ -86,6 +87,10 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::delete('/users/{user}/unlink-parent', [AdminUserController::class, 'unlinkParent'])->name('users.unlink-parent');
         Route::post('/users/{user}/link-child', [AdminUserController::class, 'linkChild'])->name('users.link-child');
         Route::delete('/users/{user}/unlink-child', [AdminUserController::class, 'unlinkChild'])->name('users.unlink-child');
+
+        // Schools
+        Route::get('/schools', [SchoolWebController::class, 'index'])->name('schools.index');
+        Route::post('/schools', [SchoolWebController::class, 'store'])->name('schools.store');
 
         // Academic Years
         Route::get('/academic-years', [AcademicYearWebController::class, 'index'])->name('academic-years.index');
