@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\AssignmentWebController;
 use App\Http\Controllers\Web\AuthWebController;
 use App\Http\Controllers\Web\CalendarWebController;
 use App\Http\Controllers\Web\ClassroomWebController;
+use App\Http\Controllers\Web\ComplaintWebController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DiagnosticKnowledgeMapWebController;
 use App\Http\Controllers\Web\ExamTypeWebController;
@@ -61,6 +62,8 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
     Route::get('/settings', [SettingsWebController::class, 'index'])->name('settings.index');
 
     Route::get('/notifications', [NotificationWebController::class, 'index'])->name('notifications.index');
+    Route::get('/complaints', [ComplaintWebController::class, 'index'])->name('complaints.index');
+    Route::post('/complaints', [ComplaintWebController::class, 'store'])->name('complaints.store');
     Route::post('/notifications/read-all', [NotificationWebController::class, 'markAllRead'])->name('notifications.read-all');
     Route::post('/notifications/{notification}/read', [NotificationWebController::class, 'markRead'])->name('notifications.read');
 
@@ -76,6 +79,10 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+
+        // Complaints
+        Route::get('/complaints', [ComplaintWebController::class, 'adminIndex'])->name('complaints.index');
+        Route::post('/complaints/{complaint}/review', [ComplaintWebController::class, 'review'])->name('complaints.review');
 
         // Reports
         Route::get('/reports', [AdminReportWebController::class, 'index'])->name('reports.index');
