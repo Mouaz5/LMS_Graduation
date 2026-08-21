@@ -144,6 +144,52 @@ class DomainTest extends TestCase
             ->assertSee(__('Manage Grades'));
     }
 
+    public function test_admin_can_activate_an_inactive_academic_year(): void
+    {
+        $inactiveYear = AcademicYear::create([
+            'school_id' => $this->school->id,
+            'name' => '2026-2027',
+            'start_date' => '2026-09-01',
+            'end_date' => '2027-06-30',
+            'is_active' => false,
+        ]);
+
+        $this->from(route('admin.academic-years.index'))
+            ->actingAs($this->admin)
+            ->post(route('admin.academic-years.activate', $inactiveYear))
+            ->assertRedirect(route('admin.academic-years.index'));
+
+        $this->assertDatabaseHas('academic_years', [
+            'id' => $inactiveYear->id,
+            'is_active' => true,
+        ]);
+        $this->assertDatabaseHas('academic_years', [
+            'id' => $this->year->id,
+            'is_active' => false,
+        ]);
+    }
+
+    public function test_creating_an_active_academic_year_deactivates_the_previous_one(): void
+    {
+        $this->actingAs($this->admin)
+            ->post(route('admin.academic-years.store'), [
+                'name' => '2026-2027',
+                'start_date' => '2026-09-01',
+                'end_date' => '2027-06-30',
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('admin.academic-years.index'));
+
+        $this->assertDatabaseHas('academic_years', [
+            'id' => $this->year->id,
+            'is_active' => false,
+        ]);
+        $this->assertDatabaseHas('academic_years', [
+            'name' => '2026-2027',
+            'is_active' => true,
+        ]);
+    }
+
     public function test_admin_can_create_classroom_for_an_academic_year(): void
     {
         $this->actingAs($this->admin)
@@ -241,7 +287,8 @@ class DomainTest extends TestCase
         $this->actingAs($this->admin)
             ->get(route('admin.academic-years.show', $this->year))
             ->assertOk()
-            ->assertSee($this->classroom->name);
+            ->assertSee($this->classroom->name)
+            ->assertSee('10 months');
 
         $this->actingAs($this->admin)
             ->get(route('classrooms.show', $this->classroom))

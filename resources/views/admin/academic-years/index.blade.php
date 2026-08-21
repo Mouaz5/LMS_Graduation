@@ -84,7 +84,8 @@
                     <th>{{ __("Start Date") }}</th>
                     <th>{{ __("End Date") }}</th>
                     <th>{{ __("Semesters") }}</th>
-                    <th>{{ __("Status") }}</th>
+                    <th>{{ __('Status') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,13 +98,23 @@
                         <td>{{ $year->semesters_count }}</td>
                         <td>
                             <span class="badge {{ $year->is_active ? 'badge-active' : 'badge-inactive' }}">
-                                {{ $year->is_active ? __("Active") : __("Inactive") }}
+                                {{ $year->is_active ? __('Active') : __('Inactive') }}
                             </span>
+                        </td>
+                        <td data-row-ignore>
+                            @if(! $year->is_active)
+                                <form method="POST" action="{{ route('admin.academic-years.activate', $year) }}">
+                                    @csrf
+                                    <button type="submit" class="btn-primary" style="padding: 6px 12px; font-size: 12px;">{{ __('Activate') }}</button>
+                                </form>
+                            @else
+                                <span style="font-size: 12px; color: var(--text-muted);">{{ __('Current') }}</span>
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="empty-state">{{ __("No academic years found. Create one to get started.") }}</td>
+                        <td colspan="6" class="empty-state">{{ __('No academic years found. Create one to get started.') }}</td>
                     </tr>
                 @endforelse
             </tbody>

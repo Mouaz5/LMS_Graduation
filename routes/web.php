@@ -103,6 +103,7 @@ Route::middleware(['auth', 'impersonation'])->group(function () {
         Route::get('/academic-years', [AcademicYearWebController::class, 'index'])->name('academic-years.index');
         Route::get('/academic-years/create', [AcademicYearWebController::class, 'create'])->name('academic-years.create');
         Route::get('/academic-years/{year}', [AcademicYearWebController::class, 'show'])->name('academic-years.show');
+        Route::post('/academic-years/{year}/activate', [AcademicYearWebController::class, 'activate'])->name('academic-years.activate');
         Route::post('/academic-years', [AcademicYearWebController::class, 'store'])->name('academic-years.store');
 
         // Calendar

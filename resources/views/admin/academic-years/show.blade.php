@@ -124,7 +124,7 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">{{ __("Duration") }}</span>
-                <span class="detail-value">{{ __(":count months", ['count' => $year->start_date->diffInMonths($year->end_date)]) }}</span>
+                <span class="detail-value">{{ __(':count months', ['count' => (int) ceil($year->start_date->diffInMonths($year->end_date))]) }}</span>
             </div>
             <div class="detail-row">
                 <span class="detail-label">{{ __("Status") }}</span>
@@ -134,10 +134,16 @@
                         {{ __("Active") }}
                     </span>
                 @else
-                    <span class="badge" style="background: var(--surface-2); color: var(--text-muted);">
-                        <span class="badge-dot" style="background: var(--text-faint);"></span>
-                        {{ __("Inactive") }}
-                    </span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="badge" style="background: var(--surface-2); color: var(--text-muted);">
+                            <span class="badge-dot" style="background: var(--text-faint);"></span>
+                            {{ __('Inactive') }}
+                        </span>
+                        <form method="POST" action="{{ route('admin.academic-years.activate', $year) }}">
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-sm">{{ __('Activate') }}</button>
+                        </form>
+                    </div>
                 @endif
             </div>
         </div>
